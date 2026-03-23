@@ -1,7 +1,0 @@
-public Class Car{
-    private string carID = C0001;
-
-    public Car(){
-        carID = "";
-    };
-}
