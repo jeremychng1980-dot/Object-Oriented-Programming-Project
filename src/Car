@@ -1,6 +1,5 @@
 public Class Car{
-    private carID = C0001;
-
+    private string carID = C0001;
 
     public Car(){
         carID = "";
