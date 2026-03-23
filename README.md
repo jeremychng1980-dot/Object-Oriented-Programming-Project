@@ -1,2 +1,1 @@
-# Object-Oriented-Programming-Project
-Respository for OOP Car Rental System Project
+This repository is for the AMCS2204 Object-Oriented Programming Project
