@@ -1,3 +1,5 @@
+package models;
+
 public class Car{
     private String carID ;          // auto generate no need use input
     private static int carCount = 1;    // use to generate the carID
