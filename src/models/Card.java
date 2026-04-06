@@ -1,3 +1,5 @@
+package models;
+
 public class Card extends Payment {
 //data properties
     private String cardNo;

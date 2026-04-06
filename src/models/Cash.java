@@ -1,3 +1,5 @@
+package models;
+
 public class Cash extends Payment{
     private float amountReceived;
     private float changes;
