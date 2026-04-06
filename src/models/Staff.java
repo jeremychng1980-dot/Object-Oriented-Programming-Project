@@ -1,6 +1,8 @@
 package models;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class Staff extends User {  
     
@@ -46,7 +48,11 @@ public class Staff extends User {
 }
 //--------------------------------ToString Method------------------------- 
     public String toString(){ 
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String hireDateStr = sdf.format(hireDate);
+        
     	return "Staff ID: "+ staffID +
-    		    "\n" + super.toString();
+    		    "\n" + super.toString() +
+    		    "\nHire Date: " + hireDateStr;
 }
 }
