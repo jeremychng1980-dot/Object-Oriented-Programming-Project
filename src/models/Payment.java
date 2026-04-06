@@ -8,17 +8,23 @@ public class Payment {
     private Date date;
     private float amount;
     private static int paymentCounter;
+    private float MINOR_DAMAGE;
+    private float MODERATE_DAMAGE;
+    private float MAJOR_DAMAGE;
 
     // no-args constructor
     public Payment() {
-        this(new Date(),0.0f);
+        this(new Date(),0.0f, 500.0f, 1000.0f, 1500.0f);
     }
     
     // constructor with args
-    public Payment(Date date, float amount) {
+    public Payment(Date date, float amount, float MINOR_DAMAGE, float MODERATE_DAMAGE, float MAJOR_DAMAGE) {
         this.paymentID = generatePaymentID(); // use generatePaymentID() method
         this.date = date;
         this.amount = amount;
+        this.MINOR_DAMAGE = MINOR_DAMAGE;
+        this.MODERATE_DAMAGE = MODERATE_DAMAGE;
+        this.MAJOR_DAMAGE = MAJOR_DAMAGE;
     }
 
     // method to generate paymentID
@@ -38,8 +44,19 @@ public class Payment {
 
     public float getAmount() {
         return amount;
+    } 
+
+    public float getMinorDamage(){
+        return MINOR_DAMAGE;
     }
 
+    public float getModerateDamage(){
+        return MODERATE_DAMAGE;
+    }
+    
+    public float getMajorDamage(){
+        return MAJOR_DAMAGE;
+    }
     // ============== setters ================
     public void setDate(Date date) {
         this.date = date;
@@ -53,7 +70,17 @@ public class Payment {
         Payment.paymentCounter = paymentCounter;
     }
 
+    public void setMinorDamage(float MINOR_DAMAGE){
+        this.MINOR_DAMAGE = MINOR_DAMAGE;
+    }
 
+    public void setModerateDamage(float MODERATE_DAMAGE){
+        this.MODERATE_DAMAGE = MODERATE_DAMAGE;
+    }
+
+    public void setMajorDamage(float MAJOR_DAMAGE){
+        this.MAJOR_DAMAGE = MAJOR_DAMAGE;
+    }
 
     // ============== other methods ==============
     public String toString() {
@@ -68,15 +95,15 @@ public void calculateDamage(int damageOption) { //reference for actual damage ca
             break;
 
         case 2: // Minor
-            this.amount += 1000;
+            this.amount += MINOR_DAMAGE;
             break;
 
         case 3: // Moderate
-            this.amount += 1500;
+            this.amount += MODERATE_DAMAGE;
             break;
 
         case 4: // High
-            this.amount += 2000;
+            this.amount += MAJOR_DAMAGE;
             break;
 
         default:
