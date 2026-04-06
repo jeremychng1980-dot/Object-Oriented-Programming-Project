@@ -1,6 +1,6 @@
 package models;
 
-public class Admin extends User {  // don't forget "extends User"
+public class Admin extends User {
    private String adminID;
     private int adminCount;
     

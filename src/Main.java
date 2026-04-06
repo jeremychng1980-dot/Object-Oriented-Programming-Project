@@ -340,7 +340,7 @@ public class Main{
     new Scanner(System.in).nextLine();  // Wait for user to press Enter
     Helper.clearScreen();
 }
-//-----------------Save users to file method----------------
+//-------------------------------Save users to file method------------------------
 public static void saveUsersToFile() {
     PrintWriter writer = null;
     try {
@@ -377,6 +377,8 @@ public static void saveUsersToFile() {
                     writer.print(s.getName() + "|");
                     writer.print(s.getGender() + "|");
                     writer.print(s.getPhoneNo());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					writer.print(sdf.format(s.getHireDate())); 
                     writer.println();
                 }
                 else if (u instanceof Admin) {
@@ -402,8 +404,7 @@ public static void saveUsersToFile() {
         }
     }
 }
-
-//----------------load users file methods----------------
+//----------------------------LoadUsersFile---------------------------
 public static void loadUsersFile() {
     File file = new File(USER_FILE);
     
@@ -437,7 +438,7 @@ public static void loadUsersFile() {
                 String[] parts = dataLine.split("\\|");
                 
                 // parts[0]=custID, [1]=loginID, [2]=password, [3]=name, 
-                // [4]=gender, [5]=phoneNo, [6]=email, [7]=licenseNo, [8]=expiryDate
+                // [4]=gender, [5]=phoneNo, [6]=email, [7]=licenseNo, [8]=licenseExpiredDate
                 String custID = parts[0];
                 String loginID = parts[1];
                 String password = parts[2];
@@ -446,12 +447,12 @@ public static void loadUsersFile() {
                 String phoneNo = parts[5];
                 String email = parts[6];
                 String licenseNo = parts[7];
-                String expiryDateStr = parts[8];
+                String licenseExpireDateStr = parts[8];
                 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date expiryDate = sdf.parse(expiryDateStr);
+                Date licenseExpireDate = sdf.parse(licenseExpireDateStr);
                 
-                License license = new License(licenseNo, expiryDate);
+                License license = new License(licenseNo, licenseExpireDate);
                 Customer customer = new Customer(loginID, password, name, gender, 
                                                  phoneNo, email, license);
                 customer.setCustID(custID);
@@ -465,15 +466,18 @@ public static void loadUsersFile() {
                 // FIX: Use \\| for split
                 String[] parts = dataLine.split("\\|");
                 
-                // parts[0]=staffID, [1]=loginID, [2]=password, [3]=name, [4]=gender, [5]=phoneNo
+                // parts[0]=staffID, [1]=loginID, [2]=password, [3]=name, [4]=gender, [5]=phoneNo, [6]=hireDate
                 String staffID = parts[0];
                 String loginID = parts[1];
                 String password = parts[2];
                 String name = parts[3];
                 char gender = parts[4].charAt(0);
                 String phoneNo = parts[5];
+                String hireDateStr = parts[6];
                 
-                Staff staff = new Staff(loginID, password, name, gender, phoneNo);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date hireDate = sdf.parse(hireDateStr);
+                Staff staff = new Staff(loginID, password, name, gender, phoneNo, hireDate);
                 staff.setStaffID(staffID);
                 
                 users[User.getUserCount() - 1] = staff;

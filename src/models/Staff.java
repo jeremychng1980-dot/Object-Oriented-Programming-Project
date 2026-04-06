@@ -1,16 +1,20 @@
 package models;
 
+import java.util.Date;
+
 public class Staff extends User {  
     
     private String staffID;
     private int staffCount;
+    private Date hireDate;
     
     public Staff() {
-       this(" ", " ", " ", ' ', " ");   
+       this(" ", " ", " ", ' ', " ", null);   
     }
-    public Staff(String loginID,String password,String name, char gender,String phoneNo){
+    public Staff(String loginID,String password,String name, char gender,String phoneNo, Date hireDate){
     	super(loginID, password, name, gender, phoneNo);
         staffCount++;
+        this.hireDate = hireDate;
         this.staffID = generateStaffID();
     }
     private String generateStaffID() {
@@ -21,8 +25,16 @@ public class Staff extends User {
         return staffID;
     }
     
+    public Date getHireDate(){
+    	return hireDate;
+    }
+    
     public void setStaffID(String staffID) {
     this.staffID = staffID;
+    }
+    
+    public void setHireDate(){
+    	this.hireDate = hireDate;
     }
 //---------------------------------Equaals Method--------------------------
     public boolean equals(Object obj) {
