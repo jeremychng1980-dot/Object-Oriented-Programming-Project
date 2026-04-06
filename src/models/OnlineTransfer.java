@@ -63,7 +63,9 @@ public class OnlineTransfer extends Payment{
     
 
     //other methods
-
+    public String toString(){
+        
+    }
 
 }//End of OnlineTransfer Class
 
