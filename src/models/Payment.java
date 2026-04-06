@@ -16,18 +16,18 @@ public class Payment {
     
     // constructor with args
     public Payment(Date date, float amount) {
-        this.paymentID = generatePaymentID(); // use method
+        this.paymentID = generatePaymentID(); // use generatePaymentID() method
         this.date = date;
         this.amount = amount;
     }
 
-    // method to handle counter
+    // method to generate paymentID
     private static String generatePaymentID() {
         paymentCounter++;
         return String.format("P%04d", paymentCounter);
     }
 
-    // ===== getters =====
+    // ============== getters ===============
     public String getPaymentID() {
         return paymentID;
     }
@@ -40,7 +40,7 @@ public class Payment {
         return amount;
     }
 
-    // ===== setters ======
+    // ============== setters ================
     public void setDate(Date date) {
         this.date = date;
     }
@@ -49,7 +49,9 @@ public class Payment {
         this.amount = amount;
     }
 
-    // toString
+
+
+    // ============== other methods ==============
     public String toString() {
         return "Payment ID: " + paymentID +
                "\nDate: " + date +

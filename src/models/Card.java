@@ -5,8 +5,8 @@ public class Card extends Payment {
     private String cardNo;
     private String CCV;
     private String nameOnCard;
-    private String password;
-
+    private String expiryMonth;  
+    private String expiryYear;    
 
 
 }//End of Card Class

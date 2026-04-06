@@ -1,6 +1,9 @@
 package models;
 
 public class Cash extends Payment{
+//data properties
     private float amountReceived;
-    private float changes;
+    private float change;
+
+    
 }//End of Cash Class
