@@ -49,6 +49,10 @@ public class Payment {
         this.amount = amount;
     }
 
+    public static void setPaymentCounter(int paymentCounter){
+        Payment.paymentCounter = paymentCounter;
+    }
+
 
 
     // ============== other methods ==============
