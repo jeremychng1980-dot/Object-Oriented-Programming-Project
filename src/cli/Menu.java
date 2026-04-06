@@ -2,7 +2,6 @@ package cli;
 
 import models.Car;
 import utils.Helper;
-import utils.InputHelper;
 import java.util.Scanner;
 
 public class Menu {
@@ -14,11 +13,12 @@ public class Menu {
     }
 
     public void start() {
+        Scanner input = new Scanner(System.in);
         displayMainMenu();
         boolean pageRunning = true;
-        
+        int choice = 0;
         while (pageRunning) {
-            int choice = InputHelper.getIntInput("Choose an Option[1/2/3]: ", 1, 3);
+            choice = Helper.getValidatedInt(input, "Choose an option [1/2/3]): ", 1, 3);
             switch (choice) {
                 case -1:
                     break;
@@ -33,7 +33,7 @@ public class Menu {
                     pageRunning = false;
                     break;
                 case 3:
-                    Helper.printError("Exiting system...");
+                     System.out.print("Exiting system...");
                     return;
             }
         }

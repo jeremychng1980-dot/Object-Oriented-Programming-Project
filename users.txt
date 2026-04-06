@@ -1,0 +1,3 @@
+1
+CUSTOMER
+C001|pwd01|money|Lim Giap Zhen|F|0124296805|john@gmail.com|070521040299|2026-07-21
