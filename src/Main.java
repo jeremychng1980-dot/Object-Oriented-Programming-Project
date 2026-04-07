@@ -298,10 +298,13 @@ public class Main{
         System.out.println("\n=====================================");
         System.out.println("               WELCOME!                ");
         System.out.println("=====================================");
-        System.out.println("1. View Information");
-        System.out.println("2. Exit to Main Menu");
+        System.out.println("1. View Profile");
+        System.out.println("2. Rent a Vehicle");
+        System.out.println("3. Process Return");
+        System.out.println("4. View History");
+        System.out.println("5. Exit to Main Menu");
         System.out.println("=====================================");
-        System.out.print("Enter your choice (1-2): ");
+        System.out.print("Enter your choice (1-5): ");
         
         choice = Helper.getValidatedInt(input, "Please enter a number (1-5): ", 1, 2); //use the reusable validation method
         
@@ -310,10 +313,19 @@ public class Main{
                 viewCustomerInformation(loggedInCustomer);
                 break;
             case 2:
-                System.out.println("\nReturning to Main Menu...");
+                rentVehicle();
                 break;
+            case 3:
+                processReturn();
+                break;
+            case 4:
+                viewHistory();
+                break;
+            case 5:
+                Helper.clearScreen();
+                return;
             default:
-                System.out.println("\nInvalid choice! Please enter 1 or 2.");
+                System.out.println("\nInvalid choice! Please enter (1-5) number only.");
         }
         
     } while (choice != 2);
@@ -340,6 +352,36 @@ public class Main{
     new Scanner(System.in).nextLine();  // Wait for user to press Enter
     Helper.clearScreen();
 }
+
+//-----------------------Rent a Vehicle-----------------------------------------
+    public static void rentVehicle(){
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("\n           Rent a Vehicle            ");
+        System.out.println("\n=====================================");
+
+        
+    }
+
+
+//------------------------Process Return----------------------------
+    public static void processReturn(){
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("\n           Process Return            ");
+        System.out.println("\n=====================================");
+    }
+
+
+
+//-------------------------View History-------------------------------
+    public static void viewHistory(){
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("\n         View Booking History        ");
+        System.out.println("\n=====================================");
+    }
+
 //-------------------------------Save users to file method------------------------
 public static void saveUsersToFile() {
     PrintWriter writer = null;
