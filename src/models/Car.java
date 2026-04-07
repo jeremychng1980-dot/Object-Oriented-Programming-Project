@@ -12,6 +12,7 @@ public class Car{
     private String status;
     private double fuelLevel;
 
+
     // constructor
 
     public Car(){
@@ -83,5 +84,15 @@ public class Car{
     }
 
 
+// other methods
+	public double calcRentalFee(int day){
+		double rentalFee = day * dailyRate;
+		return rentalFee;
+	}
+
+	public String toString(){
+		return String.format("CarID:%s | Plate: %s | %s %s | Rate: RM%.2f/day | Seats: %d | Mileage: %d km | Status: %s | Fuel: %.1f%%", 
+                carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelLevel);
+	}
     
 }
