@@ -65,8 +65,8 @@ public class Main{
         
         input.close();
     }
-//-------------------Customer Registration----------------
-     public static void customerRegistration(){
+//--------------------------------------------Customer Registration-----------------------------------
+    public static void customerRegistration(){
     	 Scanner input = new Scanner(System.in);
     	 
     	Helper.clearScreen();
@@ -86,6 +86,7 @@ public class Main{
     System.out.print("Press Enter to continue to register or '0' to exit... ");
     
     String userChoice = input.nextLine();//ask user if they want to return or proceed to register
+    System.out.println("\n");
         
     // Check if user wants to exit
     if (userChoice.equals("0")) {
@@ -217,13 +218,27 @@ public class Main{
         System.out.println("        REGISTRATION SUCCESSFUL!     ");
         System.out.println("=====================================");
         User[] tempArray = {users[User.getUserCount()- 1]}; //create temporary array using newCustomer object 
-		Helper.displayUsers(tempArray, 1); // call method to print register information, (the index of the array i pass in, to avoid it continue printing
+		displayUsers(tempArray, 1); // call method to print register information, (the index of the array i pass in, to avoid it continue printing
 		                            //  so it print one only
 		System.out.println("=====================================");
     
     System.out.println("\nPress Enter to continue...");
     input.nextLine();
     Helper.clearScreen();
+}
+//------------------------------ instanceof method---------------------------------
+public static void displayUsers(User[] users, int count) {
+    for (int i = 0; i < count; i++) {
+        // instanceof to indentifies the type of user
+        if (users[i] instanceof Customer) {
+        }
+        else if (users[i] instanceof Staff) {
+        }
+        else if (users[i] instanceof Admin) {
+        }
+       
+        System.out.println(users[i].toString());// toString() method that will decide which class toString to use
+    }
 }
 //-------------------------------Customer Login Page-----------------------------------------------
     public static void customerLogin() {
@@ -235,9 +250,8 @@ public class Main{
         System.out.println("=====================================");
         
         System.out.print("Press Enter to continue to login or '0' to exit... ");
-        
         String choice = input.nextLine();//ask user if they want to continue to login or exit
-        
+        System.out.println("\n");
         // Check if user wants to exit
         if (choice.equals("0")) {
         	Helper.clearScreen();
@@ -288,6 +302,7 @@ public class Main{
         System.out.println("Please try again.\n");
     }
     }
+//-------------------------------- Customer main menu------------------------------------
     
     public static void customerMenu(Customer loggedInCustomer) {
     Scanner input = new Scanner(System.in);
@@ -299,33 +314,41 @@ public class Main{
         System.out.println("               WELCOME!                ");
         System.out.println("=====================================");
         System.out.println("1. View Profile");
-        System.out.println("2. Rent a Vehicle");
-        System.out.println("3. Process Return");
-        System.out.println("4. View History");
-        System.out.println("5. Exit to Main Menu");
+        System.out.println("2. Modify License Expired Date");
+        System.out.println("3. Rent a Vehicle");
+        System.out.println("4. Check out");
+        System.out.println("5. Return");
+        System.out.println("6. Payment");
+        System.out.println("7. View History");
+        System.out.println("8. Log out");
         System.out.println("=====================================");
-        System.out.print("Enter your choice (1-5): ");
         
-        choice = Helper.getValidatedInt(input, "Please enter a number (1-5): ", 1, 2); //use the reusable validation method
+        choice = Helper.getValidatedInt(input, "Please enter a number (1-8): ", 1, 8); //use the reusable validation method
         
         switch(choice) {
             case 1:
                 viewCustomerInformation(loggedInCustomer);
                 break;
             case 2:
+                updateLicenseExpiryDate(loggedInCustomer);
+                break;
+            case 3: 
                 rentVehicle();
                 break;
-            case 3:
-                processReturn();
-                break;
             case 4:
-                viewHistory();
+                System.out.println("Checkout coming soon");
                 break;
             case 5:
-                Helper.clearScreen();
-                return;
-            default:
-                System.out.println("\nInvalid choice! Please enter (1-5) number only.");
+                processReturn();
+                break;
+            case 6:
+                System.out.println("Payment coming soon");
+                break;
+            case 7:
+                System.out.println("View History coming soon");
+                break;
+            case 8:
+                break;
         }
         
     } while (choice != 2);
@@ -339,7 +362,7 @@ public class Main{
     
     User[] tempArray = {customer}; // create a temparary array that store the specific object of this customer
     
-    Helper.displayUsers(tempArray, 1);// Use the instance of method to print
+    displayUsers(tempArray, 1);// Use the instance of method to print
     
     System.out.print("License Status: ");//check if the license status is expired
     if (customer.getLicense().isExpired()) {
@@ -348,10 +371,71 @@ public class Main{
         System.out.println("Valid");
     }
     
-    System.out.println("\nPress Enter to Exit...");
+    System.out.println("\nPress Enter to Exit...   ");
     new Scanner(System.in).nextLine();  // Wait for user to press Enter
     Helper.clearScreen();
 }
+
+//-------------------------------Modify Customer License Expiry Date -------------
+	public static void updateLicenseExpiryDate(Customer customer) {
+		Scanner input = new Scanner(System.in);
+	Helper.clearScreen();
+    System.out.println("\n=====================================");
+    System.out.println("      Modify License Expired Date      ");
+    System.out.println("=====================================");
+    
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    System.out.println("Current License Expiry Date: " + sdf.format(customer.getLicense().getLicenseExpireDate()));//print out the license expired date
+    System.out.print("License Status: ");//check if the license status is expired
+    if (customer.getLicense().isExpired()) {
+        System.out.println("Expired");
+    } else {
+        System.out.println("Valid");
+    }
+   
+    System.out.print("\nPress Enter to continue to modify or '0' to exit... ");
+        
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
+        }
+	
+	 boolean valid = false;
+    while (!valid) {
+        try {
+            System.out.print("\nEnter New License Expired Date: ");
+            String newExpiredDateInput = input.nextLine();
+            
+            //call the methods to update the new license expired date and also for validation
+            customer.getLicense().updateLicenseExpiryDate(newExpiredDateInput, customer.getLicense().getLicenseExpireDate());
+
+            
+            saveUsersToFile();  // Save changes to file
+            
+            System.out.println("\n==========================================");
+    		System.out.println("  License Expired Date Update Successfully!");
+    		System.out.println("=============================================");
+    		System.out.println("\nNew License Expiry Date: " + sdf.format(customer.getLicense().getLicenseExpireDate()));//print out the license expired date
+    		System.out.print("License Status: ");//check if the license status is expired
+    		if (customer.getLicense().isExpired()) {
+        	System.out.println("Expired");
+    		} else {
+        	System.out.println("Valid");
+    		
+    		}
+            valid = true;
+            
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    System.out.println("\nPress Enter to continue...");
+    input.nextLine();
+}      
 
 //-----------------------Rent a Vehicle-----------------------------------------
     public static void rentVehicle(){

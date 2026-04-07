@@ -42,14 +42,9 @@ public class License {
 }
 
 //-----------------------------------Register customer driving license date expired method-------------------------
-     public static Date validateRegisterLicenseDate(String RegisterLicenseDate) {
+     public static Date validateRegisterLicenseDate(String RegisterLicenseExpireDate) {
 
-    if (RegisterLicenseDate == null || RegisterLicenseDate.trim().isEmpty()) {
-        throw new IllegalArgumentException("License expiry date cannot be empty!");//check if empty
-    }
-    
-    String trimmed = RegisterLicenseDate.trim();//ctrim the string to remove extra spaces
-    
+    String trimmed = User.validateNonEmpty(RegisterLicenseExpireDate, "License Expire Date");
     
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     sdf.setLenient(false);  // makes sure that invalid fate fails (e.g. 2026-02-31 will fails)
@@ -58,7 +53,7 @@ public class License {
     try {
         expiryDate = sdf.parse(trimmed);//try to convert the string to date object
     } catch (ParseException e) {
-        throw new IllegalArgumentException("Invalid date! Please use yyyy-MM-dd format (e.g., 2025-12-31)");//if fails custom message 
+        throw new IllegalArgumentException("Invalid date! Please use yyyy-MM-dd format and Enter a Valid Date!(e.g., 2025-12-31)");//if fails custom message 
     }
     
     //check if license expired
@@ -73,6 +68,18 @@ public class License {
     public boolean isExpired() {
     Date today = new Date();
     return licenseExpireDate.before(today);
+}
+
+//------------------------------Update License Expire Date Method-----------------------------
+public void updateLicenseExpiryDate(String newLicenseExpiryDateStr, Date currentExpiryDate) {
+ 
+    Date newLicenseExpiryDate = validateRegisterLicenseDate(newLicenseExpiryDateStr);//call the method to check
+  
+    if (!newLicenseExpiryDate.after(currentExpiryDate)) {
+        throw new IllegalArgumentException("New license expiry date must be AFTER the current expiry date!"); // Check if the new date is after current expiry date
+    
+	}
+	setLicenseExpireDate(newLicenseExpiryDate);
 }
 
 //--------------------------------Equals Method----------------------------------------  

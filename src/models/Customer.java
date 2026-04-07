@@ -1,5 +1,6 @@
 package models;
 
+
 public class Customer extends User {
     // Attributes
     private String custID;
