@@ -95,4 +95,13 @@ public class Car{
                 carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelLevel);
 	}
     
-}
+    public boolean equals(Object o){ 
+		Car c = (Car)o;
+	if(c instanceof Car){ // prevent tuntime error : ClassCastException
+		return this.carID.equals(c.carID);  // true or false
+	    }
+	else{
+		return false;}
+    }
+
+} // end of car class

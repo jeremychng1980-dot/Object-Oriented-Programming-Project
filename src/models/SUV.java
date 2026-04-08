@@ -29,7 +29,15 @@ public class SUV extends Car{
     	String.format("\n4WheelDrive: %s | Ground Clearance: %d mm", has4WD, this.groundClearance);
     }
     
+	public boolean equals(Object o){
+  		if(o instanceof SUV){
+  			return super.equals(o);
+  		}
+  		else{
+  			return false;
+  		}
+  	}
     
-}
+} // end of SUV class
 
 

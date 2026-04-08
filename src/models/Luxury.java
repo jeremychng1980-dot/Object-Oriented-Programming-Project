@@ -28,5 +28,15 @@ public class Luxury extends Car{
 		String sunroof = this.hasSunroof ? "Yes" : "No";
 		return super.toString() + String.format("\nHas Leather Seats: %s | Has Sunroof: %s", leatherSeats, sunroof);
 	}
-}
+
+	public boolean equals(Object o){
+  		if(o instanceof Luxury){
+  			return super.equals(o);
+  		}
+  		else{
+  			return false;
+  		}
+  	}
+
+} // end of Luxury class
 

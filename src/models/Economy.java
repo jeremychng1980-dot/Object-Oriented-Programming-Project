@@ -30,4 +30,13 @@ public class Economy extends Car{
                 ( isHatchback ? "Yes" : "No"), fuelEfficiencyPer100KM);
     }
     
-}
+    public boolean equals(Object o){
+  		if(o instanceof Economy){
+  			return super.equals(o);
+  		}
+  		else{
+  			return false;
+  		}
+  	}
+    
+} // end of Economy class
