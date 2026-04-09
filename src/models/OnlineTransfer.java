@@ -61,7 +61,6 @@ public class OnlineTransfer extends Payment{
         this.reference = reference;
     }
     
-
     //other methods
     public String toString(){
         return super.toString() + 
