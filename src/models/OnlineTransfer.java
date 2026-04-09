@@ -64,7 +64,12 @@ public class OnlineTransfer extends Payment{
 
     //other methods
     public String toString(){
-        return "swiftcode"; //help you write some stuff first to prevent error
+        return super.toString() + 
+        "\nAccount Number: " + accountNumber + 
+        "\nAccount Name: " + accountName + 
+        "\nBank Name: " + bankName + 
+        "\nSwift Code: " + swiftCode + 
+        "\nReference: " + reference;
     }
 
 }//End of OnlineTransfer Class
