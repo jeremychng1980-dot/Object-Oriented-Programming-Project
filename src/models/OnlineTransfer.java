@@ -14,12 +14,12 @@ public class OnlineTransfer extends Payment{
     //methods 
     //no args con
     public OnlineTransfer() {
-     this(new Date(),0.0f, 500.0f, 1000.0f, 1500.0f, "", "", "", "", "");
+     this(new Date(),0.0f, "", "", "", "", "");
 }
 
-    public OnlineTransfer(Date date, float amount, float MINOR_DAMAGE, float MODERATE_DAMAGE, float MAJOR_DAMAGE, String accountNumber, String accountName, String bankName
+    public OnlineTransfer(Date date, float amount, String accountNumber, String accountName, String bankName
                             , String swiftCode, String reference){
-        super(date, amount, MINOR_DAMAGE, MODERATE_DAMAGE, MAJOR_DAMAGE );
+        super(date, amount);
         this.accountNumber = accountNumber;
         this.accountName = accountName;
         this.bankName = bankName;
@@ -61,6 +61,7 @@ public class OnlineTransfer extends Payment{
         this.reference = reference;
     }
     
+
     //other methods
     public String toString(){
         return super.toString() + 

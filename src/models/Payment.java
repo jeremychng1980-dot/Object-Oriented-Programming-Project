@@ -8,23 +8,22 @@ public class Payment {
     private Date date;
     private float amount;
     private static int paymentCounter;
-    private float MINOR_DAMAGE;
-    private float MODERATE_DAMAGE;
-    private float MAJOR_DAMAGE;
+    //constant d.p
+    private static final float MINOR_DAMAGE = 500;
+    private static final float MODERATE_DAMAGE = 1000;
+    private static final float MAJOR_DAMAGE = 1500;
 
     // no-args constructor
     public Payment() {
-        this(new Date(),0.0f, 500.0f, 1000.0f, 1500.0f);
+        this(new Date(),0.0f);
     }
     
     // constructor with args
-    public Payment(Date date, float amount, float MINOR_DAMAGE, float MODERATE_DAMAGE, float MAJOR_DAMAGE) {
+    public Payment(Date date, float amount) {
         this.paymentID = generatePaymentID(); // use generatePaymentID() method
         this.date = date;
         this.amount = amount;
-        this.MINOR_DAMAGE = MINOR_DAMAGE;
-        this.MODERATE_DAMAGE = MODERATE_DAMAGE;
-        this.MAJOR_DAMAGE = MAJOR_DAMAGE;
+
     }
 
     // method to generate paymentID
@@ -46,17 +45,18 @@ public class Payment {
         return amount;
     } 
 
-    public float getMinorDamage(){
+    public static float getMinorDamage(){
         return MINOR_DAMAGE;
     }
 
-    public float getModerateDamage(){
+    public static float getModerateDamage(){
         return MODERATE_DAMAGE;
     }
-    
-    public float getMajorDamage(){
+
+    public static float getMajorDamage(){
         return MAJOR_DAMAGE;
     }
+    
     // ============== setters ================
     public void setDate(Date date) {
         this.date = date;
@@ -70,45 +70,33 @@ public class Payment {
         Payment.paymentCounter = paymentCounter;
     }
 
-    public void setMinorDamage(float MINOR_DAMAGE){
-        this.MINOR_DAMAGE = MINOR_DAMAGE;
-    }
-
-    public void setModerateDamage(float MODERATE_DAMAGE){
-        this.MODERATE_DAMAGE = MODERATE_DAMAGE;
-    }
-
-    public void setMajorDamage(float MAJOR_DAMAGE){
-        this.MAJOR_DAMAGE = MAJOR_DAMAGE;
-    }
-
     // ============== other methods ==============
     public String toString() {
         return "Payment ID: " + paymentID +
                "\nDate: " + date +
                "\nAmount: " + amount;
-    }
+    }//end toString()
 
-public void calculateDamage(int damageOption) { //reference for actual damage calculation
-    switch (damageOption) {
-        case 1: // No damage
-            break;
+    public void calculateDamage(int damageOption) { //reference for actual damage calculation
+        switch (damageOption) {
+            case 1: // No damage
+                break;
 
-        case 2: // Minor
-            this.amount += MINOR_DAMAGE;
-            break;
+            case 2: // Minor
+                this.amount += MINOR_DAMAGE;
+                break;
 
-        case 3: // Moderate
-            this.amount += MODERATE_DAMAGE;
-            break;
+            case 3: // Moderate
+                this.amount += MODERATE_DAMAGE;
+                break;
 
-        case 4: // High
-            this.amount += MAJOR_DAMAGE;
-            break;
+            case 4: // High
+                this.amount += MAJOR_DAMAGE;
+                break;
 
-        default:
-            System.out.println("Invalid damage option!");
-        }
-    }
+            default:
+                System.out.println("Invalid damage option!");
+            }//end Switch
+        }//end calculateDamage()
 
 }//end of Payment Class
