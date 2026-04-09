@@ -1,5 +1,6 @@
 import cli.Menu;
 import models.Admin;
+import models.CarRentalSystem;
 import models.Customer;
 import models.User;
 import models.Staff;
@@ -16,6 +17,7 @@ import java.io.*;
 public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
+    static CarRentalSystem sys = new CarRentalSystem();
     private static final String USER_FILE = "users.txt"; 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
