@@ -1,5 +1,7 @@
-2
+3
 CUSTOMER
 C001|pwd01|money|Lim Giap Zhen|F|0124296805|john@gmail.com|070521040299|2026-07-21
 CUSTOMER
 C002|sexy|baby|i am giapzhen|F|0121234561|giapzhensexybaby@gmail.com|010101010101|2026-04-07
+CUSTOMER
+C003|Customer3|password123|Customer Name|M|1234567890|customer@gmail.com|011001011110|2099-12-12

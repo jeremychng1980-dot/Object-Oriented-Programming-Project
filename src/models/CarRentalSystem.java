@@ -1,16 +1,14 @@
 package models;
-import models.User;
-import models.Admin;
 import java.util.Scanner;
 
+import models.Rental;
 import utils.Helper;
-
-
 
 public class CarRentalSystem {
     private Car[] cars;
     private Customer[] cust;
     private Payment[] payment;
+    private Rental[] rentals;
 
     private int carCount;
     private int custCount;
@@ -36,7 +34,23 @@ public class CarRentalSystem {
         paymentCount = 0;
     }
 
+    public void RentCar() {
+        
+    }
 
+    public void Reservation(String carID) {
 
+    }
 
+    public void ReturnCar() {
+
+    }
+
+    public void Checkout() {
+
+    }
+
+    public void Inspection() {
+
+    }
 }
