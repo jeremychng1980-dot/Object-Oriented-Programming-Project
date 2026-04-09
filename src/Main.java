@@ -49,9 +49,7 @@ public class Main{
                     input.nextLine();
                     break;
                 case 4:
-                    System.out.println("\n? Admin login coming soon!");
-                    System.out.println("Press Enter to continue...");
-                    input.nextLine();
+                    adminLogin();
                     break;
                 case 5:
                     System.out.println("\n=====================================");
@@ -65,7 +63,7 @@ public class Main{
         
         input.close();
     }
-//--------------------------------------------Customer Registration-----------------------------------
+//------------------------------------Customer Registration-----------------------------------
     public static void customerRegistration(){
     	 Scanner input = new Scanner(System.in);
     	 
@@ -218,7 +216,7 @@ public class Main{
         System.out.println("        REGISTRATION SUCCESSFUL!     ");
         System.out.println("=====================================");
         User[] tempArray = {users[User.getUserCount()- 1]}; //create temporary array using newCustomer object 
-		displayUsers(tempArray, 1); // call method to print register information, (the index of the array i pass in, to avoid it continue printing
+		Helper.displayUsers(tempArray, 1); // call method to print register information, (the index of the array i pass in, to avoid it continue printing
 		                            //  so it print one only
 		System.out.println("=====================================");
     
@@ -226,20 +224,7 @@ public class Main{
     input.nextLine();
     Helper.clearScreen();
 }
-//------------------------------ instanceof method---------------------------------
-public static void displayUsers(User[] users, int count) {
-    for (int i = 0; i < count; i++) {
-        // instanceof to indentifies the type of user
-        if (users[i] instanceof Customer) {
-        }
-        else if (users[i] instanceof Staff) {
-        }
-        else if (users[i] instanceof Admin) {
-        }
-       
-        System.out.println(users[i].toString());// toString() method that will decide which class toString to use
-    }
-}
+
 //-------------------------------Customer Login Page-----------------------------------------------
     public static void customerLogin() {
     Scanner input = new Scanner(System.in);
@@ -302,6 +287,9 @@ public static void displayUsers(User[] users, int count) {
         System.out.println("Please try again.\n");
     }
     }
+
+
+
 //-------------------------------- Customer main menu------------------------------------
     
     public static void customerMenu(Customer loggedInCustomer) {
@@ -319,7 +307,7 @@ public static void displayUsers(User[] users, int count) {
         System.out.println("4. Check out");
         System.out.println("5. Return");
         System.out.println("6. Payment");
-        System.out.println("7. View History");
+        System.out.println("7. View History record");
         System.out.println("8. Log out");
         System.out.println("=====================================");
         
@@ -336,22 +324,22 @@ public static void displayUsers(User[] users, int count) {
                 rentVehicle();
                 break;
             case 4:
-                System.out.println("Checkout coming soon");
+                checkOut();
                 break;
             case 5:
                 processReturn();
                 break;
             case 6:
-                System.out.println("Payment coming soon");
+                processPayment();
                 break;
             case 7:
-                System.out.println("View History coming soon");
+                viewHistory();;
                 break;
             case 8:
                 break;
         }
         
-    } while (choice != 2);
+    } while (choice != 8);
 }
 //------------------------View Information Page ---------------------------------    
     public static void viewCustomerInformation(Customer customer) {
@@ -362,7 +350,7 @@ public static void displayUsers(User[] users, int count) {
     
     User[] tempArray = {customer}; // create a temparary array that store the specific object of this customer
     
-    displayUsers(tempArray, 1);// Use the instance of method to print
+    Helper.displayUsers(tempArray, 1);// Use the instance of method to print
     
     System.out.print("License Status: ");//check if the license status is expired
     if (customer.getLicense().isExpired()) {
@@ -447,6 +435,13 @@ public static void displayUsers(User[] users, int count) {
         
     }
 
+//-----------------------Check out-----------------------------
+    public static void checkOut(){
+        System.out.println("\n=====================================");
+        System.out.println("\n             Check  Out              ");
+        System.out.println("\n=====================================");
+    }
+
 
 //------------------------Process Return----------------------------
     public static void processReturn(){
@@ -456,7 +451,12 @@ public static void displayUsers(User[] users, int count) {
         System.out.println("\n=====================================");
     }
 
-
+//--------------------Process Payment-----------------------
+    public static void processPayment(){
+        System.out.println("\n=====================================");
+        System.out.println("\n              Payment                ");
+        System.out.println("\n=====================================");
+    }
 
 //-------------------------View History-------------------------------
     public static void viewHistory(){
@@ -464,6 +464,133 @@ public static void displayUsers(User[] users, int count) {
         System.out.println("\n=====================================");
         System.out.println("\n         View Booking History        ");
         System.out.println("\n=====================================");
+    }
+
+// Admin Login
+ public static void adminLogin() {
+    Scanner input = new Scanner(System.in);
+    boolean loggedIn = false;
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("            ADMIN LOGIN              ");
+        System.out.println("=====================================");
+        
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        System.out.println("\n");
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
+        }
+        
+        while (!loggedIn) {
+        String loginID = "";
+        String password = "";
+        
+        // LOGIN ID 
+        boolean loginValid = false;
+        while (!loginValid) {
+            try {
+                System.out.print("Enter Login ID: ");
+                loginID = input.nextLine();
+                loginID = User.validateNonEmpty(loginID, "Login ID");//call the method to heck if empty
+                loginValid = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\n");//prompt the custom message if empty 
+            }
+        }
+        
+        // PASSWORD
+        boolean passwordValid = false;
+        while (!passwordValid) {
+            try {
+                System.out.print("Enter Password: ");
+                password = input.nextLine();
+                password = User.validateNonEmpty(password, "Password");//call method to check if empty
+                passwordValid = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\n");//prompt the custom message if empty
+            }
+        }
+        
+        for (int i = 0; i < User.getUserCount(); i++) { //go through all the user
+            if (users[i] instanceof Admin) { //check if it is a admin, skip the staff object in the array
+                Admin a = (Admin) users[i]; //
+                if (a.verifyLogin(loginID, password)) { //call the methods on this specific admin object
+                    adminMenu(a); //if login successfully pass the specific object to adminMenu
+                    return;  // Exit method after successful login
+                }
+        
+        }
+        
+        System.out.println("\nInvalid Admin login credentials!");
+        System.out.println("Please try again.\n");
+    }
+    }   
+}// end of admin login
+
+    public static void adminMenu(Admin loggedInAdmin){
+    Scanner input = new Scanner(System.in);
+    int choice = 0;
+    Helper.clearScreen();
+    
+    do {
+        System.out.println("\n=====================================");
+        System.out.println("               WELCOME!                ");
+        System.out.println("=====================================");
+        System.out.println("1. View Profile");
+        System.out.println("2. View Car");
+        System.out.println("3. Add Car");
+        System.out.println("4. Update Mileage");
+        System.out.println("5. Set Maintenance Status");
+        System.out.println("6. Log out");
+
+        System.out.println("=====================================");
+        
+        choice = Helper.getValidatedInt(input, "Please enter a number (1-6): ", 1, 6); //use the reusable validation method
+        
+        switch(choice) {
+            case 1:
+                viewAdminInformation(loggedInAdmin);
+                break;
+            case 2:
+                viewCar();
+                break;
+            case 3: 
+                addCar();
+                break;
+            case 4:
+                updateMileage();
+                break;
+            case 5:
+                setMaintenance();
+                break;
+            case 6:
+                break;
+        }
+        
+    } while (choice != 6);
+} // end of admin menu
+
+    public static void viewAdminInformation(Admin admin){
+
+    }
+
+    public static void viewCar(){
+
+    }
+
+    public static void addCar(){
+
+    }
+
+    public static void updateMileage(){
+
+    }
+
+    public static void setMaintenance(){
+        
     }
 
 //-------------------------------Save users to file method------------------------
