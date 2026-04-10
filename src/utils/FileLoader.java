@@ -18,13 +18,13 @@ import java.util.Date;
 
 public class FileLoader {
     
-    public static int loadUsersFile(String filename, User[] users) { 
+    public static void loadUsersFile(String filename, User[] users) { 
         File file = new File(filename);
         
         // Check if file exists
         if (!file.exists()) {
             System.out.println("No existing file found");
-            return 0; 
+            return;
         }
         
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -32,11 +32,11 @@ public class FileLoader {
             // Read total number of users
             String line = reader.readLine();
             if (line == null) {
-                return 0;  
+                return;
             }
             
             int totalUsers = Integer.parseInt(line.trim());
-            int userIndex = 0;  // Track current position in array
+            int count = 0;  // Track number of users loaded
             
             // Read each user
             for (int i = 0; i < totalUsers; i++) {
@@ -71,8 +71,8 @@ public class FileLoader {
                                                     phoneNo, email, license);
                     customer.setCustID(custID);
                     
-                    users[userIndex] = customer;
-                    userIndex++;
+                    users[count] = customer;
+                    count++;
                     
                     System.out.println("✓ Loaded customer: " + name);
                 }
@@ -97,8 +97,8 @@ public class FileLoader {
                     Staff staff = new Staff(loginID, password, name, gender, phoneNo, hireDate);
                     staff.setStaffID(staffID);
                     
-                    users[userIndex] = staff;
-                    userIndex++;
+                    users[count] = staff;
+                    count++;
                     
                     System.out.println("✓ Loaded staff: " + name);
                 }
@@ -120,22 +120,32 @@ public class FileLoader {
                     Admin admin = new Admin(loginID, password, name, gender, phoneNo);
                     admin.setAdminID(adminID);
                     
-                    users[userIndex] = admin;
-                    userIndex++;
+                    users[count] = admin;
+                    count++;
                     
                     System.out.println("✓ Loaded admin: " + name);
                 }
             }
             
-            System.out.println("✅ Successfully loaded " + userIndex + " users from file");
-            return userIndex;  // ← Return the number of users loaded
+            System.out.println("Successfully loaded " + count + " users from file");
             
         } catch (IOException e) {
             System.out.println("Error reading user file: " + e.getMessage());
-            return 0;  // ← Return 0 on error
         } catch (ParseException e) {
             System.out.println("Error parsing date in file: " + e.getMessage());
-            return 0;  // ← Return 0 on error
         }
+    }
+
+    public static void loadCarFile(String filename, Car[] cars) {
+        File file = new File(filename);
+
+        if (!file.exists()) {
+            System.out.println("No existing file found");
+            return;
+        }
+        /* 
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        }
+        */
     }
 }

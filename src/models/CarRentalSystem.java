@@ -9,43 +9,26 @@ import models.User;
 
 public class CarRentalSystem {
     public CarRentalSystem(){
-        // Load only customers from users.txt file
-        User[] allUsers = new User[100];
-        int userCount = utils.FileLoader.loadUsersFile("users.txt", allUsers);
-
-        // Count customers first
-        int customerCount = 0;
-        for (int i = 0; i < userCount; i++) {
-            if (allUsers[i] instanceof Customer) {
-                customerCount++;
-            }
-        } // end of for loop
-
-        // Create exact customer array
-        Customer[] customers = new Customer[customerCount];
-        int index = 0;
-        for (int i = 0; i < userCount; i++) {
-            if (allUsers[i] instanceof Customer) {
-                customers[index++] = (Customer) allUsers[i];
-            }
-        } // end of for loop
-
-        // Now 'customers' array contains ONLY Customer objects
-        System.out.println("Loaded " + customers.length + " customers");
-        for (Customer c : customers) {
-            System.out.println(" - " + c.getName() + " (" + c.getCustID() + ")");
-        }// end of for loop
-
-        // Load only customers from users.txt file
+        // Creaqte array to hold all Users temporarily
         User[] users = new User[100];
 
-        // Count customers first
-        if (users[i] instanceof Customer) {
-                customerCount++;
+        // Load only customers from users.txt file
+        int custCount = Customer.getCustCount();
+        Customer[] customers = new Customer[custCount];
+        FileLoader.loadUsersFile("users.txt", users);
+
+        int customerIndex = 0;
+        for (int i = 0; i < custCount; i++) {
+            if (users[i] instanceof Customer) {
+                customers[customerIndex++] = (Customer) users[i];
             }
-        } // end of for loop} 
- 
- // end of constructor
+        }
+
+        int carCount = Car.getCarCount();
+        Car[] cars = new Car[carCount];
+        FileLoader.loadCarFile("cars.txt", cars);
+    }// end of constructor
+
 //---------------------Rent a Vehicle-------------------
     public static void rentVehicle() {
         Scanner input = new Scanner(System.in);
@@ -55,7 +38,7 @@ public class CarRentalSystem {
         System.out.println("\n=====================================");
 
         CarRentalSystem sys = new CarRentalSystem();
-        sys.displayAllCars();
+        sys.displayAllCars(cars);
 
         System.out.print("Press Enter to continue to login or '0' to exit... ");
         String choice = input.nextLine();//ask user if they want to continue to login or exit
@@ -108,7 +91,8 @@ public class CarRentalSystem {
         
     }
 
-    public void displayAllCars() {
+    public void displayAllCars(Car [] cars) {
+
         System.out.println("\n=====================================");
         System.out.println("           View All Vehicles           ");
         System.out.println("=====================================");
