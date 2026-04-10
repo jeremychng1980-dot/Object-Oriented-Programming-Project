@@ -22,8 +22,6 @@ public class Menu {
         while (pageRunning) {
             choice = Helper.getValidatedInt(input, "Choose an option [1/2/3]): ", 1, 3);
             switch (choice) {
-                case -1:
-                    break;
                 case 1:
                     //Code here
                     System.out.println("Page 1");

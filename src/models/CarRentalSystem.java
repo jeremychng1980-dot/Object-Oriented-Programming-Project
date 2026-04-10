@@ -1,40 +1,23 @@
 package models;
 import java.util.Scanner;
-
-import models.Rental;
 import utils.Helper;
 
 public class CarRentalSystem {
-    private Car[] cars;
-    private Customer[] cust;
-    private Payment[] payment;
-    private Rental[] rentals;
+    Scanner scan = new Scanner(System.in);
 
-    private int carCount;
-    private int custCount;
-    private int paymentCount;
-
-    public CarRentalSystem() {
-        cars = new Car[100];
-        cust = new Customer[100];
-        payment = new Payment[100];
-
-        carCount = 0;
-        custCount = 0;
-        paymentCount = 0;
-    }
-
-    public CarRentalSystem(int maxCars, int maxCustomers, int maxPayments) {
-        cars = new Car[maxCars];
-        cust = new Customer[maxCustomers];
-        payment = new Payment[maxPayments];
-
-        carCount = 0;
-        custCount = 0;
-        paymentCount = 0;
-    }
+    CarRentalSystem[] system = new CarRentalSystem[100];
+    Car[] car = new Car[100];
 
     public void RentCar() {
+        boolean isRunning = true;
+
+        System.out.println("Entering Rent Car Page...");
+        Helper.delay(3);
+        while (isRunning) {
+            int option = Helper.getValidatedInt(scan, "Enter the no. of car you want to borrow : ", 1, car.length);
+
+        }
+
         
     }
 

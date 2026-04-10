@@ -52,20 +52,29 @@ public class Helper {
     }
 
 //----------------instanceof method to display----------------------
-public static void displayUsers(User[] users, int count) {
-    for (int i = 0; i < count; i++) {
-        // instanceof to indentifies the type of user
-        if (users[i] instanceof Customer) {
+    public static void displayUsers(User[] users, int count) {
+        for (int i = 0; i < count; i++) {
+            // instanceof to indentifies the type of user
+            if (users[i] instanceof Customer) {
+            }
+            else if (users[i] instanceof Staff) {
+            }
+            else if (users[i] instanceof Admin) {
+            }
+        
+            System.out.println(users[i].toString());// toString() method that will decide which class toString to use
         }
-        else if (users[i] instanceof Staff) {
-        }
-        else if (users[i] instanceof Admin) {
-        }
-       
-        System.out.println(users[i].toString());// toString() method that will decide which class toString to use
     }
-}
-public static void printSeperator(){
-    System.out.print("===========================");
-}
+    public static void printSeperator(){
+        System.out.print("===========================");
+    }
+
+    public static void delay(int number) {
+        try {
+            Thread.sleep(number);
+        } catch(InterruptedException e) {
+            e.printStackTrace(); //Prints error if interrupted
+        }
+    }
+
 }
