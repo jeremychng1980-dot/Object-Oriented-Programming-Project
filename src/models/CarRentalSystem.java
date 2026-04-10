@@ -40,14 +40,13 @@ public class CarRentalSystem {
         User[] users = new User[100];
 
         // Count customers first
-            if (users[i] instanceof Customer) {
+        if (users[i] instanceof Customer) {
                 customerCount++;
             }
         } // end of for loop} 
  
  // end of constructor
----------------------Rent a Vehicle-----------------------------------------
-
+//---------------------Rent a Vehicle-------------------
     public static void rentVehicle() {
         Scanner input = new Scanner(System.in);
         Helper.clearScreen();
@@ -72,7 +71,8 @@ public class CarRentalSystem {
         String carId = input.nextLine();
         
 
-        Car c1 = new Car();        c1.equals(String carId);
+        Car c1 = new Car();        
+        c1.equals(String carId);
     }
 
 //-----------------------Check out-----------------------------
