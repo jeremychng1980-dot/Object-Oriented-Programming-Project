@@ -35,7 +35,7 @@ public class Staff extends User {
     this.staffID = staffID;
     }
     
-    public void setHireDate(){
+    public void setHireDate(Date hireDate){
     	this.hireDate = hireDate;
     }
 //---------------------------------Equaals Method--------------------------

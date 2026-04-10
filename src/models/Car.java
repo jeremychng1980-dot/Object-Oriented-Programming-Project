@@ -70,6 +70,9 @@ public class Car{
         return fuelLevel;
     }
 
+    public static int getCarCount(){
+        return Car.carCount;
+    }
     // setter
     public void setDailyRate(double dailyRate){
         this.dailyRate = dailyRate;

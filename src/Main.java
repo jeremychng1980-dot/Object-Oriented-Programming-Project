@@ -1,4 +1,3 @@
-import cli.Menu;
 import models.Admin;
 import models.CarRentalSystem;
 import models.Customer;
@@ -18,12 +17,13 @@ public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
     static CarRentalSystem sys = new CarRentalSystem();
-    private static final String USER_FILE = "users.txt"; 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+        // Load existing users from file
+        utils.FileLoader.loadUsersFile("users.txt", users);
         
-        loadUsersFile();
-//-----------------------First Page---------------------     
+
+//-----------------------First Page---------------------    
+        Scanner input = new Scanner(System.in);
         int choice = 0;
         do{
         	System.out.println("\n=====================================");
@@ -212,7 +212,7 @@ public class Main{
 
         users[User.getUserCount()- 1] = newCustomer;  // Store at correct index
         
-        saveUsersToFile();//save to file
+        utils.FileUploader.saveUsersToFile("users.txt", users);//save to file
         
         System.out.println("\n=====================================");
         System.out.println("        REGISTRATION SUCCESSFUL!     ");
@@ -323,19 +323,19 @@ public class Main{
                 updateLicenseExpiryDate(loggedInCustomer);
                 break;
             case 3: 
-                rentVehicle();
+                CarRentalSystem.rentVehicle();
                 break;
             case 4:
-                checkOut();
+                CarRentalSystem.checkOut();
                 break;
             case 5:
-                processReturn();
+                CarRentalSystem.processReturn();
                 break;
             case 6:
-                processPayment();
+                CarRentalSystem.processPayment();
                 break;
             case 7:
-                viewHistory();;
+                CarRentalSystem.viewHistory();
                 break;
             case 8:
                 break;
@@ -344,7 +344,7 @@ public class Main{
     } while (choice != 8);
 }
 //------------------------View Information Page ---------------------------------    
-    public static void viewCustomerInformation(Customer customer) {
+    public static void viewCustomerInformation(Customer customer){
     Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("           YOUR INFORMATION            ");
@@ -403,7 +403,7 @@ public class Main{
             customer.getLicense().updateLicenseExpiryDate(newExpiredDateInput, customer.getLicense().getLicenseExpireDate());
 
             
-            saveUsersToFile();  // Save changes to file
+            utils.FileUploader.saveUsersToFile("users.txt", users);  // Save changes to file
             
             System.out.println("\n==========================================");
     		System.out.println("  License Expired Date Update Successfully!");
@@ -427,46 +427,6 @@ public class Main{
     input.nextLine();
 }      
 
-//-----------------------Rent a Vehicle-----------------------------------------
-    public static void rentVehicle(){
-        Helper.clearScreen();
-        System.out.println("\n=====================================");
-        System.out.println("\n           Rent a Vehicle            ");
-        System.out.println("\n=====================================");
-
-        
-    }
-
-//-----------------------Check out-----------------------------
-    public static void checkOut(){
-        System.out.println("\n=====================================");
-        System.out.println("\n             Check  Out              ");
-        System.out.println("\n=====================================");
-    }
-
-
-//------------------------Process Return----------------------------
-    public static void processReturn(){
-        Helper.clearScreen();
-        System.out.println("\n=====================================");
-        System.out.println("\n           Process Return            ");
-        System.out.println("\n=====================================");
-    }
-
-//--------------------Process Payment-----------------------
-    public static void processPayment(){
-        System.out.println("\n=====================================");
-        System.out.println("\n              Payment                ");
-        System.out.println("\n=====================================");
-    }
-
-//-------------------------View History-------------------------------
-    public static void viewHistory(){
-        Helper.clearScreen();
-        System.out.println("\n=====================================");
-        System.out.println("\n         View Booking History        ");
-        System.out.println("\n=====================================");
-    }
 
 // Admin Login
  public static void adminLogin() {
@@ -576,7 +536,7 @@ public class Main{
 } // end of admin menu
 
     public static void viewAdminInformation(Admin admin){
-
+          
     }
 
     public static void viewCar(){
@@ -595,175 +555,4 @@ public class Main{
         
     }
 
-//-------------------------------Save users to file method------------------------
-public static void saveUsersToFile() {
-    PrintWriter writer = null;
-    try {
-        writer = new PrintWriter(new FileWriter(USER_FILE));
-        
-        writer.println(User.getUserCount());
-        
-         for (int i = 0; i < User.getUserCount(); i++) {
-            User u = users[i];
-            if (u != null) {
-                if (u instanceof Customer) {
-                    writer.println("CUSTOMER");
-                    Customer c = (Customer) u;
-                    // Format: custID|loginID|password|name|gender|phoneNo|email|licenseNo|expiryDate
-                    writer.print(c.getCustID() + "|");
-                    writer.print(c.getLoginID() + "|");
-                    writer.print(c.getPassword() + "|");
-                    writer.print(c.getName() + "|");
-                    writer.print(c.getGender() + "|");
-                    writer.print(c.getPhoneNo() + "|");
-                    writer.print(c.getEmail() + "|");
-                    writer.print(c.getLicense().getDrivingLicenseNo() + "|");
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    writer.print(sdf.format(c.getLicense().getLicenseExpireDate()));
-                    writer.println();
-                }
-                else if (u instanceof Staff) {
-                    writer.println("STAFF");
-                    Staff s = (Staff) u;
-                    // Format: staffID|loginID|password|name|gender|phoneNo
-                    writer.print(s.getStaffID() + "|");
-                    writer.print(s.getLoginID() + "|");
-                    writer.print(s.getPassword() + "|");
-                    writer.print(s.getName() + "|");
-                    writer.print(s.getGender() + "|");
-                    writer.print(s.getPhoneNo());
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					writer.print(sdf.format(s.getHireDate())); 
-                    writer.println();
-                }
-                else if (u instanceof Admin) {
-                    writer.println("ADMIN");
-                    Admin a = (Admin) u;
-                    // Format: adminID|loginID|password|name|gender|phoneNo
-                    writer.print(a.getAdminID() + "|");
-                    writer.print(a.getLoginID() + "|");
-                    writer.print(a.getPassword() + "|");
-                    writer.print(a.getName() + "|");
-                    writer.print(a.getGender() + "|");
-                    writer.print(a.getPhoneNo());
-                    writer.println();
-                }
-            }
-        }
-        
-    } catch (IOException e) {
-        System.out.println("Error saving users to file: ");
-    } finally {
-        if (writer != null) {
-            writer.close();
-        }
-    }
-}
-//----------------------------LoadUsersFile---------------------------
-public static void loadUsersFile() {
-    File file = new File(USER_FILE);
-    
-    // Check if file exists
-    if (!file.exists()) {
-        System.out.println("No existing file found");
-        return;
-    }
-    
-   try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-        
-        // Read total number of users
-        String line = reader.readLine();
-        if (line == null) {
-            return;
-        }
-        
-        int totalUsers = Integer.parseInt(line.trim());
-        
-        // Read each user
-        for (int i = 0; i < totalUsers; i++) {
-            String userType = reader.readLine();
-            
-            if (userType == null) break;
-            
-            if (userType.equals("CUSTOMER")) {
-                String dataLine = reader.readLine();
-                if (dataLine == null) break;
-                
-                // FIX: Use \\| for split (pipe is special character)
-                String[] parts = dataLine.split("\\|");
-                
-                // parts[0]=custID, [1]=loginID, [2]=password, [3]=name, 
-                // [4]=gender, [5]=phoneNo, [6]=email, [7]=licenseNo, [8]=licenseExpiredDate
-                String custID = parts[0];
-                String loginID = parts[1];
-                String password = parts[2];
-                String name = parts[3];
-                char gender = parts[4].charAt(0);
-                String phoneNo = parts[5];
-                String email = parts[6];
-                String licenseNo = parts[7];
-                String licenseExpireDateStr = parts[8];
-                
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date licenseExpireDate = sdf.parse(licenseExpireDateStr);
-                
-                License license = new License(licenseNo, licenseExpireDate);
-                Customer customer = new Customer(loginID, password, name, gender, 
-                                                 phoneNo, email, license);
-                customer.setCustID(custID);
-                
-                users[User.getUserCount() - 1] = customer;
-            }
-            else if (userType.equals("STAFF")) {
-                String dataLine = reader.readLine();
-                if (dataLine == null) break;
-                
-                // FIX: Use \\| for split
-                String[] parts = dataLine.split("\\|");
-                
-                // parts[0]=staffID, [1]=loginID, [2]=password, [3]=name, [4]=gender, [5]=phoneNo, [6]=hireDate
-                String staffID = parts[0];
-                String loginID = parts[1];
-                String password = parts[2];
-                String name = parts[3];
-                char gender = parts[4].charAt(0);
-                String phoneNo = parts[5];
-                String hireDateStr = parts[6];
-                
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date hireDate = sdf.parse(hireDateStr);
-                Staff staff = new Staff(loginID, password, name, gender, phoneNo, hireDate);
-                staff.setStaffID(staffID);
-                
-                users[User.getUserCount() - 1] = staff;
-            }
-            else if (userType.equals("ADMIN")) {
-                String dataLine = reader.readLine();
-                if (dataLine == null) break;
-                
-                // Use \\| for split
-                String[] parts = dataLine.split("\\|");
-                
-                // parts[0]=adminID, [1]=loginID, [2]=password, [3]=name, [4]=gender, [5]=phoneNo
-                String adminID = parts[0];
-                String loginID = parts[1];
-                String password = parts[2];
-                String name = parts[3];
-                char gender = parts[4].charAt(0);
-                String phoneNo = parts[5];
-                
-                Admin admin = new Admin(loginID, password, name, gender, phoneNo);
-                admin.setAdminID(adminID);
-                
-                users[User.getUserCount() - 1] = admin;
-            }
-        }
-           
-        
-    } catch (IOException e) {
-        System.out.println("Error reading user file: ");
-    } catch (ParseException e) {
-        System.out.println("Error parsing date in file: ");
-    }
-}
 }
