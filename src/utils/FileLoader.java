@@ -2,6 +2,7 @@ package utils;
 import models.Admin;
 import models.Car;
 import models.Customer;
+import models.Economy;
 import models.License;
 import models.Staff;
 import models.User;
@@ -143,9 +144,78 @@ public class FileLoader {
             System.out.println("No existing file found");
             return;
         }
-        /* 
+
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if (line == null) {
+                return;
+            }
+
+            int totalCars = Integer.parseInt(line.trim());
+            int count = 0;
+
+            for (int i = 0; i < totalCars; i++) {
+                String carType = reader.readLine();
+
+                if (carType == null) break;
+
+                if (carType.equals("ECONOMY")) {
+                    String dataline = reader.readLine();
+                    if (dataline == null) break;
+                    String[] parts = dataline.split("\\|");
+                    // parts[0]=carID, [1]=plateNumber, [2]=model, [3]=brand, [4]=dailyRate,
+                    // [5]=seatingCapacity, [6]=mileage, [7]=status, [8]=fuelLevel, [9q]=isHatchback, [10]=fuelEfficiencyPer100KM
+                    String carID = parts[0];
+                    String plateNumber = parts[1];
+                    String model = parts[2];
+                    String brand = parts[3];
+                    double dailyRate = Double.parseDouble(parts[4]);
+                    int seatingCapacity = Integer.parseInt(parts[5]);
+                    int mileage = Integer.parseInt(parts[6]);
+                    String status = parts[7];
+                    double fuelLevel = Double.parseDouble(parts[8]);
+                    boolean isHatchback = Boolean.parseBoolean(parts[9]);
+                    double fuelEfficiencyPer100KM = Double.parseDouble(parts[10]);
+                } else if (carType.equals("LUXURY")) {
+                    String dataline = reader.readLine();
+                    if (dataline == null) break;
+                    String[] parts = dataline.split("\\|");
+                    // parts[0]=carID, [1]=plateNumber, [2]=model, [3]=brand, [4]=dailyRate,
+                    // [5]=seatingCapacity, [6]=mileage, [7]=status, [8]=fuelLevel, [9]=hasLeatherSeats, [10]=hasSunroof
+                    String carID = parts[0];
+                    String plateNumber = parts[1];
+                    String model = parts[2];
+                    String brand = parts[3];
+                    double dailyRate = Double.parseDouble(parts[4]);
+                    int seatingCapacity = Integer.parseInt(parts[5]);
+                    int mileage = Integer.parseInt(parts[6]);
+                    String status = parts[7];
+                    double fuelLevel = Double.parseDouble(parts[8]);
+                    boolean hasLeatherSeats = Boolean.parseBoolean(parts[9]);
+                    boolean hasSunroof = Boolean.parseBoolean(parts[10]);
+                } else if (carType.equals("SUV")) {
+                    String dataline = reader.readLine();
+                    if (dataline == null) break;
+                    String[] parts = dataline.split("\\|");
+                    // parts[0]=carID, [1]=plateNumber, [2]=model, [3]=brand, [4]=dailyRate,
+                    // [5]=seatingCapacity, [6]=mileage, [7]=status, [8]=fuelLevel, [9]=fourWheelDrive, [10]=groundClearance
+                    String carID = parts[0];
+                    String plateNumber = parts[1];
+                    String model = parts[2];
+                    String brand = parts[3];
+                    double dailyRate = Double.parseDouble(parts[4]);
+                    int seatingCapacity = Integer.parseInt(parts[5]);
+                    int mileage = Integer.parseInt(parts[6]);
+                    String status = parts[7];
+                    double fuelLevel = Double.parseDouble(parts[8]);
+                    boolean fourWheelDrive = Boolean.parseBoolean(parts[9]);
+                    double groundClearance = Double.parseDouble(parts[10]);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading car file: " + e.getMessage());
         }
-        */
+
     }
 }
