@@ -76,9 +76,46 @@ public class CarRentalSystem {
 
 //--------------------Process Payment-----------------------
     public static void processPayment(){
-        System.out.println("\n=====================================");
-        System.out.println("\n              Payment                ");
-        System.out.println("\n=====================================");
+        boolean isRunning = true;
+        int totalCharge = 0; //Temporary
+
+        while (isRunning) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("\n=====================================");
+            System.out.println("\n              Payment                ");
+            System.out.println("\n=====================================");
+
+            System.out.println("Select payment method ([C]Cash, [K]Card: ");
+            char option = scanner.next().charAt(0);
+
+            if (option == 'C') {
+                Helper.delay(3);
+                System.out.println("Payment type selected: Cash");
+                //Show damages and rent cost, calculated in payment class
+                System.out.println("Enter the amount you wish to pay: ");
+                double payAmount = scanner.nextDouble();
+                //calculateTotalCost() {payAmount - totalCost}, need to be added in payment class
+                Helper.delay(3);
+                System.out.println("Change: ");
+                System.out.println("Thank you for renting with us, please come again!");
+                Helper.delay(5);
+                isRunning = false;
+
+            } else if (option == 'K') {
+                Helper.delay(3);
+                System.out.println("Enter your card pin number: ");
+                int pinNumber = scanner.nextInt(); //Basically mock process which provide 0 use
+
+                System.out.println("Amount charged: " + totalCharge);
+                System.out.println("Thank you for renting with us, please come again!");
+                Helper.delay(5);
+                isRunning = false;
+            } else {
+                System.out.println("Invalid option selected, please enter C or K only!");
+                Helper.delay(5);
+            }
+        }
+
     }
 
 //-------------------------View History-------------------------------
