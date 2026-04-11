@@ -148,5 +148,13 @@ public class CarRentalSystem {
         System.out.println("==========================================================================");
     }
 
+    public double calculateTotalCost(Car[] cars) {
+        for (int i = 0; i < cars.length; i++) {
+            private double totalAmount = Payment.calculateDamage + cars[i].calcRentalFee();
+            return totalAmount;
+        }
+
+    }
+
 
 }

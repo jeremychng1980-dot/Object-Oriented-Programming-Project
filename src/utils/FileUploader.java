@@ -6,9 +6,15 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 
 import models.Admin;
+import models.Car;
 import models.Customer;
 import models.Staff;
 import models.User;
+
+import models.Car;
+import models.Economy;
+import models.Luxury;
+import models.SUV;
 
 public class FileUploader {
     public static void saveUsersToFile(String filename, User[] users) {
@@ -18,7 +24,7 @@ public class FileUploader {
         
         writer.println(User.getUserCount());
         
-         for (int i = 0; i < User.getUserCount(); i++) {
+        for (int i = 0; i < User.getUserCount(); i++) {
             User u = users[i];
             if (u != null) {
                 if (u instanceof Customer) {
@@ -73,5 +79,45 @@ public class FileUploader {
             writer.close();
         }
     }
+    }
+
+    public static void saveCarsToFile(String filename, Car[] cars) {
+        PrintWriter writer = null;
+        
+
+        try {
+            writer = new PrintWriter(new FileWriter(filename));
+
+            writer.println(Car.getCarCount());
+            for (int i = 0; i < Car.getCarCount(); i++) {
+                Car c = cars[i];
+                if (c != null) {
+                    if (cars[i] instanceof Economy) {
+                        writer.println("ECONOMY");
+                        Economy e = (Economy) c;
+
+                        
+
+                    } else if (cars[i] instanceof Luxury) {
+                        writer.println("LUXURY");
+                        Luxury l = (Luxury) c;
+
+                    } else if (cars[i] instanceof SUV) {
+                        writer.println("SUV");
+                        SUV s = (SUV) c;
+
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving cars to file: ");
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+
+
+
     }
 }
