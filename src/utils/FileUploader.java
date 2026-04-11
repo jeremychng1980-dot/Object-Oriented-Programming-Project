@@ -84,7 +84,6 @@ public class FileUploader {
     public static void saveCarsToFile(String filename, Car[] cars) {
         PrintWriter writer = null;
         
-
         try {
             writer = new PrintWriter(new FileWriter(filename));
 
@@ -151,7 +150,6 @@ public class FileUploader {
             }
         }
 
-
-
     }
-}
+
+}// end of class

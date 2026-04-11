@@ -2,9 +2,12 @@ import models.Admin;
 import models.Car;
 import models.CarRentalSystem;
 import models.Customer;
+import models.Economy;
 import models.User;
 import models.Staff;
 import models.License;
+import models.Luxury;
+import models.SUV;
 import utils.Helper;
 
 import java.util.Scanner;
@@ -18,11 +21,11 @@ public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
     static CarRentalSystem sys = new CarRentalSystem();
-    static Car [] cars = new Car[Car.getCarCount()];
+    static Car [] cars = new Car[100];
     public static void main(String[] args) {
         // Load existing users from file
         utils.FileLoader.loadUsersFile("users.txt", users);
-        
+        utils.FileLoader.loadCarFile("cars.txt", cars);
 
 //-----------------------First Page---------------------    
         Scanner input = new Scanner(System.in);
@@ -53,7 +56,7 @@ public class Main{
                     input.nextLine();
                     break;
                 case 4:
-                    adminLogin();
+                    adminLogin(input);
                     break;
                 case 5:
                     System.out.println("\n=====================================");
@@ -320,10 +323,10 @@ public class Main{
         
         switch(choice) {
             case 1:
-                viewCustomerInformation(loggedInCustomer);
+                viewCustomerInformation(loggedInCustomer, input);
                 break;
             case 2:
-                updateLicenseExpiryDate(loggedInCustomer);
+                updateLicenseExpiryDate(loggedInCustomer, input);
                 break;
             case 3: 
                 CarRentalSystem.rentVehicle(input, cars, sys);
@@ -347,7 +350,7 @@ public class Main{
     } while (choice != 8);
 }
 //------------------------View Information Page ---------------------------------    
-    public static void viewCustomerInformation(Customer customer){
+    public static void viewCustomerInformation(Customer customer, Scanner input){
     Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("           YOUR INFORMATION            ");
@@ -365,13 +368,12 @@ public class Main{
     }
     
     System.out.println("\nPress Enter to Exit...   ");
-    new Scanner(System.in).nextLine();  // Wait for user to press Enter
+    input.nextLine();  // Wait for user to press Enter
     Helper.clearScreen();
 }
 
 //-------------------------------Modify Customer License Expiry Date -------------
-	public static void updateLicenseExpiryDate(Customer customer) {
-		Scanner input = new Scanner(System.in);
+	public static void updateLicenseExpiryDate(Customer customer, Scanner input) {
 	Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("      Modify License Expired Date      ");
@@ -432,8 +434,7 @@ public class Main{
 
 
 // Admin Login
- public static void adminLogin() {
-    Scanner input = new Scanner(System.in);
+ public static void adminLogin(Scanner input) {
     boolean loggedIn = false;
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -520,10 +521,10 @@ public class Main{
                 viewAdminInformation(loggedInAdmin);
                 break;
             case 2:
-                viewCar();
+                sys.displayAllCars();
                 break;
             case 3: 
-                addCar();
+                addCar(input);
                 break;
             case 4:
                 updateMileage();
@@ -542,12 +543,68 @@ public class Main{
           
     }
 
-    public static void viewCar(){
+    public static void addCar(Scanner input){
+        Helper.clearScreen();
+        System.out.println("=====================================");
+        System.out.println("            Add New Vehicle          ");
+        System.out.println("=====================================");
 
-    }
+        System.out.println("Select Category:");
+        System.out.println("1. Economy");
+        System.out.println("2. SUV");
+        System.out.println("3. Luxury");
+        int type = Helper.getValidatedInt(input, "Choice (1-3): ", 1, 3);
 
-    public static void addCar(){
+        // data input
+        System.out.print("Enter Plate Number: ");
+        String plate = input.nextLine();
+        System.out.print("Enter Model: ");
+        String model = input.nextLine();
+        System.out.print("Enter Brand: ");
+        String brand = input.nextLine();
+        System.out.print("Enter Daily Rate: ");
+        double rate = input.nextDouble();
+        System.out.print("Enter Seating Capacity: ");
+        int seats = input.nextInt();
+        input.nextLine(); // clear buffer
 
+        Car newCar = null;
+
+        switch (type) {
+            case 1: // Economy
+                System.out.print("Is it a Hatchback? (true/false): ");
+                boolean isHb = input.nextBoolean();
+                System.out.print("Fuel Efficiency (L/100km): ");
+                double eff = input.nextDouble();
+                //  status default is "available", mileage default is 0, fuelLevel 100.0
+                newCar = new Economy(plate, model, brand, rate, seats, 0, "available", 100.0, isHb, eff);
+                break;
+
+            case 2: // SUV
+                System.out.print("Four Wheel Drive? (true/false): ");
+                boolean fwd = input.nextBoolean();
+                System.out.print("Ground Clearance (mm): ");
+                int gc = input.nextInt();
+                newCar = new SUV(plate, model, brand, rate, seats, 0, "available", 100.0, fwd, gc);
+                break;
+
+            case 3: // Luxury
+                System.out.print("Leather Seats? (true/false): ");
+                boolean leather = input.nextBoolean();
+                System.out.print("Has Sunroof? (true/false): ");
+                boolean sunroof = input.nextBoolean();
+                newCar = new Luxury(plate, model, brand, rate, seats, 0, "available", 100.0, leather, sunroof);
+                break;
+        }
+
+        // store into file
+        if (newCar != null) {
+            sys.addCarToSystem(newCar, "cars.txt"); 
+            System.out.println("\nSuccessfully added: " + newCar.getCarID());
+        }
+
+        System.out.println("\nPress Enter to continue...");
+        input.nextLine();
     }
 
     public static void updateMileage(){

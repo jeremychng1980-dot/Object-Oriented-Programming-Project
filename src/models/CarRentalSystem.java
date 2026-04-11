@@ -9,8 +9,8 @@ import models.User;
 
 public class CarRentalSystem {
     Scanner input = new Scanner(System.in);
-    private Car[] cars = new Car[Car.getCarCount()];
-    private Customer[] customers = new Customer[Customer.getCustCount()];
+    private Car[] cars = new Car[100];
+    private Customer[] customers = new Customer[100];
 
 
     public CarRentalSystem(){
@@ -178,5 +178,18 @@ public class CarRentalSystem {
 
     }
 
+
+    // Admin function
+    public void addCarToSystem(Car newCar, String filename) {
+        if (Car.getCarCount() < cars.length) {
+            cars[Car.getCarCount()] = newCar;
+
+            utils.FileUploader.saveCarsToFile(filename, this.cars); 
+            System.out.println("\nVehicle record has been uploaded to the system.");
+        } 
+        else {
+            System.out.println("\nError, the garage is full, can not add new vehicle.");
+            }
+    }
 
 }

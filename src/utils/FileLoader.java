@@ -4,6 +4,8 @@ import models.Car;
 import models.Customer;
 import models.Economy;
 import models.License;
+import models.Luxury;
+import models.SUV;
 import models.Staff;
 import models.User;
 
@@ -176,6 +178,11 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean isHatchback = Boolean.parseBoolean(parts[9]);
                     double fuelEfficiencyPer100KM = Double.parseDouble(parts[10]);
+
+                        Economy eco = new Economy(plateNumber, model, brand, dailyRate, seatingCapacity, 
+                                                mileage, status, fuelLevel, isHatchback, fuelEfficiencyPer100KM);
+                        eco.setCarID(carID); 
+                        cars[count++] = eco; 
                 } else if (carType.equals("LUXURY")) {
                     String dataline = reader.readLine();
                     if (dataline == null) break;
@@ -193,6 +200,10 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean hasLeatherSeats = Boolean.parseBoolean(parts[9]);
                     boolean hasSunroof = Boolean.parseBoolean(parts[10]);
+                        Luxury lux = new Luxury(plateNumber, model, brand, dailyRate, seatingCapacity, 
+                                                mileage, status, fuelLevel, hasLeatherSeats, hasSunroof);
+                        lux.setCarID(carID); 
+                        cars[count++] = lux; 
                 } else if (carType.equals("SUV")) {
                     String dataline = reader.readLine();
                     if (dataline == null) break;
@@ -209,9 +220,13 @@ public class FileLoader {
                     String status = parts[7];
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean fourWheelDrive = Boolean.parseBoolean(parts[9]);
-                    double groundClearance = Double.parseDouble(parts[10]);
+                    int groundClearance = Integer.parseInt(parts[10]);
+                        SUV suv = new SUV(plateNumber, model, brand, dailyRate, seatingCapacity, 
+                                            mileage, status, fuelLevel, fourWheelDrive, groundClearance);
+                        suv.setCarID(carID); 
+                        cars[count++] = suv; 
                 }
-            }
+            }// end of for loop
 
         } catch (IOException e) {
             System.out.println("Error reading car file: " + e.getMessage());

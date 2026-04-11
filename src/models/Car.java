@@ -74,6 +74,10 @@ public class Car{
         return Car.carCount;
     }
     // setter
+    public void setCarID(String carID){
+        this.carID = carID;
+    }
+
     public void setDailyRate(double dailyRate){
         this.dailyRate = dailyRate;
     }
@@ -84,6 +88,10 @@ public class Car{
 
     public void setStatus(String status){
         this.status = status;
+    }
+
+    public static void setCarCount(int carCount){
+        Car.carCount = carCount;
     }
 
 
