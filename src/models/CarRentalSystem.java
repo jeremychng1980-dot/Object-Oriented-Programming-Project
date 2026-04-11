@@ -8,13 +8,17 @@ import models.Customer;
 import models.User;
 
 public class CarRentalSystem {
+    Scanner input = new Scanner(System.in);
+    private Car[] cars = new Car[Car.getCarCount()];
+    private Customer[] customers = new Customer[Customer.getCustCount()];
+
+
     public CarRentalSystem(){
         // Creaqte array to hold all Users temporarily
         User[] users = new User[100];
 
         // Load only customers from users.txt file
         int custCount = Customer.getCustCount();
-        Customer[] customers = new Customer[custCount];
         FileLoader.loadUsersFile("users.txt", users);
 
         int customerIndex = 0;
@@ -24,21 +28,18 @@ public class CarRentalSystem {
             }
         }
 
-        int carCount = Car.getCarCount();
-        Car[] cars = new Car[carCount];
         FileLoader.loadCarFile("cars.txt", cars);
     }// end of constructor
 
 //---------------------Rent a Vehicle-------------------
-    public static void rentVehicle() {
-        Scanner input = new Scanner(System.in);
+    public static void rentVehicle(Scanner input, Car[] cars, CarRentalSystem sys) {
+
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("\n           Rent a Vehicle            ");
         System.out.println("\n=====================================");
 
-        CarRentalSystem sys = new CarRentalSystem();
-        sys.displayAllCars(cars);
+        sys.displayAllCars();
 
         System.out.print("Press Enter to continue to login or '0' to exit... ");
         String choice = input.nextLine();//ask user if they want to continue to login or exit
@@ -49,13 +50,34 @@ public class CarRentalSystem {
             return;
         }
 
-        input.nextLine();
-        System.out.println("\n\nEnter the Vehicle's Car ID: ");
+        System.out.print("\nEnter the Vehicle's Car ID: ");
         String carId = input.nextLine();
-        
+            
+        Car targetCar = sys.findCarById(carId);
+        if (targetCar == null) {
+        System.out.println("Cannot find the " + carId + " Car.");
+            } 
+        else {
 
-        Car c1 = new Car();        
-        c1.equals(String carId);
+        if (!targetCar.getStatus().equalsIgnoreCase("available")) { // if not available then cannot borrow
+            System.out.println("Current car status is " + targetCar.getStatus() + ", so not available now.");
+        } else { // car available
+            targetCar.setStatus("unavailable"); 
+            System.out.println("Successful , You have booked the " + carId + " Vehicle.");
+            System.out.println("This Vehicle information: " + targetCar.toString());
+        }
+    }
+
+    }
+
+    public Car findCarById(String carId) {
+        for (int i = 0; i < Car.getCarCount(); i++) {
+
+            if (cars[i] != null && cars[i].getCarID().equalsIgnoreCase(carId)) {
+                return cars[i]; 
+            }
+        }
+        return null; // not found
     }
 
 //-----------------------Check out-----------------------------
@@ -75,25 +97,24 @@ public class CarRentalSystem {
     }
 
 //--------------------Process Payment-----------------------
-    public static void processPayment(){
+    public static void processPayment(Scanner input){
         boolean isRunning = true;
         int totalCharge = 0; //Temporary
 
         while (isRunning) {
-            Scanner scanner = new Scanner(System.in);
             System.out.println("\n=====================================");
             System.out.println("\n              Payment                ");
             System.out.println("\n=====================================");
 
             System.out.println("Select payment method ([C]Cash, [K]Card: ");
-            char option = scanner.next().charAt(0);
+            char option = input.next().charAt(0);
 
             if (option == 'C') {
                 Helper.delay(3);
                 System.out.println("Payment type selected: Cash");
                 //Show damages and rent cost, calculated in payment class
                 System.out.println("Enter the amount you wish to pay: ");
-                double payAmount = scanner.nextDouble();
+                double payAmount = input.nextDouble();
                 //calculateTotalCost() {payAmount - totalCost}, need to be added in payment class
                 Helper.delay(3);
                 System.out.println("Change: ");
@@ -104,7 +125,7 @@ public class CarRentalSystem {
             } else if (option == 'K') {
                 Helper.delay(3);
                 System.out.println("Enter your card pin number: ");
-                int pinNumber = scanner.nextInt(); //Basically mock process which provide 0 use
+                int pinNumber = input.nextInt(); //Basically mock process which provide 0 use
 
                 System.out.println("Amount charged: " + totalCharge);
                 System.out.println("Thank you for renting with us, please come again!");
@@ -128,21 +149,22 @@ public class CarRentalSystem {
         
     }
 
-    public void displayAllCars(Car [] cars) {
+    public void displayAllCars() {
 
         System.out.println("\n=====================================");
         System.out.println("           View All Vehicles           ");
         System.out.println("=====================================");
         System.out.println("\n==========================================================================");
-        System.out.printf("%-10s | %-12s | %-10s | %-10s | %-10s\n", "ID", "Plate", "Brand", "Model", "Status");
+        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate  |Seats      |Mileage    |Status     |Fuel       |");
         System.out.println("--------------------------------------------------------------------------");
 
         if (Car.getCarCount() == 0) {
             System.out.println("                     [ Currently no available vehicle record ]                      ");
         } else {
             for (int i = 0; i < Car.getCarCount(); i++) {
-
-                System.out.println(cars[i].toString());
+                if(cars[i] != null){
+                    System.out.println(cars[i].toString());
+                    }
             }
         }
         System.out.println("==========================================================================");

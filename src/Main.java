@@ -1,4 +1,5 @@
 import models.Admin;
+import models.Car;
 import models.CarRentalSystem;
 import models.Customer;
 import models.User;
@@ -17,6 +18,7 @@ public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
     static CarRentalSystem sys = new CarRentalSystem();
+    static Car [] cars = new Car[Car.getCarCount()];
     public static void main(String[] args) {
         // Load existing users from file
         utils.FileLoader.loadUsersFile("users.txt", users);
@@ -40,7 +42,7 @@ public class Main{
         	
         	  switch(choice) {
                 case 1:
-                    customerLogin(); //to customer login page
+                    customerLogin(input); //to customer login page
                     break;
                 case 2:
                     customerRegistration();//to customer registration page
@@ -59,6 +61,7 @@ public class Main{
                     System.out.println("     Goodbye!");
                     System.out.println("=====================================");
                     break;
+
             }
         	
         }while (choice != 5);
@@ -228,8 +231,8 @@ public class Main{
 }
 
 //-------------------------------Customer Login Page-----------------------------------------------
-    public static void customerLogin() {
-    Scanner input = new Scanner(System.in);
+    public static void customerLogin(Scanner input) {
+
     boolean loggedIn = false;
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -323,7 +326,7 @@ public class Main{
                 updateLicenseExpiryDate(loggedInCustomer);
                 break;
             case 3: 
-                CarRentalSystem.rentVehicle();
+                CarRentalSystem.rentVehicle(input, cars, sys);
                 break;
             case 4:
                 CarRentalSystem.checkOut();
@@ -332,7 +335,7 @@ public class Main{
                 CarRentalSystem.processReturn();
                 break;
             case 6:
-                CarRentalSystem.processPayment();
+                CarRentalSystem.processPayment(input);
                 break;
             case 7:
                 CarRentalSystem.viewHistory();
