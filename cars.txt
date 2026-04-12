@@ -1,61 +1,61 @@
-30
+62
 ECONOMY
-CA001|PHH 1001|Myvi|Perodua|100.0|5|12000|available|100.0|true|6.2
+C001|PHH 1001|Myvi|Perodua|100.0|5|12000|available|100.0|true|6.2
 ECONOMY
-CA002|VAB 2002|Axia|Perodua|80.0|5|25000|available|100.0|true|5.5
+C002|VAB 2002|Axia|Perodua|80.0|5|25000|available|100.0|true|5.5
 ECONOMY
-CA003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7
+C003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7
 ECONOMY
-CA004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4
+C004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4
 ECONOMY
-CA005|VAY 5005|Vios|Toyota|180.0|5|22000|available|100.0|false|5.8
+C005|VAY 5005|Vios|Toyota|180.0|5|22000|available|100.0|false|5.8
 ECONOMY
-CA006|BCC 6006|Iriz|Proton|95.0|5|30000|maintenance|50.0|true|6.6
+C006|BCC 6006|Iriz|Proton|95.0|5|30000|maintenance|50.0|true|6.6
 ECONOMY
-CA007|KAA 7007|Bezza|Perodua|110.0|5|18000|available|100.0|false|5.0
+C007|KAA 7007|Bezza|Perodua|110.0|5|18000|available|100.0|false|5.0
 ECONOMY
-CA008|MAB 8008|Almera|Nissan|160.0|5|28000|available|100.0|false|5.4
+C008|MAB 8008|Almera|Nissan|160.0|5|28000|available|100.0|false|5.4
 ECONOMY
-CA009|JCD 9009|Yaris|Toyota|190.0|5|12000|unavailable|100.0|true|5.7
+C009|JCD 9009|Yaris|Toyota|190.0|5|12000|unavailable|100.0|true|5.7
 ECONOMY
-CA010|PCE 1010|Jazz|Honda|170.0|5|35000|available|100.0|true|5.8
+C010|PCE 1010|Jazz|Honda|170.0|5|35000|available|100.0|true|5.8
 SUV
-CA011|VBH 2011|X70|Proton|280.0|5|8000|available|100.0|true|190
+C011|VBH 2011|X70|Proton|280.0|5|8000|available|100.0|true|190
 SUV
-CA012|WRC 3012|X50|Proton|220.0|5|15000|available|100.0|false|170
+C012|WRC 3012|X50|Proton|220.0|5|15000|available|100.0|false|170
 SUV
-CA013|VCS 4013|CR-V|Honda|350.0|5|25000|available|100.0|false|200
+C013|VCS 4013|CR-V|Honda|350.0|5|25000|available|100.0|false|200
 SUV
-CA014|BDE 5014|HR-V|Honda|280.0|5|12000|unavailable|90.0|false|185
+C014|BDE 5014|HR-V|Honda|280.0|5|12000|unavailable|90.0|false|185
 SUV
-CA015|AFG 6015|Fortuner|Toyota|450.0|7|40000|available|100.0|true|220
+C015|AFG 6015|Fortuner|Toyota|450.0|7|40000|available|100.0|true|220
 SUV
-CA016|PHJ 7016|CX-5|Mazda|320.0|5|20000|maintenance|100.0|false|193
+C016|PHJ 7016|CX-5|Mazda|320.0|5|20000|maintenance|100.0|false|193
 SUV
-CA017|VDA 8017|Aruz|Perodua|180.0|7|30000|available|100.0|false|220
+C017|VDA 8017|Aruz|Perodua|180.0|7|30000|available|100.0|false|220
 SUV
-CA018|WES 9018|Tiguan|Volkswagen|380.0|5|15000|available|100.0|false|191
+C018|WES 9018|Tiguan|Volkswagen|380.0|5|15000|available|100.0|false|191
 SUV
-CA019|BFF 1019|X-Trail|Nissan|300.0|7|28000|available|100.0|false|210
+C019|BFF 1019|X-Trail|Nissan|300.0|7|28000|available|100.0|false|210
 SUV
-CA020|VCG 2020|Ativa|Perodua|150.0|5|10000|available|100.0|false|200
+C020|VCG 2020|Ativa|Perodua|150.0|5|10000|available|100.0|false|200
 LUXURY
-CA021|W 2021 B|320i|BMW|550.0|5|5000|available|100.0|true|true
+C021|W 2021 B|320i|BMW|550.0|5|5000|available|100.0|true|true
 LUXURY
-CA022|VCH 3022|C200|Mercedes|580.0|5|8000|available|100.0|true|true
+C022|VCH 3022|C200|Mercedes|580.0|5|8000|available|100.0|true|true
 LUXURY
-CA023|PDK 4023|A4|Audi|500.0|5|12000|unavailable|100.0|true|false
+C023|PDK 4023|A4|Audi|500.0|5|12000|unavailable|100.0|true|false
 LUXURY
-CA024|BGL 5024|530e|BMW|750.0|5|15000|available|100.0|true|true
+C024|BGL 5024|530e|BMW|750.0|5|15000|available|100.0|true|true
 LUXURY
-CA025|VEM 6025|E250|Mercedes|800.0|5|20000|available|100.0|true|true
+C025|VEM 6025|E250|Mercedes|800.0|5|20000|available|100.0|true|true
 LUXURY
-CA026|WAM 7026|ES250|Lexus|650.0|5|10000|available|100.0|true|true
+C026|WAM 7026|ES250|Lexus|650.0|5|10000|available|100.0|true|true
 LUXURY
-CA027|PHM 8027|Model 3|Tesla|700.0|5|5000|available|100.0|true|true
+C027|PHM 8027|Model 3|Tesla|700.0|5|5000|available|100.0|true|true
 LUXURY
-CA028|BGN 9028|S90|Volvo|680.0|5|18000|maintenance|100.0|true|true
+C028|BGN 9028|S90|Volvo|680.0|5|18000|maintenance|100.0|true|true
 LUXURY
-CA029|VFN 1029|911|Porsche|1500.0|2|3000|available|100.0|true|false
+C029|VFN 1029|911|Porsche|1500.0|2|3000|available|100.0|true|false
 LUXURY
-CA030|WHP 2030|Taycan|Porsche|1800.0|4|2000|available|100.0|true|true
+C030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true

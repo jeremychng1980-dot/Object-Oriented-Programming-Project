@@ -31,6 +31,14 @@ public class CarRentalSystem {
         FileLoader.loadCarFile("cars.txt", cars);
     }// end of constructor
 
+    public Car [] getCars(){
+        return cars;
+    }
+
+    public Customer [] getCustomers(){
+        return customers;
+    }
+
 //---------------------Rent a Vehicle-------------------
     public static void rentVehicle(Scanner input, Car[] cars, CarRentalSystem sys) {
 
@@ -180,7 +188,7 @@ public class CarRentalSystem {
 
 
     // Admin function
-    public void addCarToSystem(Car newCar, String filename) {
+    public void addCarToSystem(String filename, Car newCar) {
         if (Car.getCarCount() < cars.length) {
             cars[Car.getCarCount()] = newCar;
 

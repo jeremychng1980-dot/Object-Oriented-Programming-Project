@@ -51,6 +51,35 @@ public class Helper {
         return value;//return the input
     }
 
+    // use for daily rate, fuel efficiency
+    public static double getValidatedDouble(Scanner input, String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                double value = input.nextDouble();
+                if (value < 0) throw new Exception("Value cannot be negative!");
+                input.nextLine(); // clear buffer
+                return value;
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Please enter a valid number (e.g. 150.50).");
+                input.nextLine(); 
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    // use for hatchback, sunroof, leather seat, four wheel drive
+    public static boolean getValidatedBoolean(Scanner input, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String strInput = input.nextLine().trim().toLowerCase();
+            if (strInput.equals("true") || strInput.equals("yes") || strInput.equals("y")) return true;
+            if (strInput.equals("false") || strInput.equals("no") || strInput.equals("n")) return false;
+            System.out.println("Error: Please enter 'true' or 'false' (or y/n).");
+        }
+    }
+
 //----------------instanceof method to display----------------------
     public static void displayUsers(User[] users, int count) {
         for (int i = 0; i < count; i++) {

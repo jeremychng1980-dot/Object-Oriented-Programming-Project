@@ -21,11 +21,10 @@ public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
     static CarRentalSystem sys = new CarRentalSystem();
-    static Car [] cars = new Car[100];
     public static void main(String[] args) {
         // Load existing users from file
         utils.FileLoader.loadUsersFile("users.txt", users);
-        utils.FileLoader.loadCarFile("cars.txt", cars);
+        utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
 
 //-----------------------First Page---------------------    
         Scanner input = new Scanner(System.in);
@@ -329,7 +328,7 @@ public class Main{
                 updateLicenseExpiryDate(loggedInCustomer, input);
                 break;
             case 3: 
-                CarRentalSystem.rentVehicle(input, cars, sys);
+                CarRentalSystem.rentVehicle(input, sys.getCars(), sys);
                 break;
             case 4:
                 CarRentalSystem.checkOut();
@@ -518,19 +517,19 @@ public class Main{
         
         switch(choice) {
             case 1:
-                viewAdminInformation(loggedInAdmin);
+                viewAdminInformation(loggedInAdmin, input);
                 break;
             case 2:
-                sys.displayAllCars();
+                viewCar(input);
                 break;
             case 3: 
                 addCar(input);
                 break;
             case 4:
-                updateMileage();
+                updateMileage(input, sys);
                 break;
             case 5:
-                setMaintenance();
+                setMaintenance(input);
                 break;
             case 6:
                 break;
@@ -539,8 +538,26 @@ public class Main{
     } while (choice != 6);
 } // end of admin menu
 
-    public static void viewAdminInformation(Admin admin){
-          
+    public static void viewAdminInformation(Admin admin, Scanner input){
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("           YOUR INFORMATION            ");
+        System.out.println("=====================================");
+        
+        User[] tempArray = {admin}; // create a temparary array that store the specific object of this customer
+        
+        Helper.displayUsers(tempArray, 1);// Use the instance of method to print
+        
+        System.out.print("\nPress Enter to Exit...   ");
+        input.nextLine();  // Wait for user to press Enter
+        Helper.clearScreen(); 
+    }
+
+    public static void viewCar(Scanner input){
+        sys.displayAllCars();
+
+        System.out.print("\nPress Enter to Exit...   ");
+        input.nextLine();  // Wait for user to press Enter
     }
 
     public static void addCar(Scanner input){
@@ -557,16 +574,17 @@ public class Main{
 
         // data input
         System.out.print("Enter Plate Number: ");
-        String plate = input.nextLine();
+        String plate = input.nextLine().trim();
+        while(plate.isEmpty()){
+            System.out.print("Plate cannot be empty. Please re-enter: ");
+            plate = input.nextLine().trim();
+        }
         System.out.print("Enter Model: ");
         String model = input.nextLine();
         System.out.print("Enter Brand: ");
         String brand = input.nextLine();
-        System.out.print("Enter Daily Rate: ");
-        double rate = input.nextDouble();
-        System.out.print("Enter Seating Capacity: ");
-        int seats = input.nextInt();
-        input.nextLine(); // clear buffer
+        double rate = Helper.getValidatedDouble(input, "Enter Daily Rate: ");
+        int seats = Helper.getValidatedInt(input, "Enter Seating Capacity: ", 2, 7);
 
         Car newCar = null;
 
@@ -599,20 +617,68 @@ public class Main{
 
         // store into file
         if (newCar != null) {
-            sys.addCarToSystem(newCar, "cars.txt"); 
+            sys.addCarToSystem("cars.txt", newCar); 
             System.out.println("\nSuccessfully added: " + newCar.getCarID());
         }
-
-        System.out.println("\nPress Enter to continue...");
+        input.nextLine(); // clear buffer
+        System.out.print("\nPress Enter to continue...");
         input.nextLine();
     }
 
-    public static void updateMileage(){
+    public static void updateMileage(Scanner input, CarRentalSystem sys){
+        Helper.clearScreen();
+        System.out.println("=====================================");
+        System.out.println("           Update Mileage            ");
+        System.out.println("=====================================");
 
+        System.out.print("Enter Car ID: ");
+        String carID = input.nextLine();
+
+        Car target = sys.findCarById(carID);
+        
+        if (target != null) {
+            System.out.println("Current Mileage for " + carID + ": " + target.getMileage() + " KM.");
+            
+            int additionalKm = Helper.getValidatedInt(input, "Enter additional distance (km): ", 0, 10000);
+            
+            target.setMileage(target.getMileage() + additionalKm);
+            
+            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
+            
+            System.out.println("\nMileage updated successfully!");
+        } 
+        else {
+            System.out.println("Error: Car ID not found.");
+        }
+
+        System.out.print("\nPress Enter to continue...");
+        input.nextLine();
     }
 
-    public static void setMaintenance(){
-        
+    public static void setMaintenance(Scanner input){
+        Helper.clearScreen();
+        System.out.println("=====================================");
+        System.out.println("         SET MAINTENANCE STATUS      ");
+        System.out.println("=====================================");
+
+        System.out.print("Enter Car ID to send for maintenance: ");
+        String carID = input.nextLine();
+
+        Car target = sys.findCarById(carID);
+
+        if (target != null) {
+            target.setStatus("maintenance");
+
+            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
+            
+            System.out.println("\nVehicle " + carID + " is already in maintenance.");
+        } 
+        else {
+            System.out.println("Error: Car ID not found.");
+        }
+        input.nextLine();
+        System.out.print("\nPress Enter to continue...");
+        input.nextLine();
     }
 
 }
