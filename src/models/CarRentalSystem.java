@@ -39,8 +39,11 @@ public class CarRentalSystem {
         return customers;
     }
 
-//---------------------Rent a Vehicle-------------------
+//---------------------Rent a Vehicle RESERVATION-------------------
     public static void rentVehicle(Scanner input, Car[] cars, CarRentalSystem sys) {
+
+        int rentalDayCount;
+        double toBePaid;
 
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -73,15 +76,20 @@ public class CarRentalSystem {
             targetCar.setStatus("unavailable"); 
             System.out.println("Successful , You have booked the " + carId + " Vehicle.");
             System.out.println("This Vehicle information: " + targetCar.toString());
+            System.out.println("Enter the days you wish to rent for: ");
+            rentalDayCount = input.nextInt();
+            toBePaid = rentalDayCount * targetCar.getDailyRate();
+            System.out.println("Total rental fee (Without any additional charges): RM " + toBePaid);
+            Helper.delay(5);
         }
     }
 
     }
 
-    public Car findCarById(String carId) {
+    public Car findCarById(String carID) {
         for (int i = 0; i < Car.getCarCount(); i++) {
 
-            if (cars[i] != null && cars[i].getCarID().equalsIgnoreCase(carId)) {
+            if (cars[i] != null && cars[i].getCarID().equalsIgnoreCase(carID)) {
                 return cars[i]; 
             }
         }
@@ -89,32 +97,77 @@ public class CarRentalSystem {
     }
 
 //-----------------------Check out-----------------------------
-    public static void checkOut(){
+    public static void checkOut(Scanner input, CarRentalSystem sys) {
+        
         System.out.println("\n=====================================");
         System.out.println("\n             Check  Out              ");
         System.out.println("\n=====================================");
+
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        System.out.println("\n");
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
+        }
+
+        System.out.print("Enter the Vehicle's Car ID: ");
+        String carId = input.nextLine();
+        Car targetCar = sys.findCarById(carId);
+        
+        if (targetCar == null) {
+            System.out.println("Cannot find the " + carId + " Car.");
+        } else {
+            if (targetCar.getStatus().equalsIgnoreCase("unavailable")) { // if not available then can check out
+                targetCar.setStatus("available"); 
+                System.out.println("Successful , You have checked out the " + carId + " Vehicle.");
+                Helper.delay(5);
+            } else { // car available
+                System.out.println("Current car status is " + targetCar.getStatus() + ", so not checked out yet.");
+            }
+            
+        }
     }
 
 
-//------------------------Process Return----------------------------
-    public static void processReturn(){
+
+
+//------------------------Process Return---------------------
+    public static double processReturn(Scanner input, Payment payment) {
+
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("\n           Process Return            ");
         System.out.println("\n=====================================");
+
+        System.out.println("Enter the damage option for the car returned (None/ Minor/ Moderate/ Heavy) :");
+        String damageOption = input.nextLine();
+        damageOption = damageOption.toLowerCase(); // Convert input to lowercase for case-insensitive comparison
+
+        if (damageOption.equals("none") || damageOption.equals("minor") || damageOption.equals("moderate") || damageOption.equals("heavy")) {\
+        
+            double paymentAmount = payment.getDamageCharge();
+            System.out.println("Damage charge calculated: RM " + paymentAmount);
+            return paymentAmount;
+        } else {
+            System.out.println("Invalid damage option entered. Please enter None, Minor, Moderate, or Heavy.");
+        }
     }
+                          
 
 //--------------------Process Payment-----------------------
     public static void processPayment(Scanner input){
         boolean isRunning = true;
-        int totalCharge = 0; //Temporary
+        double totalCharge = 0;
+        double payAmount;
 
         while (isRunning) {
             System.out.println("\n=====================================");
             System.out.println("\n              Payment                ");
             System.out.println("\n=====================================");
 
-            System.out.println("Select payment method ([C]Cash, [K]Card: ");
+            System.out.println("Select payment method ([C]Cash, [K]Card, [T]Online Transfer): ");
             char option = input.next().charAt(0);
 
             if (option == 'C') {
@@ -122,25 +175,35 @@ public class CarRentalSystem {
                 System.out.println("Payment type selected: Cash");
                 //Show damages and rent cost, calculated in payment class
                 System.out.println("Enter the amount you wish to pay: ");
-                double payAmount = input.nextDouble();
+                payAmount = input.nextDouble();
                 //calculateTotalCost() {payAmount - totalCost}, need to be added in payment class
                 Helper.delay(3);
-                System.out.println("Change: ");
+                System.out.println("Change: " + (payAmount - toBepaid));
                 System.out.println("Thank you for renting with us, please come again!");
                 Helper.delay(5);
                 isRunning = false;
 
             } else if (option == 'K') {
                 Helper.delay(3);
-                System.out.println("Enter your card pin number: ");
+                System.out.println("Enter your card PIN number: ");
                 int pinNumber = input.nextInt(); //Basically mock process which provide 0 use
 
-                System.out.println("Amount charged: " + totalCharge);
+                System.out.println("Amount charged: " + toBePaid);
                 System.out.println("Thank you for renting with us, please come again!");
                 Helper.delay(5);
                 isRunning = false;
+            } else if (option == 'T') {
+                Helper.delay(3);
+                System.out.println("Enter your double-verification code: ");
+                int pinNumber = input.nextInt(); //Basically mock process which provide 0 use
+
+                System.out.println("Amount charged: " + toBePaid);
+                System.out.println("Thank you for renting with us, please come again!");
+                Helper.delay(5);
+                isRunning = false;
+                
             } else {
-                System.out.println("Invalid option selected, please enter C or K only!");
+                System.out.println("Invalid option selected, please enter C, K or T only!");
                 Helper.delay(5);
             }
         }
@@ -176,8 +239,9 @@ public class CarRentalSystem {
             }
         }
         System.out.println("==========================================================================");
+        System.out.println("Total car count: " + Car.getCarCount());
     }
-
+/* 
     public double calculateTotalCost(Car[] cars) {
         for (int i = 0; i < cars.length; i++) {
             private double totalAmount = Payment.calculateDamage + cars[i].calcRentalFee();
@@ -185,18 +249,18 @@ public class CarRentalSystem {
         }
 
     }
-
+*/
     // Admin function
     public void addCarToSystem(String filename, Car newCar) {
         if (Car.getCarCount() < cars.length) {
             cars[Car.getCarCount()] = newCar;
 
-            utils.FileUploader.saveCarsToFile(filename, this.cars); 
+            utils.FileUploader.saveCarsToFile(filename, cars); 
             System.out.println("\nVehicle record has been uploaded to the system.");
         } 
         else {
             System.out.println("\nError, the garage is full, can not add new vehicle.");
             }
     }
-
 }
+

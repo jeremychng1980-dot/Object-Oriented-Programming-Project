@@ -148,11 +148,13 @@ public class FileLoader {
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            //Read total number of cars
             String line = reader.readLine();
             if (line == null) {
                 return;
             }
 
+            //Convert the first line to an integer to get the total number of cars
             int totalCars = Integer.parseInt(line.trim());
             int count = 0;
 
@@ -183,6 +185,8 @@ public class FileLoader {
                                                 mileage, status, fuelLevel, isHatchback, fuelEfficiencyPer100KM);
                         eco.setCarID(carID); 
                         cars[count++] = eco; 
+
+
                 } else if (carType.equals("LUXURY")) {
                     String dataline = reader.readLine();
                     if (dataline == null) break;
@@ -203,7 +207,9 @@ public class FileLoader {
                         Luxury lux = new Luxury(plateNumber, model, brand, dailyRate, seatingCapacity, 
                                                 mileage, status, fuelLevel, hasLeatherSeats, hasSunroof);
                         lux.setCarID(carID); 
-                        cars[count++] = lux; 
+                        cars[count++] = lux;
+
+                         
                 } else if (carType.equals("SUV")) {
                     String dataline = reader.readLine();
                     if (dataline == null) break;
@@ -227,7 +233,8 @@ public class FileLoader {
                         cars[count++] = suv; 
                 }
             }// end of for loop
-
+            Car.setCarCount(count); // Update the static carCount variable to reflect the number of cars loaded
+            
         } catch (IOException e) {
             System.out.println("Error reading car file: " + e.getMessage());
         }

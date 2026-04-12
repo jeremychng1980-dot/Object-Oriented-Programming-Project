@@ -1,10 +1,9 @@
 package models;
 
 
-
 public class Cash implements PaymentMethod{
 //data properties
-    private float amountReceived;
+    private double amountReceived;
 
 //methods
     // no-args constructor
@@ -13,19 +12,19 @@ public class Cash implements PaymentMethod{
     }
     
     // constructor with args
-    public Cash(float amountReceived){
+    public Cash(double amountReceived){
         this.amountReceived = amountReceived;
         
     }
 
     // getters
-    public float getAmountReceived() {
+    public double getAmountReceived() {
         return amountReceived;
     }
 
 
     // setters
-    public void setAmountReceived(float amountReceived) {
+    public void setAmountReceived(double amountReceived) {
         this.amountReceived = amountReceived;
     }
 
@@ -33,8 +32,7 @@ public class Cash implements PaymentMethod{
 
     //other methods
     public String toString() {
-        return super.toString() +
-            "\nAmount Received: " + amountReceived;
+        return "\nAmount Received: " + amountReceived;
     }
     
 

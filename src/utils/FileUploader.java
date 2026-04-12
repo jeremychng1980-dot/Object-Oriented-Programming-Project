@@ -87,8 +87,13 @@ public class FileUploader {
         try {
             writer = new PrintWriter(new FileWriter(filename));
 
-            writer.println(Car.getCarCount());
-            for (int i = 0; i < Car.getCarCount(); i++) {
+            int actualCount = 0;
+            for (int i = 0; i < cars.length; i++) {
+                if (cars[i] != null) actualCount++;
+            }
+
+            writer.println(actualCount);
+            for (int i = 0; i < cars.length; i++) {
                 Car c = cars[i];
                 if (c != null) {
                     if (cars[i] instanceof Economy) {

@@ -9,6 +9,8 @@ import models.License;
 import models.Luxury;
 import models.SUV;
 import utils.Helper;
+import models.Payment;
+
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
@@ -20,6 +22,7 @@ import java.io.*;
 public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
+    static Payment[] payment = new Payment[30];
     static CarRentalSystem sys = new CarRentalSystem();
     public static void main(String[] args) {
         // Load existing users from file
@@ -331,10 +334,10 @@ public class Main{
                 CarRentalSystem.rentVehicle(input, sys.getCars(), sys);
                 break;
             case 4:
-                CarRentalSystem.checkOut();
+                CarRentalSystem.checkOut(input, sys);
                 break;
             case 5:
-                CarRentalSystem.processReturn();
+                CarRentalSystem.processReturn(input);
                 break;
             case 6:
                 CarRentalSystem.processPayment(input);
@@ -585,6 +588,7 @@ public class Main{
         String brand = input.nextLine();
         double rate = Helper.getValidatedDouble(input, "Enter Daily Rate: ");
         int seats = Helper.getValidatedInt(input, "Enter Seating Capacity: ", 2, 7);
+        int mileage = Helper.getValidatedInt(input, "Enter Mileage: ", 0, 100000);
 
         Car newCar = null;
 
@@ -594,8 +598,8 @@ public class Main{
                 boolean isHb = input.nextBoolean();
                 System.out.print("Fuel Efficiency (L/100km): ");
                 double eff = input.nextDouble();
-                //  status default is "available", mileage default is 0, fuelLevel 100.0
-                newCar = new Economy(plate, model, brand, rate, seats, 0, "available", 100.0, isHb, eff);
+                //  status default is "available", fuelLevel 100.0
+                newCar = new Economy(plate, model, brand, rate, seats, mileage, "available", 100.0, isHb, eff);
                 break;
 
             case 2: // SUV
@@ -603,7 +607,7 @@ public class Main{
                 boolean fwd = input.nextBoolean();
                 System.out.print("Ground Clearance (mm): ");
                 int gc = input.nextInt();
-                newCar = new SUV(plate, model, brand, rate, seats, 0, "available", 100.0, fwd, gc);
+                newCar = new SUV(plate, model, brand, rate, seats, mileage, "available", 100.0, fwd, gc);
                 break;
 
             case 3: // Luxury
@@ -611,7 +615,7 @@ public class Main{
                 boolean leather = input.nextBoolean();
                 System.out.print("Has Sunroof? (true/false): ");
                 boolean sunroof = input.nextBoolean();
-                newCar = new Luxury(plate, model, brand, rate, seats, 0, "available", 100.0, leather, sunroof);
+                newCar = new Luxury(plate, model, brand, rate, seats, mileage, "available", 100.0, leather, sunroof);
                 break;
         }
 
@@ -620,7 +624,7 @@ public class Main{
             sys.addCarToSystem("cars.txt", newCar); 
             System.out.println("\nSuccessfully added: " + newCar.getCarID());
         }
-        input.nextLine(); // clear buffer
+
         System.out.print("\nPress Enter to continue...");
         input.nextLine();
     }
@@ -650,7 +654,7 @@ public class Main{
         else {
             System.out.println("Error: Car ID not found.");
         }
-
+        input.nextLine();
         System.out.print("\nPress Enter to continue...");
         input.nextLine();
     }

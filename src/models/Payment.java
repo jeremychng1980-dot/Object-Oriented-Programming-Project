@@ -6,25 +6,26 @@ public class Payment {
     // data properties
     private String paymentID;
     private Date date;
-    private float amount;
+    private double amount;
     private static int paymentCounter;
-    private PaymentMethod PaymentMethod;
+    private PaymentMethod paymentMethod;
     //constant d.p
-    private static final float MINOR_DAMAGE = 500;
-    private static final float MODERATE_DAMAGE = 1000;
-    private static final float MAJOR_DAMAGE = 1500;
+    private double damageCharge;
+    private static final double MINOR_DAMAGE = 500;
+    private static final double MODERATE_DAMAGE = 1000;
+    private static final double MAJOR_DAMAGE = 1500;
 
     // no-args constructor
     public Payment() {
-        this(new Date(),0.0f, );
+        this(new Date(),0.0f, null);
     }
     
     // constructor with args
-    public Payment(Date date, float amount, PaymentMethod PaymentMethod) {
+    public Payment(Date date, double amount, PaymentMethod paymentMethod) {
         this.paymentID = generatePaymentID(); // use generatePaymentID() method
         this.date = date;
         this.amount = amount;
-        this.PaymentMethod = PaymentMethod;
+        this.paymentMethod = paymentMethod;
 
     }
 
@@ -43,23 +44,27 @@ public class Payment {
         return date;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     } 
 
-    public PaymentMethod PaymentMethod(){
-        return PaymentMethod;
+    public double getDamageCharge(){
+        return damageCharge;
     }
 
-    public static float getMinorDamage(){
+    public PaymentMethod PaymentMethod(){
+        return paymentMethod;
+    }
+
+    public static double getMinorDamage(){
         return MINOR_DAMAGE;
     }
 
-    public static float getModerateDamage(){
+    public static double getModerateDamage(){
         return MODERATE_DAMAGE;
     }
 
-    public static float getMajorDamage(){
+    public static double getMajorDamage(){
         return MAJOR_DAMAGE;
     }
     
@@ -68,8 +73,16 @@ public class Payment {
         this.date = date;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public void setDamageCharge(double damageCharge){
+        this.damageCharge = damageCharge;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod){
+        this.paymentMethod = paymentMethod;
     }
 
     public static void setPaymentCounter(int paymentCounter){
@@ -84,27 +97,33 @@ public class Payment {
                "\n" + PaymentMethod();
             }//end toString()
 
-    public void calculateDamage(int damageOption) { //reference for actual damage calculation
-        switch (damageOption) {
-            case 1: // No damage
+    public void calculateDamage(String damageOption) { //reference for actual damage calculation
+            switch (damageOption) {
+                case "none": //No damage
+                    break;
+                case "minor": // Minor
+                    damageCharge += MINOR_DAMAGE;
+                    break;
+                                                                                    
+                case "moderate": // Moderate
+                    damageCharge += MODERATE_DAMAGE;
                 break;
+                                 
+                case "heavy": // High
+                    damageCharge += MAJOR_DAMAGE;
+                default:
+                    System.out.println("Invalid damage option!");
+                }//end switchbreak
+    }
 
-            case 2: // Minor
-                this.amount += MINOR_DAMAGE;
-                break;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-            case 3: // Moderate
-                this.amount += MODERATE_DAMAGE;
-                break;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
 
-            case 4: // High
-                this.amount += MAJOR_DAMAGE;
-                break;
-
-            default:
-                System.out.println("Invalid damage option!");
-            }//end Switch
-        }//end calculateDamage()
-
-
+        Payment other = (Payment) obj;
+        return this.paymentID.equals(other.paymentID);
+    }
 }//end of Payment Class
