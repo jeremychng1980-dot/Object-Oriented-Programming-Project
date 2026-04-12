@@ -8,6 +8,7 @@ public class Payment {
     private Date date;
     private float amount;
     private static int paymentCounter;
+    private PaymentMethod PaymentMethod;
     //constant d.p
     private static final float MINOR_DAMAGE = 500;
     private static final float MODERATE_DAMAGE = 1000;
@@ -15,14 +16,15 @@ public class Payment {
 
     // no-args constructor
     public Payment() {
-        this(new Date(),0.0f);
+        this(new Date(),0.0f, );
     }
     
     // constructor with args
-    public Payment(Date date, float amount) {
+    public Payment(Date date, float amount, PaymentMethod PaymentMethod) {
         this.paymentID = generatePaymentID(); // use generatePaymentID() method
         this.date = date;
         this.amount = amount;
+        this.PaymentMethod = PaymentMethod;
 
     }
 
@@ -44,6 +46,10 @@ public class Payment {
     public float getAmount() {
         return amount;
     } 
+
+    public PaymentMethod PaymentMethod(){
+        return PaymentMethod;
+    }
 
     public static float getMinorDamage(){
         return MINOR_DAMAGE;
@@ -74,8 +80,9 @@ public class Payment {
     public String toString() {
         return "Payment ID: " + paymentID +
                "\nDate: " + date +
-               "\nAmount: " + amount;
-    }//end toString()
+               "\nAmount: " + amount +
+               "\n" + PaymentMethod();
+            }//end toString()
 
     public void calculateDamage(int damageOption) { //reference for actual damage calculation
         switch (damageOption) {
@@ -98,5 +105,6 @@ public class Payment {
                 System.out.println("Invalid damage option!");
             }//end Switch
         }//end calculateDamage()
+
 
 }//end of Payment Class

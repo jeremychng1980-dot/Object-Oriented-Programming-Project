@@ -1,8 +1,7 @@
 package models;
+; 
 
-import java.util.Date; 
-
-public class Card extends Payment {
+public class Card implements PaymentMethod {
 //data properties
     private String cardNo;
     private String CCV;
@@ -13,12 +12,11 @@ public class Card extends Payment {
 //methods
     // no-args constructor
     public Card() {
-        this(new Date(),0.0f, "", "", "", "","");
+        this("", "", "", "","");
     }
     
     // constructor with args
-    public Card(Date date, float amount, String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) {
-        super(date, amount);
+    public Card(String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) {
         this.cardNo = cardNo;
         this.CCV = CCV;
         this.nameOnCard = nameOnCard;
@@ -76,6 +74,5 @@ public class Card extends Payment {
         "\nName on Card: " + nameOnCard +
         "\nExpiry: " + expiryMonth + "/" + expiryYear;
     }
-
 
 }//End of Card Class
