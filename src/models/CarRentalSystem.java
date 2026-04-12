@@ -186,7 +186,6 @@ public class CarRentalSystem {
 
     }
 
-
     // Admin function
     public void addCarToSystem(String filename, Car newCar) {
         if (Car.getCarCount() < cars.length) {

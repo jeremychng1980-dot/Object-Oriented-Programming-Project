@@ -658,7 +658,7 @@ public class Main{
     public static void setMaintenance(Scanner input){
         Helper.clearScreen();
         System.out.println("=====================================");
-        System.out.println("         SET MAINTENANCE STATUS      ");
+        System.out.println("        SET MAINTENANCE STATUS       ");
         System.out.println("=====================================");
 
         System.out.print("Enter Car ID to send for maintenance: ");
@@ -676,7 +676,6 @@ public class Main{
         else {
             System.out.println("Error: Car ID not found.");
         }
-        input.nextLine();
         System.out.print("\nPress Enter to continue...");
         input.nextLine();
     }
