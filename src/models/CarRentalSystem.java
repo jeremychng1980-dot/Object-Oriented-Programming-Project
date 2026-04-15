@@ -183,6 +183,7 @@ public class CarRentalSystem {
                 int pinNumber = input.nextInt(); //Basically mock process which provide 0 use
 
 
+
                 System.out.println("Amount charged: " + toBePaid);
                 System.out.println("Thank you for renting with us, please come again!");
                 Helper.delay(5);
@@ -203,7 +204,7 @@ public class CarRentalSystem {
             }
         }
 
-    }//end ProcessPayment
+    }//end ProcessPayment//end ProcessPayment
 
 //-------------------------View History-------------------------------
     public static void viewHistory(){
