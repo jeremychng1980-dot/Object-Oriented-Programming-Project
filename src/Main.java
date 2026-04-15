@@ -22,7 +22,7 @@ import java.io.*;
 public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
-    static Payment[] payment = new Payment[30];
+    static Payment[] payment = new Payment[100];
     static CarRentalSystem sys = new CarRentalSystem();
     public static void main(String[] args) {
         // Load existing users from file
@@ -313,9 +313,9 @@ public class Main{
         System.out.println("=====================================");
         System.out.println("1. View Profile");
         System.out.println("2. Modify License Expired Date");
-        System.out.println("3. Rent a Vehicle");
+        System.out.println("3. Rent a Vehicle(Reservation)");
         System.out.println("4. Check out");
-        System.out.println("5. Return");
+        System.out.println("5. Return Vehicle");
         System.out.println("6. Payment");
         System.out.println("7. View History record");
         System.out.println("8. Log out");
@@ -331,7 +331,7 @@ public class Main{
                 updateLicenseExpiryDate(loggedInCustomer, input);
                 break;
             case 3: 
-                CarRentalSystem.rentVehicle(input, sys.getCars(), sys);
+                rentVehicle(input, sys.getCars());
                 break;
             case 4:
                 CarRentalSystem.checkOut(input, sys);
@@ -340,7 +340,7 @@ public class Main{
                 CarRentalSystem.processReturn(input);
                 break;
             case 6:
-                CarRentalSystem.processPayment(input);
+                //CarRentalSystem.processPayment(input);
                 break;
             case 7:
                 CarRentalSystem.viewHistory();
@@ -351,6 +351,8 @@ public class Main{
         
     } while (choice != 8);
 }
+
+
 //------------------------View Information Page ---------------------------------    
     public static void viewCustomerInformation(Customer customer, Scanner input){
     Helper.clearScreen();
@@ -434,7 +436,31 @@ public class Main{
     input.nextLine();
 }      
 
+//-------------------------Reservation (rent vehicle)
+    public static void rentVehicle(Scanner input, Car[] cars){
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("\n           Rent a Vehicle            ");
+        System.out.println("\n=====================================");
 
+        sys.displayAllCars();
+
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        System.out.println("\n");
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
+        }
+
+        System.out.print("\n\nEnter the Vehicle's Car ID: ");
+        String carID = input.nextLine();
+
+        double deposit = sys.reservation(input, carID, sys);
+        // payment[] <-- setDeposit;
+
+    }
 // Admin Login
  public static void adminLogin(Scanner input) {
     boolean loggedIn = false;

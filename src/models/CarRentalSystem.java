@@ -8,10 +8,9 @@ import models.Customer;
 import models.User;
 
 public class CarRentalSystem {
-    Scanner input = new Scanner(System.in);
+
     private Car[] cars = new Car[100];
     private Customer[] customers = new Customer[100];
-
 
     public CarRentalSystem(){
         // Creaqte array to hold all Users temporarily
@@ -40,50 +39,33 @@ public class CarRentalSystem {
     }
 
 //---------------------Rent a Vehicle RESERVATION-------------------
-    public static void rentVehicle(Scanner input, Car[] cars, CarRentalSystem sys) {
+    public double reservation(Scanner input, String carID, CarRentalSystem sys) {
 
         int rentalDayCount;
         double toBePaid;
 
-        Helper.clearScreen();
-        System.out.println("\n=====================================");
-        System.out.println("\n           Rent a Vehicle            ");
-        System.out.println("\n=====================================");
+        Car targetCar = sys.findCarById(carID);
 
-        sys.displayAllCars();
-
-        System.out.print("Press Enter to continue to login or '0' to exit... ");
-        String choice = input.nextLine();//ask user if they want to continue to login or exit
-        System.out.println("\n");
-        // Check if user wants to exit
-        if (choice.equals("0")) {
-        	Helper.clearScreen();
-            return;
-        }
-
-        System.out.print("\nEnter the Vehicle's Car ID: ");
-        String carId = input.nextLine();
-            
-        Car targetCar = sys.findCarById(carId);
         if (targetCar == null) {
-        System.out.println("Cannot find the " + carId + " Car.");
+        System.out.println("Cannot find the " + carID + " Car.");
             } 
         else {
 
-        if (!targetCar.getStatus().equalsIgnoreCase("available")) { // if not available then cannot borrow
-            System.out.println("Current car status is " + targetCar.getStatus() + ", so not available now.");
-        } else { // car available
-            targetCar.setStatus("unavailable"); 
-            System.out.println("Successful , You have booked the " + carId + " Vehicle.");
-            System.out.println("This Vehicle information: " + targetCar.toString());
-            System.out.println("Enter the days you wish to rent for: ");
-            rentalDayCount = input.nextInt();
-            toBePaid = rentalDayCount * targetCar.getDailyRate();
-            System.out.println("Total rental fee (Without any additional charges): RM " + toBePaid);
-            Helper.delay(5);
+            if (!targetCar.getStatus().equalsIgnoreCase("available")) { // if not available then cannot borrow
+                System.out.println("Current car status is " + targetCar.getStatus() + ", so not available now.");
+            } 
+            else { // car available
+                targetCar.setStatus("unavailable"); 
+                System.out.println("Successful , You have booked the " + carID + " Vehicle.");
+                System.out.println("This Vehicle information: " + targetCar.toString());
+                System.out.println("Enter the days you wish to rent for: ");
+                rentalDayCount = input.nextInt();
+                toBePaid = rentalDayCount * targetCar.getDailyRate();
+                System.out.println("Total rental fee (Without any additional charges): RM " + toBePaid);
+                Helper.delay(5);
+            }
         }
-    }
-
+        return 0.0;
     }
 
     public Car findCarById(String carID) {
@@ -128,36 +110,30 @@ public class CarRentalSystem {
             }
             
         }
+
+        // set status --> unavailable
+        // how to store this car rented by this customer
+
+
     }
 
 
 
 
 //------------------------Process Return---------------------
-    public static double processReturn(Scanner input, Payment payment) {
+    public static void processReturn(Scanner input) {
 
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("\n           Process Return            ");
         System.out.println("\n=====================================");
 
-        System.out.println("Enter the damage option for the car returned (None/ Minor/ Moderate/ Heavy) :");
-        String damageOption = input.nextLine();
-        damageOption = damageOption.toLowerCase(); // Convert input to lowercase for case-insensitive comparison
-
-        if (damageOption.equals("none") || damageOption.equals("minor") || damageOption.equals("moderate") || damageOption.equals("heavy")) {\
         
-            double paymentAmount = payment.getDamageCharge();
-            System.out.println("Damage charge calculated: RM " + paymentAmount);
-            return paymentAmount;
-        } else {
-            System.out.println("Invalid damage option entered. Please enter None, Minor, Moderate, or Heavy.");
-        }
     }
                           
 
 //--------------------Process Payment-----------------------
-    public static void processPayment(Scanner input){
+    public static void processPayment(Scanner input, double toBepaid){
         boolean isRunning = true;
         double totalCharge = 0;
         double payAmount;
@@ -227,7 +203,6 @@ public class CarRentalSystem {
         System.out.println("=====================================");
         System.out.println("\n==========================================================================");
         System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate  |Seats      |Mileage    |Status     |Fuel       |");
-        System.out.println("--------------------------------------------------------------------------");
 
         if (Car.getCarCount() == 0) {
             System.out.println("                     [ Currently no available vehicle record ]                      ");
@@ -250,6 +225,30 @@ public class CarRentalSystem {
 
     }
 */
+    // Staff function 
+    public static double inspection(Scanner input, Payment payment){
+        double penalty = 0.0;
+
+        System.out.println("Enter the damage option for the car returned (None/ Minor/ Moderate/ Heavy) :");
+        String damageOption = input.nextLine();
+        damageOption = damageOption.toLowerCase(); // Convert input to lowercase for case-insensitive comparison
+
+        if (damageOption.equals("none") || damageOption.equals("minor") || damageOption.equals("moderate") || damageOption.equals("heavy")) {
+        
+            double paymentAmount = payment.getDamageCharge();
+            System.out.println("Damage charge calculated: RM " + paymentAmount);
+            return paymentAmount;
+        } else {
+            System.out.println("Invalid damage option entered. Please enter None, Minor, Moderate, or Heavy.");
+        }
+
+        // switch-case --> penalty --> return penalty 
+
+        return penalty;
+    }
+
+
+
     // Admin function
     public void addCarToSystem(String filename, Car newCar) {
         if (Car.getCarCount() < cars.length) {
