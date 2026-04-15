@@ -22,7 +22,7 @@ import java.io.*;
 public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
-    static Payment[] payment = new Payment[100];
+    static Payment[] payments = new Payment[100];
     static CarRentalSystem sys = new CarRentalSystem();
     public static void main(String[] args) {
         // Load existing users from file
@@ -438,6 +438,7 @@ public class Main{
 
 //-------------------------Reservation (rent vehicle)
     public static void rentVehicle(Scanner input, Car[] cars){
+
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("\n           Rent a Vehicle            ");
@@ -457,8 +458,8 @@ public class Main{
         System.out.print("\n\nEnter the Vehicle's Car ID: ");
         String carID = input.nextLine();
 
-        double deposit = sys.reservation(input, carID, sys);
-        // payment[] <-- setDeposit;
+        double toBePaid = sys.reservation(input, carID, sys);
+        double amount = payments[0].getAmount(); //  
 
     }
 // Admin Login

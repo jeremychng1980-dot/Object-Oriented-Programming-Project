@@ -11,6 +11,7 @@ public class CarRentalSystem {
 
     private Car[] cars = new Car[100];
     private Customer[] customers = new Customer[100];
+    private Payment[] payments = new Payment[100];
 
     public CarRentalSystem(){
         // Creaqte array to hold all Users temporarily
@@ -38,6 +39,10 @@ public class CarRentalSystem {
         return customers;
     }
 
+    public Payment [] getPayments(){
+        return payments;
+    }
+
 //---------------------Rent a Vehicle RESERVATION-------------------
     public double reservation(Scanner input, String carID, CarRentalSystem sys) {
 
@@ -63,8 +68,10 @@ public class CarRentalSystem {
                 toBePaid = rentalDayCount * targetCar.getDailyRate();
                 System.out.println("Total rental fee (Without any additional charges): RM " + toBePaid);
                 Helper.delay(5);
+                return toBePaid;
             }
         }
+        
         return 0.0;
     }
 
@@ -101,17 +108,17 @@ public class CarRentalSystem {
         if (targetCar == null) {
             System.out.println("Cannot find the " + carId + " Car.");
         } else {
-            if (targetCar.getStatus().equalsIgnoreCase("unavailable")) { // if not available then can check out
-                targetCar.setStatus("available"); 
+            if (targetCar.getStatus().equalsIgnoreCase("available")) {
+                targetCar.setStatus("unavailable"); 
                 System.out.println("Successful , You have checked out the " + carId + " Vehicle.");
                 Helper.delay(5);
-            } else { // car available
+            } 
+            else { // car available
                 System.out.println("Current car status is " + targetCar.getStatus() + ", so not checked out yet.");
             }
             
         }
 
-        // set status --> unavailable
         // how to store this car rented by this customer
 
 
@@ -133,7 +140,7 @@ public class CarRentalSystem {
                           
 
 //--------------------Process Payment-----------------------
-    public static void processPayment(Scanner input, double toBepaid){
+    public static void processPayment(Scanner input, double toBePaid){
         boolean isRunning = true;
         double totalCharge = 0;
         double payAmount;
@@ -154,7 +161,7 @@ public class CarRentalSystem {
                 payAmount = input.nextDouble();
                 //calculateTotalCost() {payAmount - totalCost}, need to be added in payment class
                 Helper.delay(3);
-                System.out.println("Change: " + (payAmount - toBepaid));
+                System.out.println("Change: " + (payAmount - toBePaid));
                 System.out.println("Thank you for renting with us, please come again!");
                 Helper.delay(5);
                 isRunning = false;
