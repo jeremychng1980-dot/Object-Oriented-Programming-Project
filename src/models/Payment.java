@@ -13,20 +13,8 @@ public class Payment {
 
     // Payment
     private String paymentID;
-
-    // Payment
-    private String paymentID;
     private PaymentMethod paymentMethod;
     private double damageCharge;
-
-    // Deposit
-    private String depositID;
-    private static int depositCounter;
-
-    // Damage Constants
-    private double MINOR_DAMAGE;
-    private double MODERATE_DAMAGE;
-    private double MAJOR_DAMAGE;
 
     // Deposit
     private String depositID;
@@ -40,7 +28,6 @@ public class Payment {
     // ================= Constructors =================
     // ================= Constructors =================
     public Payment() {
-        this(new Date(), 0.0, null);
         this(new Date(), 0.0, null);
     }
 
@@ -96,17 +83,17 @@ public class Payment {
         return paymentMethod;
     }
 
-    public double getMinorDamage() {
+
     public double getMinorDamage() {
         return MINOR_DAMAGE;
     }
 
-    public double getModerateDamage() {
+
     public double getModerateDamage() {
         return MODERATE_DAMAGE;
     }
 
-    public double getMajorDamage() {
+
     public double getMajorDamage() {
         return MAJOR_DAMAGE;
     }
@@ -122,12 +109,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public void setDamageCharge(double damageCharge) {
+
     public void setDamageCharge(double damageCharge) {
         this.damageCharge = damageCharge;
     }
 
-    public static void setPaymentCounter(int paymentCounter) {
+
     public static void setPaymentCounter(int paymentCounter) {
         Payment.paymentCounter = paymentCounter;
     }
@@ -152,17 +139,7 @@ public class Payment {
         this.MAJOR_DAMAGE = MAJOR_DAMAGE;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod){
-        this.paymentMethod = paymentMethod;
-    }
 
-    public static void setDepositCounter(int depositCounter) {
-        Payment.depositCounter = depositCounter;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
 
     // ================= Other Methods =================
 
@@ -192,28 +169,6 @@ public class Payment {
 
             case "moderate":
                 damageCharge += MODERATE_DAMAGE;
-               "\nPayment Method: " + paymentMethod;
-    }
-
-    public String depositToString() {
-        return "Deposit ID: " + depositID +
-               "\nDate: " + date +
-               "\nAmount: " + amount +
-               "\nPayment Method: " + paymentMethod;
-    }
-
-    public void calculateTobePaid(String damageOption) {
-        switch (damageOption.toLowerCase()) {
-
-            case "none":
-                break;
-
-            case "minor":
-                damageCharge += MINOR_DAMAGE;
-                break;
-
-            case "moderate":
-                damageCharge += MODERATE_DAMAGE;
                 break;
 
             case "heavy":
@@ -224,13 +179,6 @@ public class Payment {
                 System.out.println("Invalid damage option!");
         }
 
-            case "heavy":
-                damageCharge += MAJOR_DAMAGE;
-                break;
-
-            default:
-                System.out.println("Invalid damage option!");
-        }
     }
 
     public boolean equals(Object obj) {
@@ -243,5 +191,4 @@ public class Payment {
         Payment other = (Payment) obj;
         return this.paymentID.equals(other.paymentID);
     }
-}
 }
