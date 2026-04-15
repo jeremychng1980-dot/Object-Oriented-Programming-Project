@@ -6,11 +6,12 @@ public class Payment {
     // data properties
     private String paymentID;
     private Date date;
-    private double amount;
+    private double amount;//amount to be paid
     private static int paymentCounter;
     private PaymentMethod paymentMethod;
-    //constant d.p
     private double damageCharge;
+    
+    //constant d.p
     private static final double MINOR_DAMAGE = 500;
     private static final double MODERATE_DAMAGE = 1000;
     private static final double MAJOR_DAMAGE = 1500;
@@ -48,6 +49,10 @@ public class Payment {
         return amount;
     } 
 
+    public static int getPaymentCounter(){
+        return paymentCounter;
+    }
+
     public double getDamageCharge(){
         return damageCharge;
     }
@@ -81,12 +86,12 @@ public class Payment {
         this.damageCharge = damageCharge;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod){
-        this.paymentMethod = paymentMethod;
-    }
-
     public static void setPaymentCounter(int paymentCounter){
         Payment.paymentCounter = paymentCounter;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod){
+        this.paymentMethod = paymentMethod;
     }
 
     // ============== other methods ==============
