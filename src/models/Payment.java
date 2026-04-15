@@ -6,7 +6,7 @@ public class Payment {
 
     // ================= Data Properties =================
     private Date date;
-    private double amount;
+    private double amount;//amount to be paid
     private static int paymentCounter;
 
     // Payment
@@ -61,6 +61,10 @@ public class Payment {
 
     public double getAmount() {
         return amount;
+    } 
+
+    public static int getPaymentCounter(){
+        return paymentCounter;
     }
 
     public static int getPaymentCounter() {
@@ -126,6 +130,14 @@ public class Payment {
 
     public void setMAJOR_DAMAGE(double MAJOR_DAMAGE) {
         this.MAJOR_DAMAGE = MAJOR_DAMAGE;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod){
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod){
+        this.paymentMethod = paymentMethod;
     }
 
     // ================= Other Methods =================
