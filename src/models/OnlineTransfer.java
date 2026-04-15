@@ -1,22 +1,23 @@
 package models;
 
-public class OnlineTransfer implements PaymentMethod{
-//data properties
-    private String accountNumber;  
-    private String accountName;    
-    private String bankName;     
-    private String swiftCode;      
-    private String reference;      
+public class OnlineTransfer implements PaymentMethod {
 
+    // ================= Data Properties =================
+    private String accountNumber;
+    private String accountName;
+    private String bankName;
+    private String swiftCode;
+    private String reference;
 
-    //methods 
-    //no args con
+    // ================= Constructors =================
+
+    // No-args constructor
     public OnlineTransfer() {
-     this("", "", "", "", "");
-}
+        this("", "", "", "", "");
+    }
 
-    public OnlineTransfer(String accountNumber, String accountName, String bankName
-                            , String swiftCode, String reference){
+    public OnlineTransfer(String accountNumber, String accountName, String bankName,
+                          String swiftCode, String reference) {
         this.accountNumber = accountNumber;
         this.accountName = accountName;
         this.bankName = bankName;
@@ -24,52 +25,72 @@ public class OnlineTransfer implements PaymentMethod{
         this.reference = reference;
     }
 
-    //getter
-    public String getAccountNumber(){
+    // ================= Getters =================
+
+    public String getAccountNumber() {
         return accountNumber;
     }
-    public String getAccountName(){
+
+    public String getAccountName() {
         return accountName;
     }
-    public String getBankName(){
+
+    public String getBankName() {
         return bankName;
     }
-    public String getSwiftCode(){
+
+    public String getSwiftCode() {
         return swiftCode;
     }
-    public String getReference(){
+
+    public String getReference() {
         return reference;
     }
 
-    //setter
-    public void setAccountNumber(String accountNumber){
+    // ================= Setters =================
+
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
-    public void setAccountName(String accountName){
+
+    public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
-    public void setBankName(String bankName){
+
+    public void setBankName(String bankName) {
         this.bankName = bankName;
     }
-    public void setSwiftCode(String swiftCode){
+
+    public void setSwiftCode(String swiftCode) {
         this.swiftCode = swiftCode;
     }
-    public void setReference(String reference){
+
+    public void setReference(String reference) {
         this.reference = reference;
     }
-    
 
-    //other methods
-    public String toString(){
-        return super.toString() + 
-        "\nAccount Number: " + accountNumber + 
-        "\nAccount Name: " + accountName + 
-        "\nBank Name: " + bankName + 
-        "\nSwift Code: " + swiftCode + 
-        "\nReference: " + reference;
+    // ================= Other Methods =================
+
+    public String toString() {
+        return "Account Number: " + maskAccountNumber(accountNumber) +
+               "\nAccount Name: " + maskName(accountName) +
+               "\nBank Name: " + bankName +
+               "\nReference: " + reference;
     }
 
-}//End of OnlineTransfer Class
+    // ================= Helper Methods =================
 
+    private String maskAccountNumber(String accountNumber) {
+        if (accountNumber == null || accountNumber.length() <= 4) {
+            return "****";
+        }
+        return "****" + accountNumber.substring(accountNumber.length() - 4);
+    }
 
-
+    private String maskName(String name) {
+        if (name == null || name.length() <= 2) {
+            return (name != null && name.length() > 0) ? name.charAt(0) + "*" : "*";
+        }
+        return name.charAt(0) + "***";
+    }
+}

@@ -22,7 +22,7 @@ import java.io.*;
 public class Main{
 	
     static User[] users = new User[100]; //User polymorphic array
-    static Payment[] payments = new Payment[100];
+    static Payment[] payment = new Payment[30];
     static CarRentalSystem sys = new CarRentalSystem();
     public static void main(String[] args) {
         // Load existing users from file

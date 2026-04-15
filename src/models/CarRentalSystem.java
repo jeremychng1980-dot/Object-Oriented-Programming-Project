@@ -135,7 +135,18 @@ public class CarRentalSystem {
         System.out.println("\n           Process Return            ");
         System.out.println("\n=====================================");
 
+        System.out.println("Enter the damage option for the car returned (None/ Minor/ Moderate/ Heavy) :");
+        String damageOption = input.nextLine();
+        damageOption = damageOption.toLowerCase(); // Convert input to lowercase for case-insensitive comparison
+
+        if (damageOption.equals("none") || damageOption.equals("minor") || damageOption.equals("moderate") || damageOption.equals("heavy")) {\
         
+            double paymentAmount = payment.getDamageCharge();
+            System.out.println("Damage charge calculated: RM " + paymentAmount);
+            return paymentAmount;
+        } else {
+            System.out.println("Invalid damage option entered. Please enter None, Minor, Moderate, or Heavy.");
+        }
     }
                           
 
@@ -171,6 +182,7 @@ public class CarRentalSystem {
                 System.out.println("Enter your card PIN number: ");
                 int pinNumber = input.nextInt(); //Basically mock process which provide 0 use
 
+
                 System.out.println("Amount charged: " + toBePaid);
                 System.out.println("Thank you for renting with us, please come again!");
                 Helper.delay(5);
@@ -191,7 +203,7 @@ public class CarRentalSystem {
             }
         }
 
-    }
+    }//end ProcessPayment
 
 //-------------------------View History-------------------------------
     public static void viewHistory(){

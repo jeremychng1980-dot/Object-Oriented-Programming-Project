@@ -32,7 +32,7 @@ public class Cash implements PaymentMethod{
 
     //other methods
     public String toString() {
-        return "\nAmount Received: " + amountReceived;
+        return "\nAmount Received: RM " + String.format("%.2f", amountReceived);
     }
     
 

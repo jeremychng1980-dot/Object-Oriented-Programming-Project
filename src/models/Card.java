@@ -1,5 +1,4 @@
 package models;
-; 
 
 public class Card implements PaymentMethod {
 //data properties
@@ -67,12 +66,29 @@ public class Card implements PaymentMethod {
     }
 
     //other methods
-    public String toString(){
-        return super.toString() +
-        "\nCard No.: **** **** ****" + cardNo.substring(cardNo.length() - 4) + //only display the last 4 digits of Card no. for identification
-        "\nCCV: ***" + //CCV is outputted as asterisk to protect privacy
-        "\nName on Card: " + nameOnCard +
-        "\nExpiry: " + expiryMonth + "/" + expiryYear;
+
+    public String toString() {
+        return "Payment Method: Card" +
+            "\nCard No.: **** **** **** " + getLast4Digits() +
+            "\nCCV: ***" +
+            "\nName on Card: " + maskName(nameOnCard) +
+            "\nExpiry: " + expiryMonth + "/" + expiryYear;
     }
+
+    //only display last 4 digits of card
+    private String getLast4Digits() { 
+    if (cardNo == null || cardNo.length() < 4) {
+        return "XXXX";
+    }
+    return cardNo.substring(cardNo.length() - 4);
+    }
+
+//mask name except first letter for privacy
+    private String maskName(String name) { 
+    if (name.length() <= 2) {
+        return name.charAt(0) + "*";
+    }
+    return name.charAt(0) + "***";
+}
 
 }//End of Card Class
