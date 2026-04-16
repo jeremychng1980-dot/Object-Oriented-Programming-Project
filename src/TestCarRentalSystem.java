@@ -16,6 +16,7 @@ public class TestCarRentalSystem{
 
     public static void main(String[] args) {
         // Load existing users from file
+        sys.setCars(new Car[100]);
         utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
         utils.FileLoader.loadUsersFile("users.txt", users);
 
