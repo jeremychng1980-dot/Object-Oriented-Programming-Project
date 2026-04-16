@@ -20,7 +20,6 @@ import java.text.ParseException;
 import java.io.*;
 
 public class Main{
-	
     static User[] users = new User[100]; //User polymorphic array
     static Payment[] payment = new Payment[30];
     static CarRentalSystem sys = new CarRentalSystem();
@@ -73,7 +72,7 @@ public class Main{
         
         input.close();
     }
-//------------------------------------Customer Registration-----------------------------------
+//Customer Registration
     public static void customerRegistration(){
     	 Scanner input = new Scanner(System.in);
     	 
@@ -235,7 +234,7 @@ public class Main{
     Helper.clearScreen();
 }
 
-//-------------------------------Customer Login Page-----------------------------------------------
+//Customer Login Page
     public static void customerLogin(Scanner input) {
 
     boolean loggedIn = false;
@@ -298,10 +297,7 @@ public class Main{
     }
     }
 
-
-
-//-------------------------------- Customer main menu------------------------------------
-    
+//Customer main menu
     public static void customerMenu(Customer loggedInCustomer) {
     Scanner input = new Scanner(System.in);
     int choice = 0;
@@ -352,8 +348,7 @@ public class Main{
     } while (choice != 8);
 }
 
-
-//------------------------View Information Page ---------------------------------    
+//View Information Page  
     public static void viewCustomerInformation(Customer customer, Scanner input){
     Helper.clearScreen();
     System.out.println("\n=====================================");
@@ -376,7 +371,7 @@ public class Main{
     Helper.clearScreen();
 }
 
-//-------------------------------Modify Customer License Expiry Date -------------
+//Modify Customer License Expiry Date
 	public static void updateLicenseExpiryDate(Customer customer, Scanner input) {
 	Helper.clearScreen();
     System.out.println("\n=====================================");
@@ -436,7 +431,7 @@ public class Main{
     input.nextLine();
 }      
 
-//-------------------------Reservation (rent vehicle)
+//Reservation (rentVehicle)
     public static void rentVehicle(Scanner input, Car[] cars){
 
         Helper.clearScreen();
@@ -462,7 +457,8 @@ public class Main{
         double amount = payments[0].getAmount(); //  
 
     }
-// Admin Login
+
+//Admin Login
  public static void adminLogin(Scanner input) {
     boolean loggedIn = false;
         Helper.clearScreen();
