@@ -334,16 +334,16 @@ public class Main{
                 rentVehicle(input, sys.getCars());
                 break;
             case 4:
-                CarRentalSystem.checkOut(input, sys);
+                sys.checkout(loggedInCustomer, null, null);;
                 break;
             case 5:
-                CarRentalSystem.processReturn(input);
+                sys.processReturn(loggedInCustomer, null, null);;
                 break;
             case 6:
-                //CarRentalSystem.processPayment(input);
+                sys.processPayment(loggedInCustomer, null, null);
                 break;
             case 7:
-                CarRentalSystem.viewHistory();
+                CarRentalSystem.viewHistory(); //View history?
                 break;
             case 8:
                 break;
