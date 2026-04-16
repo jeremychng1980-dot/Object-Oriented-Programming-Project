@@ -1,16 +1,5 @@
-import models.Admin;
-import models.Car;
-import models.CarRentalSystem;
-import models.Customer;
-import models.Economy;
-import models.User;
-import models.Staff;
-import models.License;
-import models.Luxury;
-import models.SUV;
+import models.*;
 import utils.Helper;
-import models.Payment;
-
 
 import java.util.Scanner;
 import java.util.InputMismatchException;

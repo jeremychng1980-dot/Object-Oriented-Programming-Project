@@ -1,13 +1,5 @@
 package utils;
-import models.Admin;
-import models.Car;
-import models.Customer;
-import models.Economy;
-import models.License;
-import models.Luxury;
-import models.SUV;
-import models.Staff;
-import models.User;
+import models.*;
 
 import java.io.BufferedReader;
 import java.io.File;

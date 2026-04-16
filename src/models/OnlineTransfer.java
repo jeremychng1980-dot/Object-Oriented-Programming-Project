@@ -78,6 +78,13 @@ public class OnlineTransfer implements PaymentMethod {
                "\nReference: " + reference;
     }
 
+    public String getPaymentDetails() {
+        return "Account Number: " + maskAccountNumber(accountNumber) +
+               "\nAccount Name: " + maskName(accountName) +
+               "\nBank Name: " + bankName +
+               "\nReference: " + reference;
+    }
+
     // ================= Helper Methods =================
 
     private String maskAccountNumber(String accountNumber) {

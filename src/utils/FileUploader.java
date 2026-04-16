@@ -5,16 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 
-import models.Admin;
-import models.Car;
-import models.Customer;
-import models.Staff;
-import models.User;
-
-import models.Car;
-import models.Economy;
-import models.Luxury;
-import models.SUV;
+import models.*;
 
 public class FileUploader {
     public static void saveUsersToFile(String filename, User[] users) {

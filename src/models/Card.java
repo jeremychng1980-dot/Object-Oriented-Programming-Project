@@ -75,6 +75,14 @@ public class Card implements PaymentMethod {
             "\nExpiry: " + expiryMonth + "/" + expiryYear;
     }
 
+    public String getPaymentDetails() {
+        return "Payment Method: Card" +
+            "\nCard No.: **** **** **** " + getLast4Digits() +
+            "\nCCV: ***" +
+            "\nName on Card: " + maskName(nameOnCard) +
+            "\nExpiry: " + expiryMonth + "/" + expiryYear;
+    }
+
     //only display last 4 digits of card
     private String getLast4Digits() { 
     if (cardNo == null || cardNo.length() < 4) {

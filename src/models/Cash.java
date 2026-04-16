@@ -35,5 +35,8 @@ public class Cash implements PaymentMethod{
         return "\nAmount Received: RM " + String.format("%.2f", amountReceived);
     }
     
-
+    public String getPaymentDetails() {
+        return "\nAmount Received: RM " + String.format("%.2f", amountReceived);
+    }
+    
 }//End of Cash Class
