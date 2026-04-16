@@ -1,7 +1,7 @@
 package models;
 
 public class Car{
-    private String carID ;          // auto generate no need use input
+    private String carID;          // auto generate no need use input
     private static int carCount = 9999;    // use to generate the carID
     private String plateNumber;
     private String model;
@@ -11,7 +11,7 @@ public class Car{
     private int mileage;
     private String status;
     private double fuelLevel;
-
+    private int reservationCount = 0;
 
     // constructor
 
@@ -73,6 +73,10 @@ public class Car{
     public static int getCarCount(){
         return Car.carCount;
     }
+
+    public int getReservationCount() {
+        return reservationCount;
+    }
     // setter
     public void setCarID(String carID){
         this.carID = carID;
@@ -92,6 +96,10 @@ public class Car{
 
     public static void setCarCount(int carCount){
         Car.carCount = carCount;
+    }
+
+    public void setReservationCount(int reservationCount) {
+        this.reservationCount = reservationCount;   
     }
 
 

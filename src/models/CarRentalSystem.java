@@ -1,6 +1,7 @@
 package models;
 
 public class CarRentalSystem {
+    private String reservationID;
     private Car car = new Car();
     private Customer customer = new Customer();
     private Payment payment = new Payment();
@@ -24,6 +25,10 @@ public class CarRentalSystem {
         this.car = car;
         this.payment = payment;
     }
+    
+    public String getReservationID() {
+        return reservationID;
+    }
 
     public Car getCar() {
         return car;
@@ -41,5 +46,22 @@ public class CarRentalSystem {
         this.customer = newCustomer;
     }
 
+    public static void rentCar(Customer customer, Car car) {
 
+    }
+
+    public static void checkout(Customer customer, Car car, Payment payment) {
+    }
+
+    public static void processReturn(Customer customer, Car car, Payment payment) {
+
+    }
+
+    public static void processPayment(Customer customer, Car car, Payment payment) {
+
+    }
+
+    public static void inspection(Staff staff, Car car) {
+
+    }
 }// End of CarRentalSystem
