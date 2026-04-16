@@ -83,16 +83,13 @@ public class Payment {
         return paymentMethod;
     }
 
-
     public double getMinorDamage() {
         return MINOR_DAMAGE;
     }
 
-
     public double getModerateDamage() {
         return MODERATE_DAMAGE;
     }
-
 
     public double getMajorDamage() {
         return MAJOR_DAMAGE;
@@ -178,8 +175,9 @@ public class Payment {
             default:
                 System.out.println("Invalid damage option!");
         }
-
     }
+
+    
 
     public boolean equals(Object obj) {
         if (this == obj)

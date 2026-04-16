@@ -3,6 +3,7 @@ package models;
 public class CarRentalSystem {
     private String approval;
     private int rentDays;
+    private String condition;
     private Car[] cars = {
         new Economy(),
         new SUV(),
@@ -20,6 +21,7 @@ public class CarRentalSystem {
         this.cars = cars;
         approval = " ";
         rentDays = 0;
+        condition = "none";
     }
 
     public CarRentalSystem(Customer customer, Payment payment) {
@@ -53,6 +55,10 @@ public class CarRentalSystem {
         return rentDays;
     }
 
+    public String getCondition() {
+        return condition;
+    }
+
     public void setCar(Car[] cars) {
         this.cars = cars;
     }
@@ -68,35 +74,48 @@ public class CarRentalSystem {
     public void setRentDays(int newRentDays) {
         this.rentDays = newRentDays;
     }
-
-    public void rentCar(Customer customer, Car car) {
+    public void seCondition(String newCondition) {
+        this.condition = newCondition;
+    }
+    
+    public void changeStatus(Customer customer, Car car, Payment payment) { //Merged from processReturn and rentCar
         String status = car.getStatus();
-
-        if (status.equalsIgnoreCase("available")) {
-            setApproval(approval);
-            setRentDays(rentDays);
+        if (status.equalsIgnoreCase("not available")) {
+            car.setStatus("available");
+        } else if (status.equalsIgnoreCase("available")) { //Checkout
             car.setStatus("unavailable");
-        } else if (status.equalsIgnoreCase("unavailable")) {
-            System.out.println("Car is currently unavailable, please contact us for more inquiries!");
         }
+
+        setApproval(approval);
+        setRentDays(rentDays);
 
         return;
     }
 
-    public void checkout(Customer customer, Car car, Payment payment) {
-        
+    public void reservation(String approval, Customer customer, Car[] car, Payment payment) {
+        //Not sure what does this want
     }
 
-    public static void processReturn(Customer customer, Car[] cars, Payment payment) {
-
-    }
-
-    public static void processPayment(Customer customer, Car[] cars, Payment payment) {
+    public void processPayment(Customer customer, Car[] cars, Payment payment) {
 
     }
 
-    public static void inspection(Staff staff, Car[] cars) {
+    public void inspection(Staff staff, Car car) {
+        Strrng
 
+        if (damages.equalsIgnoreCase("none")) {
+
+        } else if (damages.equalsIgnoreCase("minor")) {
+
+        } else if (damages.equalsIgnoreCase("moderate")) {
+            
+        } else if (damages.equalsIgnoreCase("heavy")) {
+
+        } else {
+            System.out.println("Invalid damage type");
+        }
+*/
+        return;
     }
 
 }// End of CarRentalSystem
