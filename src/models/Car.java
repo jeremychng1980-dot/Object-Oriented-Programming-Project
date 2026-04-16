@@ -1,8 +1,8 @@
 package models;
 
-public class Car{
-    private String carID;          // auto generate no need use input
-    private static int carCount = 9999;    // use to generate the carID
+public abstract class Car{
+    private String carID;          // auto generate no need user input
+    private static int carCount = 1;    // use to generate the carID
     private String plateNumber;
     private String model;
     private String brand;
@@ -104,10 +104,7 @@ public class Car{
 
 
 // other methods
-	public double calcRentalFee(int day){
-		double rentalFee = day * dailyRate;
-		return rentalFee;
-	}
+	public abstract double calcRentalFee(int day);
 
 	public String toString(){
 		return String.format("CarID:%s | Plate: %s | %s %s | Rate: RM%.2f/day | Seats: %d | Mileage: %d km | Status: %s | Fuel: %.1f%%", 

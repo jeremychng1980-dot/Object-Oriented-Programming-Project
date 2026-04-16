@@ -23,6 +23,11 @@ public class SUV extends Car{
     	return groundClearance;
     }
     
+	public double calcRentalFee(int day){
+        double rentalFee = day * super.getDailyRate();
+		return rentalFee;
+    }
+
     public String toString(){
     	String has4WD = this.fourWheelDrive ? "Yes" : "No";
     	return super.toString() + 

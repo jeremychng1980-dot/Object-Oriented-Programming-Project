@@ -23,6 +23,11 @@ public class Luxury extends Car{
         return hasSunroof;
     }
 
+	public double calcRentalFee(int day){
+        double rentalFee = day * super.getDailyRate();
+		return rentalFee;
+    }
+
 	public String toString(){
 		String leatherSeats = this.hasLeatherSeats ? "Yes" : "No";
 		String sunroof = this.hasSunroof ? "Yes" : "No";

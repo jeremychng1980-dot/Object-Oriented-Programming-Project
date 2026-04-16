@@ -3,7 +3,11 @@ package models;
 public class CarRentalSystem {
     private String approval;
     private int rentDays;
-    private Car car = new Car();
+    private Car[] cars = {
+        new Economy(),
+        new SUV(),
+        new Luxury()
+    };
     private Customer customer = new Customer();
     private Payment payment = new Payment();
 
@@ -11,9 +15,9 @@ public class CarRentalSystem {
         this(null, null, null);
      }// end of constructor
 
-    public CarRentalSystem(Customer customer, Car car) {
+    public CarRentalSystem(Customer customer, Car[] cars) {
         this.customer = customer;
-        this.car = car;
+        this.cars = cars;
         approval = " ";
         rentDays = 0;
     }
@@ -23,14 +27,14 @@ public class CarRentalSystem {
         this.payment = payment;
     }
 
-    public CarRentalSystem(Customer customer, Car car, Payment payment) {
+    public CarRentalSystem(Customer customer, Car[] cars, Payment payment) {
         this.customer = customer;
-        this.car = car;
+        this.cars = cars;
         this.payment = payment;
     }
     
-    public Car getCar() {
-        return car;
+    public Car[] getCars() {
+        return cars;
     }
 
     public Customer getCustomer() {
@@ -49,28 +53,17 @@ public class CarRentalSystem {
         return rentDays;
     }
 
-    public void setCar(Car newCar) {
-        this.car = newCar;
+    public void setCar(Car[] cars) {
+        this.cars = cars;
     }
 
     public void setCustomer(Customer newCustomer) {
         this.customer = newCustomer;
     }
 
-    public void setPayment(Payment newPayment) {
-        this.payment  = newPayment;
-    }
+    public static void rentCar(Customer customer, Car car) {
 
-    public void setApproval(String approval) {
-        this.approval = approval;
     }
-
-    public void setRentDays(int rentDays) {
-        this.rentDays = rentDays;
-    }
-
-    public void rentCar(String approval, int rentDays, Customer customer, Car car) {
-        String status = car.getStatus();
 
         if (status.equalsIgnoreCase("available")) {
             setApproval(approval);
@@ -87,15 +80,16 @@ public class CarRentalSystem {
         
     }
 
-    public void processReturn(Customer customer, Car car, Payment payment) {
+    public static void processReturn(Customer customer, Car[] cars, Payment payment) {
 
     }
 
-    public void processPayment(Customer customer, Car car, Payment payment) {
+    public static void processPayment(Customer customer, Car[] cars, Payment payment) {
 
     }
 
-    public void inspection(Staff staff, Car car) {
+    public static void inspection(Staff staff, Car[] cars) {
 
     }
+
 }// End of CarRentalSystem
