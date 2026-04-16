@@ -61,9 +61,16 @@ public class CarRentalSystem {
         this.customer = newCustomer;
     }
 
-    public static void rentCar(Customer customer, Car car) {
-
+    public void setApproval(String newApproval) {
+        this.approval = newApproval;
     }
+
+    public void setRentDays(int newRentDays) {
+        this.rentDays = newRentDays;
+    }
+
+    public void rentCar(Customer customer, Car car) {
+        String status = car.getStatus();
 
         if (status.equalsIgnoreCase("available")) {
             setApproval(approval);
