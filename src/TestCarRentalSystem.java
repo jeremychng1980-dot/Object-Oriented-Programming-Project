@@ -446,10 +446,15 @@ public class TestCarRentalSystem{
         
         if (targetCar == null) {
             System.out.println("Cannot find the " + carID + " Car.");
+
         } 
         else {
             sys.changeStatus(targetCar); // change Status from unavailable to available
-        }     
+
+        }
+             
+        System.out.println("Press enter to return to Home page...");
+        input.nextLine();
 
     } // end rentVehicle
 

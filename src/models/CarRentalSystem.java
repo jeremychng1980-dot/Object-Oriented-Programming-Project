@@ -122,6 +122,7 @@ public class CarRentalSystem {
                 targetCar.setStatus("unavailable"); 
                 System.out.println("Successful , You have booked the " + targetCar.getCarID() + " Vehicle.");
                 Helper.delay(5);
+                utils.FileUploader.saveCarsToFile("cars.txt", cars);
             } 
         else { // car unavailable -> cannot book reservation
                 System.out.println("Current car status is " + targetCar.getStatus() + ", so unable to rent.");

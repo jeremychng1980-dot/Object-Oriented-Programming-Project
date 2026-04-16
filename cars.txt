@@ -1,8 +1,8 @@
 34
 ECONOMY
-CA0001|PHH 1001|Myvi|Perodua|100.0|5|12000|available|100.0|true|6.2
+CA0001|PHH 1001|Myvi|Perodua|100.0|5|12000|unavailable|100.0|true|6.2
 ECONOMY
-CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|available|100.0|true|5.5
+CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|unavailable|100.0|true|5.5
 ECONOMY
 CA0003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7
 ECONOMY
@@ -66,4 +66,4 @@ CA0032|PEN 0000|Skyline GTR34|Nissan|100.0|5|0|available|100.0|true|true
 LUXURY
 CA0033|PME 2237|Madza MX5|Madza|100.0|5|0|available|100.0|true|true
 LUXURY
-CA0034|PWN 9331|Astina|Mazda|100.0|5|0|available|100.0|true|true
+CA0034|PWN 9331|Astina|Mazda|100.0|5|0|unavailable|100.0|true|true
