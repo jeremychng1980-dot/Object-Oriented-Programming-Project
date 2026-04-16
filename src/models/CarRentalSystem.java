@@ -97,24 +97,28 @@ public class CarRentalSystem {
     }
 
     public void processPayment(Customer customer, Car[] cars, Payment payment) {
-
+        
     }
 
     public void inspection(Staff staff, Car car) {
-        Strrng
+        String damages = "abc"; //PLACEHOLDER VALUE
 
         if (damages.equalsIgnoreCase("none")) {
+            
 
         } else if (damages.equalsIgnoreCase("minor")) {
 
+
         } else if (damages.equalsIgnoreCase("moderate")) {
+           
             
         } else if (damages.equalsIgnoreCase("heavy")) {
+
 
         } else {
             System.out.println("Invalid damage type");
         }
-*/
+    
         return;
     }
 

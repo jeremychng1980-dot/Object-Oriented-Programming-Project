@@ -5,27 +5,17 @@ import java.util.Date;
 public class Payment {
 
     // ================= Data Properties =================
-
-    // ================= Data Properties =================
     private Date date;
-    private double amount;
+    private double amount;//amount received from customer
     private static int paymentCounter;
 
     // Payment
     private String paymentID;
     private PaymentMethod paymentMethod;
     private double damageCharge;
+    private double deposit;
 
-    // Deposit
-    private String depositID;
-    private static int depositCounter;
 
-    // Damage Constants
-    private double MINOR_DAMAGE;
-    private double MODERATE_DAMAGE;
-    private double MAJOR_DAMAGE;
-
-    // ================= Constructors =================
     // ================= Constructors =================
     public Payment() {
         this(new Date(), 0.0, null);
@@ -45,18 +35,9 @@ public class Payment {
         return String.format("P%04d", paymentCounter);
     }
 
-    private static String generateDepositID() {
-        depositCounter++;
-        return String.format("D%04d", depositCounter);
-    }
-
     // ================= Getters =================
     public String getPaymentID() {
         return paymentID;
-    }
-
-    public String getDepositID() {
-        return depositID;
     }
 
     public Date getDate() {
@@ -67,35 +48,22 @@ public class Payment {
         return amount;
     }
 
-    public static int getPaymentCounter() {
-        return paymentCounter;
-    }
-
-    public static int getDepositCounter() {
-        return depositCounter;
+    public double getDeposit(){
+        return deposit;
     }
 
     public double getDamageCharge() {
         return damageCharge;
     }
 
-    public PaymentMethod getgetPaymentMethod()  {
+    public static int getPaymentCounter() {
+        return paymentCounter;
+    }
+
+    public PaymentMethod getPaymentMethod()  {
         return paymentMethod;
     }
 
-    public double getMinorDamage() {
-        return MINOR_DAMAGE;
-    }
-
-    public double getModerateDamage() {
-        return MODERATE_DAMAGE;
-    }
-
-    public double getMajorDamage() {
-        return MAJOR_DAMAGE;
-    }
-
-    // ================= Setters =================
 
     // ================= Setters =================
     public void setDate(Date date) {
@@ -106,6 +74,9 @@ public class Payment {
         this.amount = amount;
     }
 
+    public void setDeposit(double deposit){
+        this.deposit = deposit;
+    }
 
     public void setDamageCharge(double damageCharge) {
         this.damageCharge = damageCharge;
@@ -116,26 +87,11 @@ public class Payment {
         Payment.paymentCounter = paymentCounter;
     }
 
-    public static void setDepositCounter(int depositCounter) {
-        Payment.depositCounter = depositCounter;
-    }
+
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
-
-    public void setMINOR_DAMAGE(double MINOR_DAMAGE) {
-        this.MINOR_DAMAGE = MINOR_DAMAGE;
-    }
-
-    public void setMODERATE_DAMAGE(double MODERATE_DAMAGE) {
-        this.MODERATE_DAMAGE = MODERATE_DAMAGE;
-    }
-
-    public void setMAJOR_DAMAGE(double MAJOR_DAMAGE) {
-        this.MAJOR_DAMAGE = MAJOR_DAMAGE;
-    }
-
 
 
     // ================= Other Methods =================
@@ -147,37 +103,6 @@ public class Payment {
                "\nPayment Method: " + paymentMethod;
     }
 
-    public String depositToString() {
-        return "Deposit ID: " + depositID +
-               "\nDate: " + date +
-               "\nAmount: " + amount +
-               "\nPayment Method: " + paymentMethod;
-    }
-
-    public void calculateTobePaid(String damageOption) {
-        switch (damageOption.toLowerCase()) {
-
-            case "none":
-                break;
-
-            case "minor":
-                damageCharge += MINOR_DAMAGE;
-                break;
-
-            case "moderate":
-                damageCharge += MODERATE_DAMAGE;
-                break;
-
-            case "heavy":
-                damageCharge += MAJOR_DAMAGE;
-                break;
-
-            default:
-                System.out.println("Invalid damage option!");
-        }
-    }
-
-    
 
     public boolean equals(Object obj) {
         if (this == obj)

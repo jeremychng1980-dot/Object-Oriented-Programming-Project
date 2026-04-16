@@ -16,11 +16,11 @@ public abstract class Car{
     // constructor
 
     public Car(){
-        this("", "","",0.0, 0, 0, "", 0.0, "none");
+        this("", "","",0.0, 0, 0, "", 0.0);
     };
 
     public Car(String plateNumber, String model, String brand, double dailyRate, 
-               int seatingCapacity, int mileage, String status, double fuelLevel, String damages){
+               int seatingCapacity, int mileage, String status, double fuelLevel){
         carID = String.format("CA%04d", carCount + 1);
         this.plateNumber = plateNumber;
         this.model = model;
