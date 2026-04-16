@@ -107,7 +107,7 @@ public abstract class Car{
 	public abstract double calcRentalFee(int day);
 
 	public String toString(){
-		return String.format("CarID:%s | Plate: %s | %s %s | Rate: RM%.2f/day | Seats: %d | Mileage: %d km | Status: %s | Fuel: %.1f%%", 
+		return String.format("%s |  %s | %s %s |  %.2f |  %d |  %d  | %s |  %.1f%%", 
                 carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelLevel);
 	}
     

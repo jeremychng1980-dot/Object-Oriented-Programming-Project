@@ -15,12 +15,12 @@ public class TestCarRentalSystem{
     CarRentalSystem[] crs = new CarRentalSystem[100];
 
     public static void main(String[] args) {
+        Car[] cars = new Car[100];
         // Load existing users from file
         utils.FileLoader.loadUsersFile("users.txt", users);
-        utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
+        utils.FileLoader.loadCarFile("cars.txt", cars);
 
 //-----------------------First Page---------------------    
-        Scanner input = new Scanner(System.in);
         int choice = 0;
         do{
         	System.out.println("\n=====================================");
@@ -37,7 +37,7 @@ public class TestCarRentalSystem{
         	
         	  switch(choice) {
                 case 1:
-                    customerLogin(input); //to customer login page
+                    customerLogin(); //to customer login page
                     break;
                 case 2:
                     customerRegistration();//to customer registration page
@@ -65,14 +65,13 @@ public class TestCarRentalSystem{
     }
 //Customer Registration
     public static void customerRegistration(){
-    	 Scanner input = new Scanner(System.in);
     	 
     	Helper.clearScreen();
     	System.out.println("\n=====================================");
         System.out.println("       CUSTOMER REGISTRATION         ");
         System.out.println("=====================================");
        
-     String loginID = "";
+    String loginID = "";
     String password = "";
     String name = "";
     char gender = ' ';
@@ -226,7 +225,7 @@ public class TestCarRentalSystem{
 }
 
 //Customer Login Page
-    public static void customerLogin(Scanner input) {
+    public static void customerLogin() {
 
     boolean loggedIn = false;
         Helper.clearScreen();
@@ -290,7 +289,6 @@ public class TestCarRentalSystem{
 
 //Customer main menu
     public static void customerMenu(Customer loggedInCustomer) {
-    Scanner input = new Scanner(System.in);
     int choice = 0;
     Helper.clearScreen();
     
@@ -312,13 +310,13 @@ public class TestCarRentalSystem{
         
         switch(choice) {
             case 1:
-                viewCustomerInformation(loggedInCustomer, input);
+                viewCustomerInformation(loggedInCustomer);
                 break;
             case 2:
-                updateLicenseExpiryDate(loggedInCustomer, input);
+                updateLicenseExpiryDate(loggedInCustomer);
                 break;
             case 3: 
-                rentVehicle(input, sys.getCars());
+                rentVehicle(sys.getCars());
                 break;
             case 4:
                 checkout(loggedInCustomer, null, null);
@@ -330,7 +328,7 @@ public class TestCarRentalSystem{
                 processPayment(loggedInCustomer, null, null);
                 break;
             case 7:
-                CarRentalSystem.viewHistory(); //View history?
+                //CarRentalSystem.viewHistory(); //View history?
                 break;
             case 8:
                 break;
@@ -340,7 +338,7 @@ public class TestCarRentalSystem{
 }
 
 //View Information Page  
-    public static void viewCustomerInformation(Customer customer, Scanner input){
+    public static void viewCustomerInformation(Customer customer){
     Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("           YOUR INFORMATION            ");
@@ -363,7 +361,7 @@ public class TestCarRentalSystem{
 }
 
 //Modify Customer License Expiry Date
-	public static void updateLicenseExpiryDate(Customer customer, Scanner input) {
+	public static void updateLicenseExpiryDate(Customer customer) {
 	Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("      Modify License Expired Date      ");
@@ -444,8 +442,16 @@ public class TestCarRentalSystem{
         System.out.print("\n\nEnter the Vehicle's Car ID: ");
         String carID = input.nextLine();
 
+        Car targetCar = sys.findCarById(carID);
+        
+        if (targetCar == null) {
+            System.out.println("Cannot find the " + carID + " Car.");
+        } 
+        else {
+            sys.changeStatus(targetCar); // change Status from unavailable to available
+        }     
 
-    }
+    } // end rentVehicle
 
     public static void checkout(Customer loggedInCustomer, Car car, Payment payment){
         
@@ -573,19 +579,19 @@ public class TestCarRentalSystem{
         
         switch(choice) {
             case 1:
-                viewAdminInformation(loggedInAdmin, input);
+                viewAdminInformation(loggedInAdmin);
                 break;
             case 2:
-                viewCar(input);
+                viewCar();
                 break;
             case 3: 
-                addCar(input);
+                addCar();
                 break;
             case 4:
-                updateMileage(input, sys);
+                updateMileage();
                 break;
             case 5:
-                setMaintenance(input);
+                setMaintenance();
                 break;
             case 6:
                 break;
@@ -595,7 +601,7 @@ public class TestCarRentalSystem{
 } // end of admin menu
 
     //======================== ADMIN FUNCTIONS ========================
-    public static void viewAdminInformation(Admin admin, Scanner input){
+    public static void viewAdminInformation(Admin admin){
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("           YOUR INFORMATION            ");
@@ -610,14 +616,14 @@ public class TestCarRentalSystem{
         Helper.clearScreen(); 
     }//end viewAdminInformation
 
-    public static void viewCar(Scanner input){
+    public static void viewCar(){
         sys.displayAllCars();
 
         System.out.print("\nPress Enter to Exit...   ");
         input.nextLine();  // Wait for user to press Enter
     }//end viewCar
 
-    public static void addCar(Scanner input){
+    public static void addCar(){
         Helper.clearScreen();
         System.out.println("=====================================");
         System.out.println("            Add New Vehicle          ");
@@ -714,7 +720,7 @@ public class TestCarRentalSystem{
         input.nextLine();
     }
 
-    public static void setMaintenance(Scanner input){
+    public static void setMaintenance(){
         Helper.clearScreen();
         System.out.println("=====================================");
         System.out.println("        SET MAINTENANCE STATUS       ");

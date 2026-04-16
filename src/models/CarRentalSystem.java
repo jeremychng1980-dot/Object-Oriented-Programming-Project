@@ -1,5 +1,7 @@
 package models;
 
+import utils.Helper;
+
 public class CarRentalSystem {
     private String approval;
     private int rentDays;
@@ -11,6 +13,10 @@ public class CarRentalSystem {
     public CarRentalSystem(){
         this(null, null, null);
      }// end of constructor
+
+    public CarRentalSystem(Car[] cars) {
+        this.cars = cars;
+    }
 
     public CarRentalSystem(Customer[] customers, Car[] cars) {
         this.customers = customers;
@@ -55,12 +61,12 @@ public class CarRentalSystem {
         return condition;
     }
 
-    public void setCar(Car[] cars) {
+    public void setCars(Car[] cars) {
         this.cars = cars;
     }
 
-    public void setCustomer(Customer[] newCustomer) {
-        this.customers = newCustomer;
+    public void setCustomers(Customer[] customers) {
+        this.customers = customers;
     }
 
     public void setApproval(String newApproval) {
@@ -74,22 +80,72 @@ public class CarRentalSystem {
         this.condition = newCondition;
     }
     
-    public void changeStatus(Customer customers, Car car, Payment payments) { //Merged from processReturn and rentCar
-        String status = car.getStatus();
-        if (status.equalsIgnoreCase("not available")) {
-            car.setStatus("available");
-        } else if (status.equalsIgnoreCase("available")) { //Checkout
-            car.setStatus("unavailable");
+    public Car findCarById(String carID) {
+        for (int i = 0; i < Car.getCarCount(); i++) {
+
+            if (cars[i] != null && cars[i].getCarID().equalsIgnoreCase(carID)) {
+                return cars[i]; 
+            }
         }
-
-        setApproval(approval);
-        setRentDays(rentDays);
-
-        return;
+        return null; // not found
     }
+
+    public void displayAllCars() {
+
+        System.out.println("\n=====================================");
+        System.out.println("           View All Vehicles           ");
+        System.out.println("=====================================");
+        System.out.println("\n==========================================================================");
+        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
+        System.out.println("--------------------------------------------------------------------------");
+
+        if (Car.getCarCount() == 0) {
+            System.out.println("                     [ Currently no available vehicle record ]                      ");
+        } 
+        else {
+            for (int i = 0; i < Car.getCarCount(); i++) {
+                if(cars[i] != null){
+                    System.out.println(cars[i].toString());
+                }
+            } // end of for
+        }
+        System.out.println("==========================================================================");
+        System.out.println("Total car count: " + Car.getCarCount());
+    }
+
+    public void changeStatus(Car targetCar) { 
+ 
+        String status = targetCar.getStatus();
+
+        if (status.equalsIgnoreCase("available")) {// car available -> book reservation
+                targetCar.setStatus("unavailable"); 
+                System.out.println("Successful , You have booked the " + targetCar.getCarID() + " Vehicle.");
+                Helper.delay(5);
+            } 
+        else { // car unavailable -> cannot book reservation
+                System.out.println("Current car status is " + targetCar.getStatus() + ", so unable to rent.");
+            }
+
+    }
+
+    public void addCarToSystem(String filename, Car newCar) {
+        if (Car.getCarCount() < cars.length) {
+            cars[Car.getCarCount()] = newCar;
+
+            utils.FileUploader.saveCarsToFile(filename, cars); 
+            System.out.println("\nVehicle record has been uploaded to the system.");
+        } 
+        else {
+            System.out.println("\nError, the garage is full, can not add new vehicle.");
+            }
+    }
+    
 
     public void reservation(String approval, Customer customers, Car[] car, Payment payments) {
         //Not sure what does this want
+
+        setApproval(approval);
+        setRentDays(rentDays);
     }
 
     public void processPayment(Customer customers, Car[] cars, Payment payments) {
