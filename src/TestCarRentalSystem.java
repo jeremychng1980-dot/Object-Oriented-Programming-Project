@@ -12,13 +12,12 @@ public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
     static CarRentalSystem sys = new CarRentalSystem();
-    CarRentalSystem[] crs = new CarRentalSystem[100];
+    static CarRentalSystem[] crs = new CarRentalSystem[100];
 
     public static void main(String[] args) {
-        Car[] cars = new Car[100];
         // Load existing users from file
+        utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
         utils.FileLoader.loadUsersFile("users.txt", users);
-        utils.FileLoader.loadCarFile("cars.txt", cars);
 
 //-----------------------First Page---------------------    
         int choice = 0;

@@ -6,9 +6,10 @@ public class CarRentalSystem {
     private String approval;
     private int rentDays;
     private String condition;
-    private Car[] cars = new Car[100];
+    private Car[] cars;
     private Customer[] customers = new Customer[100];
     private Payment[] payments = new Payment[100];
+    private int carCount;
 
     public CarRentalSystem(){
         this(null, null, null);
