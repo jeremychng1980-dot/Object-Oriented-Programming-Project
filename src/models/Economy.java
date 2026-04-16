@@ -24,6 +24,11 @@ public class Economy extends Car{
     }
     
     // other methods
+
+    public double calcRentalFee(int day){
+        double rentalFee = day * super.getDailyRate();
+		return rentalFee;
+    }
     
     public String toString(){
     	return super.toString() + String.format("\nHatchback: %s | Fuel Efficiency: %.2f L/100km", 

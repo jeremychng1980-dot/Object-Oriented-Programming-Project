@@ -2,7 +2,11 @@ package models;
 
 public class CarRentalSystem {
     private String reservationID;
-    private Car car = new Car();
+    private Car[] cars = {
+        new Economy(),
+        new SUV(),
+        new Luxury()
+    };
     private Customer customer = new Customer();
     private Payment payment = new Payment();
 
@@ -10,9 +14,9 @@ public class CarRentalSystem {
         this(null, null, null);
      }// end of constructor
 
-    public CarRentalSystem(Customer customer, Car car) {
+    public CarRentalSystem(Customer customer, Car[] cars) {
         this.customer = customer;
-        this.car = car;
+        this.cars = cars;
     }
 
     public CarRentalSystem(Customer customer, Payment payment) {
@@ -20,9 +24,9 @@ public class CarRentalSystem {
         this.payment = payment;
     }
 
-    public CarRentalSystem(Customer customer, Car car, Payment payment) {
+    public CarRentalSystem(Customer customer, Car[] cars, Payment payment) {
         this.customer = customer;
-        this.car = car;
+        this.cars = cars;
         this.payment = payment;
     }
     
@@ -30,38 +34,39 @@ public class CarRentalSystem {
         return reservationID;
     }
 
-    public Car getCar() {
-        return car;
+    public Car[] getCars() {
+        return cars;
     }
 
     public Customer getCustomer() {
         return customer;
     }
 
-    public void setCar(Car newCar) {
-        this.car = newCar;
+    public void setCar(Car[] cars) {
+        this.cars = cars;
     }
 
     public void setCustomer(Customer newCustomer) {
         this.customer = newCustomer;
     }
 
-    public static void rentCar(Customer customer, Car car) {
+    public static void rentCar(Customer customer, Car[] cars) {
 
     }
 
-    public static void checkout(Customer customer, Car car, Payment payment) {
+    public static void checkout(Customer customer, Car[] cars, Payment payment) {
     }
 
-    public static void processReturn(Customer customer, Car car, Payment payment) {
-
-    }
-
-    public static void processPayment(Customer customer, Car car, Payment payment) {
+    public static void processReturn(Customer customer, Car[] cars, Payment payment) {
 
     }
 
-    public static void inspection(Staff staff, Car car) {
+    public static void processPayment(Customer customer, Car[] cars, Payment payment) {
 
     }
+
+    public static void inspection(Staff staff, Car[] cars) {
+
+    }
+
 }// End of CarRentalSystem
