@@ -8,10 +8,12 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.io.*;
 
-public class Main{
+public class TestCarRentalSystem{
+    static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
-    static Payment[] payment = new Payment[30];
     static CarRentalSystem sys = new CarRentalSystem();
+    CarRentalSystem[] crs = new CarRentalSystem[100];
+
     public static void main(String[] args) {
         // Load existing users from file
         utils.FileLoader.loadUsersFile("users.txt", users);
@@ -319,13 +321,13 @@ public class Main{
                 rentVehicle(input, sys.getCars());
                 break;
             case 4:
-                sys.checkout(loggedInCustomer, null, null);;
+                checkout(loggedInCustomer, null, null);
                 break;
             case 5:
-                sys.processReturn(loggedInCustomer, null, null);;
+                processReturn(loggedInCustomer, null, null);
                 break;
             case 6:
-                sys.processPayment(loggedInCustomer, null, null);
+                processPayment(loggedInCustomer, null, null);
                 break;
             case 7:
                 CarRentalSystem.viewHistory(); //View history?
@@ -421,7 +423,7 @@ public class Main{
 }      
 
 //Reservation (rentVehicle)
-    public static void rentVehicle(Scanner input, Car[] cars){
+    public static void rentVehicle(Car[] cars){
 
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -442,10 +444,49 @@ public class Main{
         System.out.print("\n\nEnter the Vehicle's Car ID: ");
         String carID = input.nextLine();
 
-        double toBePaid = sys.reservation(input, carID, sys);
-        double amount = payments[0].getAmount(); //  
 
     }
+
+    public static void checkout(Customer loggedInCustomer, Car car, Payment payment){
+        
+        System.out.println("\n=====================================");
+        System.out.println("\n             Check  Out              ");
+        System.out.println("\n=====================================");
+
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        System.out.println("\n");
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
+        }
+
+        System.out.print("Enter the Vehicle's Car ID: ");
+        String carId = input.nextLine();
+        Car targetCar = sys.findCarById(carId);
+        
+        if (targetCar == null) {
+            System.out.println("Cannot find the " + carId + " Car.");
+        } else {
+            if (targetCar.getStatus().equalsIgnoreCase("unavailable")) { // if not available then can check out
+                targetCar.setStatus("available"); 
+                System.out.println("Successful , You have checked out the " + carId + " Vehicle.");
+                Helper.delay(5);
+            } else { // car available
+                System.out.println("Current car status is " + targetCar.getStatus() + ", so not checked out yet.");
+            }
+            
+        }
+    }//end Checkout
+    
+    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment){
+        
+    }//end processReturn
+
+    public static void processPayment(Customer loggedInCustomer, Car car, Payment payment){
+
+    }//end processPayment
 
 //Admin Login
  public static void adminLogin(Scanner input) {
@@ -553,6 +594,7 @@ public class Main{
     } while (choice != 6);
 } // end of admin menu
 
+    //======================== ADMIN FUNCTIONS ========================
     public static void viewAdminInformation(Admin admin, Scanner input){
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -566,14 +608,14 @@ public class Main{
         System.out.print("\nPress Enter to Exit...   ");
         input.nextLine();  // Wait for user to press Enter
         Helper.clearScreen(); 
-    }
+    }//end viewAdminInformation
 
     public static void viewCar(Scanner input){
         sys.displayAllCars();
 
         System.out.print("\nPress Enter to Exit...   ");
         input.nextLine();  // Wait for user to press Enter
-    }
+    }//end viewCar
 
     public static void addCar(Scanner input){
         Helper.clearScreen();
@@ -639,9 +681,10 @@ public class Main{
 
         System.out.print("\nPress Enter to continue...");
         input.nextLine();
-    }
+    }//end addCar
 
-    public static void updateMileage(Scanner input, CarRentalSystem sys){
+
+    public static void updateMileage(){
         Helper.clearScreen();
         System.out.println("=====================================");
         System.out.println("           Update Mileage            ");
@@ -696,4 +739,11 @@ public class Main{
         input.nextLine();
     }
 
-}
+
+
+
+
+
+
+}//end CarRentalSystem
+  

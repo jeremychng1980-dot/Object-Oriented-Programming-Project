@@ -4,47 +4,43 @@ public class CarRentalSystem {
     private String approval;
     private int rentDays;
     private String condition;
-    private Car[] cars = {
-        new Economy(),
-        new SUV(),
-        new Luxury()
-    };
-    private Customer customer = new Customer();
-    private Payment payment = new Payment();
+    private Car[] cars = new Car[100];
+    private Customer[] customers = new Customer[100];
+    private Payment[] payments = new Payment[100];
 
     public CarRentalSystem(){
         this(null, null, null);
      }// end of constructor
 
-    public CarRentalSystem(Customer customer, Car[] cars) {
-        this.customer = customer;
+    public CarRentalSystem(Customer[] customers, Car[] cars) {
+        this.customers = customers;
         this.cars = cars;
         approval = " ";
         rentDays = 0;
         condition = "none";
     }
 
-    public CarRentalSystem(Customer customer, Payment payment) {
-        this.customer = customer;
-        this.payment = payment;
+    public CarRentalSystem(Customer[] customers, Payment[] payments) {
+        this.customers = customers;
+        this.payments = payments;
     }
 
-    public CarRentalSystem(Customer customer, Car[] cars, Payment payment) {
-        this.customer = customer;
+    public CarRentalSystem(Customer[] customers, Car[] cars, Payment[] payments) {
+        this.customers = customers;
         this.cars = cars;
-        this.payment = payment;
+        this.payments = payments;
     }
     
     public Car[] getCars() {
         return cars;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Customer[] getCustomer() {
+        return customers;
     }
 
-    public Payment getPayment() {
-        return payment;
+    public Payment[] getPayment() {
+        return payments;
     }
 
     public String getApproval() {
@@ -63,8 +59,8 @@ public class CarRentalSystem {
         this.cars = cars;
     }
 
-    public void setCustomer(Customer newCustomer) {
-        this.customer = newCustomer;
+    public void setCustomer(Customer[] newCustomer) {
+        this.customers = newCustomer;
     }
 
     public void setApproval(String newApproval) {
@@ -78,7 +74,7 @@ public class CarRentalSystem {
         this.condition = newCondition;
     }
     
-    public void changeStatus(Customer customer, Car car, Payment payment) { //Merged from processReturn and rentCar
+    public void changeStatus(Customer customers, Car car, Payment payments) { //Merged from processReturn and rentCar
         String status = car.getStatus();
         if (status.equalsIgnoreCase("not available")) {
             car.setStatus("available");
@@ -92,11 +88,11 @@ public class CarRentalSystem {
         return;
     }
 
-    public void reservation(String approval, Customer customer, Car[] car, Payment payment) {
+    public void reservation(String approval, Customer customers, Car[] car, Payment payments) {
         //Not sure what does this want
     }
 
-    public void processPayment(Customer customer, Car[] cars, Payment payment) {
+    public void processPayment(Customer customers, Car[] cars, Payment payments) {
         
     }
 
