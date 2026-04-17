@@ -5,12 +5,12 @@ public class SUV extends Car{
 	private final int groundClearance;  // using mm to measure
 
 	public SUV(){
-		this("","","", 0.0, 0, 0, "",0.0, false, 0);
+		this("","","", 0.0, 0, 0, "",0.0, false, 0, "no damage");
 	}
 
     public SUV(String plateNumber, String model, String brand, double dailyRate, int seatingCapacity, 
-    	int mileage, String status, double fuelLevel, boolean fourWheelDrive, int groundClearance) {
-    	super(plateNumber, model, brand, dailyRate, seatingCapacity, mileage, status, fuelLevel);
+    	int mileage, String status, double fuelLevel, boolean fourWheelDrive, int groundClearance, String condition) {
+    	super(plateNumber, model, brand, dailyRate, seatingCapacity, mileage, status, fuelLevel, condition);
     	this.fourWheelDrive = fourWheelDrive;
     	this.groundClearance = groundClearance;
     }

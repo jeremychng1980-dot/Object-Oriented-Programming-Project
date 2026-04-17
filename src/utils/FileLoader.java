@@ -172,9 +172,10 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean isHatchback = Boolean.parseBoolean(parts[9]);
                     double fuelEfficiencyPer100KM = Double.parseDouble(parts[10]);
+                    String condition = parts[11];
 
                         Economy eco = new Economy(plateNumber, model, brand, dailyRate, seatingCapacity, 
-                                                mileage, status, fuelLevel, isHatchback, fuelEfficiencyPer100KM);
+                                                mileage, status, fuelLevel, isHatchback, fuelEfficiencyPer100KM, condition);
                         eco.setCarID(carID); 
                         cars[count++] = eco; 
 
@@ -196,8 +197,10 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean hasLeatherSeats = Boolean.parseBoolean(parts[9]);
                     boolean hasSunroof = Boolean.parseBoolean(parts[10]);
+                    String condition = parts[11];
+                    
                         Luxury lux = new Luxury(plateNumber, model, brand, dailyRate, seatingCapacity, 
-                                                mileage, status, fuelLevel, hasLeatherSeats, hasSunroof);
+                                                mileage, status, fuelLevel, hasLeatherSeats, hasSunroof, condition);
                         lux.setCarID(carID); 
                         cars[count++] = lux;
 
@@ -219,8 +222,10 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean fourWheelDrive = Boolean.parseBoolean(parts[9]);
                     int groundClearance = Integer.parseInt(parts[10]);
+                    String condition = parts[11];
+
                         SUV suv = new SUV(plateNumber, model, brand, dailyRate, seatingCapacity, 
-                                            mileage, status, fuelLevel, fourWheelDrive, groundClearance);
+                                            mileage, status, fuelLevel, fourWheelDrive, groundClearance, condition);
                         suv.setCarID(carID); 
                         cars[count++] = suv; 
                 }
