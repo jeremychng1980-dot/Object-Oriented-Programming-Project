@@ -140,39 +140,5 @@ public class CarRentalSystem {
             System.out.println("\nError, the garage is full, can not add new vehicle.");
             }
     }
-    
-
-    public void reservation(String approval, Customer customers, Car[] car, Payment payments) { //TODO
-        //Not sure what does this want
-
-        setApproval(approval);
-        setRentDays(rentDays);
-    }
-
-    public void processPayment(Customer customers, Car[] cars, Payment payments) { //TODO
-        
-    }
-
-    public void inspection(Staff staff, Car car) { //TODO
-        String damages = "abc"; //PLACEHOLDER VALUE
-
-        if (damages.equalsIgnoreCase("none")) {
-            
-
-        } else if (damages.equalsIgnoreCase("minor")) {
-
-
-        } else if (damages.equalsIgnoreCase("moderate")) {
-           
-            
-        } else if (damages.equalsIgnoreCase("heavy")) {
-
-
-        } else {
-            System.out.println("Invalid damage type");
-        }
-    
-        return;
-    }
 
 }// End of CarRentalSystem

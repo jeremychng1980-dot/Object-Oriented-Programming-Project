@@ -43,9 +43,7 @@ public class TestCarRentalSystem{
                     customerRegistration();//to customer registration page
                     break;
                 case 3:
-                    staffLogin();
-                    System.out.println("Press Enter to continue...");
-                    input.nextLine();
+                    staffLogin(); //To staff login page
                     break;
                 case 4:
                     adminLogin();
@@ -298,7 +296,7 @@ public class TestCarRentalSystem{
         System.out.println("=====================================");
         System.out.println("1. View Profile");
         System.out.println("2. Modify License Expired Date");
-        System.out.println("3. Rent a Vehicle(Reservation)");
+        System.out.println("3. Rent a Vehicle (Reservation)");
         System.out.println("4. Check out");
         System.out.println("5. Return Vehicle");
         System.out.println("6. Payment");
@@ -328,7 +326,7 @@ public class TestCarRentalSystem{
                 processPayment(loggedInCustomer, null, null);
                 break;
             case 7:
-                //CarRentalSystem.viewHistory(); //View history?
+                viewHistory(loggedInCustomer); 
                 break;
             case 8:
                 break;
@@ -491,13 +489,35 @@ public class TestCarRentalSystem{
         }
     }//end Checkout
     
-    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment){ //TODO
-        
-    }//end processReturn
+    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment) { //TODO
+        String damages = "abc"; //PLACEHOLDER VALUE
+
+        if (damages.equalsIgnoreCase("none")) {
+            
+
+        } else if (damages.equalsIgnoreCase("minor")) {
+
+
+        } else if (damages.equalsIgnoreCase("moderate")) {
+           
+            
+        } else if (damages.equalsIgnoreCase("heavy")) {
+
+
+        } else {
+            System.out.println("Invalid damage type");
+        }
+    
+        return;
+    }
 
     public static void processPayment(Customer loggedInCustomer, Car car, Payment payment){ //TODO
 
     }//end processPayment
+
+    public static void viewHistory(Customer loggedInCustomer) { //TODO
+
+    }   
 
 //Staff Login
     public static void staffLogin() {
@@ -560,35 +580,35 @@ public class TestCarRentalSystem{
 
     }
 
-    public static void staffMenu(Staff loggedInStaff) { //TODO
-        Helper.clearScreen();
-        System.out.println("\n=====================================");
-        System.out.println("               WELCOME!                ");
-        System.out.println("=====================================");
-        System.out.println("1. View Profile");
-        System.out.println("2. View Vehicle");
-        System.out.println("3. Process Vehicle Return");
-        System.out.println("4. Inspection");
-        System.out.println("5. Log out");
-        System.out.println("=====================================");
+//Staff Methods
+    public static void staffMenu(Staff loggedInStaff) {
+        int choice = 0;
+        do {
+            Helper.clearScreen();
+            System.out.println("\n=====================================");
+            System.out.println("               WELCOME!                ");
+            System.out.println("=====================================");
+            System.out.println("1. View Profile");
+            System.out.println("2. View Vehicle");
+            System.out.println("3. Inspection");
+            System.out.println("4. Log out");
+            System.out.println("=====================================");
 
-        int choice = Helper.getValidatedInt(input, "Please enter a number (1-5): ", 1, 5);
-        switch (choice) {
-            case 1:
-                viewStaffInformation(loggedInStaff);
-                break;
-            case 2:
-                viewCar();
-                break;
-            case 3:
-                processReturn(loggedInStaff, null, null);
-                break;
-            case 4:
-                inspection(loggedInStaff);
-                break;
-            case 5:
-                break;
-        }
+            choice = Helper.getValidatedInt(input, "Please enter a number (1-4): ", 1, 4);
+            switch (choice) {
+                case 1:
+                    viewStaffInformation(loggedInStaff);
+                    break;
+                case 2:
+                    viewCar();
+                    break;
+                case 3:
+                    inspection(loggedInStaff);
+                    break;
+                case 4:
+                    break;
+            }
+        } while (choice != 4);
     }
 
     public static void viewStaffInformation(Staff loggedInStaff) {
@@ -604,10 +624,6 @@ public class TestCarRentalSystem{
         System.out.print("\nPress Enter to Exit...   ");
         input.nextLine();  // Wait for user to press Enter
         Helper.clearScreen();
-    }
-
-    public static void processReturn(Staff loggedInStaff, Car car, Payment payment) { //TODO
-
     }
 
     public static void inspection(Staff loggedInStaff) { //TODO
@@ -720,7 +736,7 @@ public class TestCarRentalSystem{
     } while (choice != 6);
 } // end of admin menu
 
-    //======================== ADMIN FUNCTIONS ========================
+//Admin Methods
     public static void viewAdminInformation(Admin admin){
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -809,7 +825,6 @@ public class TestCarRentalSystem{
         input.nextLine();
     }//end addCar
 
-
     public static void updateMileage(){
         Helper.clearScreen();
         System.out.println("=====================================");
@@ -864,12 +879,6 @@ public class TestCarRentalSystem{
         System.out.print("\nPress Enter to continue...");
         input.nextLine();
     }
-
-
-
-
-
-
 
 }//end CarRentalSystem
   
