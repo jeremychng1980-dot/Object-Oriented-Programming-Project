@@ -9,7 +9,6 @@ public class CarRentalSystem {
     private Car[] cars;
     private Customer[] customers = new Customer[100];
     private Payment[] payments = new Payment[100];
-    private int carCount;
 
     public CarRentalSystem(){
         this(null, null, null);
@@ -143,18 +142,18 @@ public class CarRentalSystem {
     }
     
 
-    public void reservation(String approval, Customer customers, Car[] car, Payment payments) {
+    public void reservation(String approval, Customer customers, Car[] car, Payment payments) { //TODO
         //Not sure what does this want
 
         setApproval(approval);
         setRentDays(rentDays);
     }
 
-    public void processPayment(Customer customers, Car[] cars, Payment payments) {
+    public void processPayment(Customer customers, Car[] cars, Payment payments) { //TODO
         
     }
 
-    public void inspection(Staff staff, Car car) {
+    public void inspection(Staff staff, Car car) { //TODO
         String damages = "abc"; //PLACEHOLDER VALUE
 
         if (damages.equalsIgnoreCase("none")) {

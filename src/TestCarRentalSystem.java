@@ -48,7 +48,7 @@ public class TestCarRentalSystem{
                     input.nextLine();
                     break;
                 case 4:
-                    adminLogin(input);
+                    adminLogin();
                     break;
                 case 5:
                     System.out.println("\n=====================================");
@@ -458,7 +458,7 @@ public class TestCarRentalSystem{
 
     } // end rentVehicle
 
-    public static void checkout(Customer loggedInCustomer, Car car, Payment payment){
+    public static void checkout(Customer loggedInCustomer, Car car, Payment payment){ //FIXME
         
         System.out.println("\n=====================================");
         System.out.println("\n             Check  Out              ");
@@ -491,16 +491,16 @@ public class TestCarRentalSystem{
         }
     }//end Checkout
     
-    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment){
+    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment){ //TODO
         
     }//end processReturn
 
-    public static void processPayment(Customer loggedInCustomer, Car car, Payment payment){
+    public static void processPayment(Customer loggedInCustomer, Car car, Payment payment){ //TODO
 
     }//end processPayment
 
 //Admin Login
- public static void adminLogin(Scanner input) {
+ public static void adminLogin() {
     boolean loggedIn = false;
         Helper.clearScreen();
         System.out.println("\n=====================================");
