@@ -72,7 +72,7 @@ public class FileUploader {
     }
     }
 
-    public static void saveCarsToFile(String filename, Car[] cars) {
+    public static void saveCarToFile(String filename, Car[] cars) {
         PrintWriter writer = null;
         
         try {

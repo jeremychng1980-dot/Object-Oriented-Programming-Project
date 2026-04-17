@@ -632,6 +632,7 @@ public class TestCarRentalSystem{
         System.out.println("             Inspection              ");
         System.out.println("=====================================");
 
+        sys.displayAllCars();
         System.out.println("Enter Car ID for Inspection: ");
         String carID = input.nextLine();
 
@@ -639,11 +640,12 @@ public class TestCarRentalSystem{
         if (targetCar == null) {
             System.out.println("Cannot find the " + carID + " Car.");
         } else {
+            System.out.println("Inspecting Car ID: " + carID);
             System.out.println("Enter condition of the inspected car (no damage/minor/major/severe): ");
             String condition = input.nextLine();
             targetCar.setCondition(condition); // Set the condition of the car based on staff input
-            System.out.println("Inspecting Car ID: " + carID);
-            // You can add more details here based on your requirements
+            utils.FileUploader.saveCarToFile("cars.txt", sys.getCars()); // Save the updated car information to file
+            System.out.println("Inspection completed. Car condition updated to: " + condition);
         }
     }
 
@@ -861,7 +863,7 @@ public class TestCarRentalSystem{
             
             target.setMileage(target.getMileage() + additionalKm);
             
-            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
+            utils.FileUploader.saveCarToFile("cars.txt", sys.getCars());
             
             System.out.println("\nMileage updated successfully!");
         } 
@@ -887,7 +889,7 @@ public class TestCarRentalSystem{
         if (target != null) {
             target.setStatus("maintenance");
 
-            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
+            utils.FileUploader.saveCarToFile("cars.txt", sys.getCars());
             
             System.out.println("\nVehicle " + carID + " is already in maintenance.");
         } 

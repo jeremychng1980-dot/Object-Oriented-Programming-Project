@@ -121,7 +121,7 @@ public class CarRentalSystem {
                 targetCar.setStatus("unavailable"); 
                 System.out.println("Successful , You have booked the " + targetCar.getCarID() + " Vehicle.");
                 Helper.delay(5);
-                utils.FileUploader.saveCarsToFile("cars.txt", cars);
+                utils.FileUploader.saveCarToFile("cars.txt", cars);
             } 
         else { // car unavailable -> cannot book reservation
                 System.out.println("Current car status is " + targetCar.getStatus() + ", so unable to rent.");
@@ -133,7 +133,7 @@ public class CarRentalSystem {
         if (Car.getCarCount() < cars.length) {
             cars[Car.getCarCount()] = newCar;
 
-            utils.FileUploader.saveCarsToFile(filename, cars); 
+            utils.FileUploader.saveCarToFile(filename, cars); 
             System.out.println("\nVehicle record has been uploaded to the system.");
         } 
         else {
