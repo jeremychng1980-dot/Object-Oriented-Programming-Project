@@ -163,7 +163,7 @@ public class FileUploader {
             for (int i = 0; i < payments.length; i++) {
                 Payment p = payments[i];
                 if (p != null) {
-                    // Format: paymentID|date|amount|deposit|damageCharge|customerID|carID|
+                    // Format: paymentID|date|amount|deposit|damageCharge|customerID|carID|PAYMENT_TYPE|rentDuration|payment-specific-fields
                     writer.print(p.getPaymentID() + "|");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     writer.print(sdf.format(p.getDate()) + "|");
@@ -173,13 +173,16 @@ public class FileUploader {
                     writer.print(p.getCustomerID() + "|");
                     writer.print(p.getCarID() + "|");
 
+                    // Write payment type and rent duration first
                     if (p.getPaymentMethod() instanceof Cash) {
                         Cash cash = (Cash) p.getPaymentMethod();
                         writer.print("CASH|");
+                        writer.print(p.getRentDuration() + "|");  // Rent duration before payment fields
                         writer.print(cash.getAmountReceived());
                     } else if (p.getPaymentMethod() instanceof Card) {
                         Card card = (Card) p.getPaymentMethod();
                         writer.print("CARD|");
+                        writer.print(p.getRentDuration() + "|");  // Rent duration before payment fields
                         writer.print(card.getCardNo() + "|");
                         writer.print(card.getCCV() + "|");
                         writer.print(card.getNameOnCard() + "|");
@@ -188,21 +191,23 @@ public class FileUploader {
                     } else if (p.getPaymentMethod() instanceof OnlineTransfer) {
                         OnlineTransfer transfer = (OnlineTransfer) p.getPaymentMethod();
                         writer.print("ONLINETRANSFER|");
+                        writer.print(p.getRentDuration() + "|");  // Rent duration before payment fields
                         writer.print(transfer.getAccountNumber() + "|");
                         writer.print(transfer.getAccountName() + "|");
                         writer.print(transfer.getBankName() + "|");
                         writer.print(transfer.getSwiftCode() + "|");
                         writer.print(transfer.getReference());
                     } else {
-                        writer.print("NULL");
+                        writer.print("NULL|");
+                        writer.print(p.getRentDuration());
                     }
 
-                    writer.print(p.getRentDuration());
-                    writer.println();
+                    writer.println();  // End the line
                 }
             }
+            
         } catch (IOException e) {
-            System.out.println("Error saving payments to file: ");
+            System.out.println("Error saving payments to file: " + e.getMessage());
         } finally {
             if (writer != null) {
                 writer.close();

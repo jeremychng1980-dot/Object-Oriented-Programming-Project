@@ -238,7 +238,7 @@ public class FileLoader {
         File file = new File(filename);
         
         if (!file.exists()) {
-            System.out.println("No existing file found");
+            System.out.println("No existing payment file found");
             return;
         }
 
@@ -255,8 +255,6 @@ public class FileLoader {
                 String dataLine = reader.readLine();
                 if (dataLine == null) break;
                 
-                // Expected format:
-                // paymentID|date|amount|deposit|damageCharge|customerID|carID|paymentType|...
                 String[] parts = dataLine.split("\\|");
                 
                 String paymentID = parts[0];
@@ -267,22 +265,29 @@ public class FileLoader {
                 String customerID = parts[5];
                 String carID = parts[6];
                 String paymentType = parts[7];
+                int rentDuration = Integer.parseInt(parts[8]);  // Now at index 8
                 
                 PaymentMethod paymentMethod = null;
+                int nextIndex = 9;  // Payment-specific fields start here
+                
                 switch (paymentType) {
                     case "CASH":
-                        double amountReceived = Double.parseDouble(parts[8]);
+                        double amountReceived = Double.parseDouble(parts[nextIndex]);
                         paymentMethod = new Cash(amountReceived);
                         break;
                     case "CARD":
-                        paymentMethod = new Card(parts[8], parts[9], parts[10], parts[11], parts[12]);
+                        paymentMethod = new Card(parts[nextIndex], parts[nextIndex+1], 
+                                            parts[nextIndex+2], parts[nextIndex+3], 
+                                            parts[nextIndex+4]);
                         break;
                     case "ONLINETRANSFER":
-                        paymentMethod = new OnlineTransfer(parts[8], parts[9], parts[10], parts[11], parts[12]);
+                        paymentMethod = new OnlineTransfer(parts[nextIndex], parts[nextIndex+1], 
+                                                        parts[nextIndex+2], parts[nextIndex+3], 
+                                                        parts[nextIndex+4]);
                         break;
                     default:
                         System.out.println("Unknown payment type: " + paymentType);
-                        break;
+                        continue;
                 }
                 
                 Payment payment = new Payment(date, amount, paymentMethod);
@@ -291,15 +296,30 @@ public class FileLoader {
                 payment.setDamageCharge(damageCharge);
                 payment.setCustomerID(customerID);
                 payment.setCarID(carID);
+                payment.setRentDuration(rentDuration);
+                
+                // Update payment counter if needed
+                int idNum = Integer.parseInt(paymentID.substring(1));
+                if (idNum >= Payment.getPaymentCounter()) {
+                    Payment.setPaymentCounter(idNum + 1);
+                }
                 
                 payments[count++] = payment;
             }
-            Payment.setPaymentCounter(count); // Update the static paymentCounter variable
+            
+            // Ensure counter is at least as high as loaded count
+            if (count > Payment.getPaymentCounter()) {
+                Payment.setPaymentCounter(count);
+            }
+            
+            System.out.println("Successfully loaded " + count + " payments");
             
         } catch (IOException e) {
             System.out.println("Error reading payment file: " + e.getMessage());
         } catch (ParseException e) {
             System.out.println("Error parsing date in payment file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing number in payment file: " + e.getMessage());
         }
     }
 }

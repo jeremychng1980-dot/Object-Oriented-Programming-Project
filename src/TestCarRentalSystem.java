@@ -486,7 +486,6 @@ public class TestCarRentalSystem{
                 int rentDuration = Helper.getValidatedInt(input, "Please enter the amount of days you want to rent the vehicle: ", 1, Integer.MAX_VALUE);
 
                 Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), 0); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
-                utils.FileUploader.saveCarsToFile("cars.txt", cars); //save the change of car status to file
                 utils.FileUploader.savePaymentsToFile("payment.txt", payments); //save the payment record
                 System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle.");
         }
