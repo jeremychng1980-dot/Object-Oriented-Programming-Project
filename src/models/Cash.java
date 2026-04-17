@@ -13,6 +13,7 @@ public class Cash extends Payment implements PaymentMethod {
     
     // constructor with args
     public Cash(double amountReceived){
+
         this.amountReceived = amountReceived;
         
     }

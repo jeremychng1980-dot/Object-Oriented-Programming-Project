@@ -177,12 +177,10 @@ public class FileUploader {
                     if (p.getPaymentMethod() instanceof Cash) {
                         Cash cash = (Cash) p.getPaymentMethod();
                         writer.print("CASH|");
-                        writer.print(p.getRentDuration() + "|");  // Rent duration before payment fields
                         writer.print(cash.getAmountReceived());
                     } else if (p.getPaymentMethod() instanceof Card) {
                         Card card = (Card) p.getPaymentMethod();
                         writer.print("CARD|");
-                        writer.print(p.getRentDuration() + "|");  // Rent duration before payment fields
                         writer.print(card.getCardNo() + "|");
                         writer.print(card.getCCV() + "|");
                         writer.print(card.getNameOnCard() + "|");
@@ -191,7 +189,6 @@ public class FileUploader {
                     } else if (p.getPaymentMethod() instanceof OnlineTransfer) {
                         OnlineTransfer transfer = (OnlineTransfer) p.getPaymentMethod();
                         writer.print("ONLINETRANSFER|");
-                        writer.print(p.getRentDuration() + "|");  // Rent duration before payment fields
                         writer.print(transfer.getAccountNumber() + "|");
                         writer.print(transfer.getAccountName() + "|");
                         writer.print(transfer.getBankName() + "|");
