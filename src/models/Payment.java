@@ -72,6 +72,16 @@ public class Payment {
         this.rentDuration = rentDuration; // can be set later when rental duration is known
     }
 
+    public Payment(String customerID, String carID) {
+        date = new Date();
+        this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
+        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.damageCharge = calculateDamageCharge("NO_DAMAGE");
+        this.customerID = customerID;
+        this.carID = carID;
+        this.rentDuration = 0; // can be set later when rental duration is known
+    }
+
     // ================= ID Generation =================
     private static String generatePaymentID() {
         paymentCounter++;

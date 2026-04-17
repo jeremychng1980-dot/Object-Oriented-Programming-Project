@@ -70,9 +70,9 @@ public class TestCarRentalSystem{
     public static void customerRegistration(){
     	 
     	Helper.clearScreen();
-    	System.out.println("\n=====================================");
-        System.out.println("       CUSTOMER REGISTRATION         ");
-        System.out.println("=====================================");
+    	System.out.print("\n=====================================");
+        System.out.print("\n       CUSTOMER REGISTRATION         ");
+        System.out.print("\n=====================================");
        
         String loginID = "";
         String password = "";
@@ -364,7 +364,7 @@ public class TestCarRentalSystem{
 }
 
 //Modify Customer License Expiry Date
-	public static void updateLicenseExpiryDate(Customer customer) { //TODO: Can reference validation from here, try to reuse that part
+	public static void updateLicenseExpiryDate(Customer customer) { 
 	Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("      Modify License Expired Date      ");
@@ -424,7 +424,13 @@ public class TestCarRentalSystem{
 }      
 
 //Reservation (rentVehicle)
-    public static void rentVehicle(Customer customer, Car[] cars){ //TODO: Stop customer from renting cars if license is EXPIRED
+    public static void rentVehicle(Customer customer, Car[] cars){ 
+        if (customer.getLicense().isExpired()) {
+            System.out.println("\nYour license is expired. You cannot rent a vehicle until you update your license expiry date.");
+            System.out.println("Press Enter to return to the menu...");
+            input.nextLine();
+            return;
+        }
 
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -460,11 +466,11 @@ public class TestCarRentalSystem{
 
     } // end rentVehicle
 
-    public static void checkout(Customer loggedInCustomer, Car car, Payment payments){ //FIXME: Incomplete method
+    public static void checkout(Customer loggedInCustomer, Car car, Payment payments){
         
-        System.out.println("\n=====================================");
-        System.out.println("\n             Check  Out              ");
-        System.out.println("\n=====================================");
+        System.out.print("\n=====================================");
+        System.out.print("\n             Check  Out              ");
+        System.out.print("\n=====================================");
 
         System.out.print("Press Enter to continue to login or '0' to exit... ");
         String choice = input.nextLine();//ask user if they want to continue to login or exit
@@ -488,7 +494,7 @@ public class TestCarRentalSystem{
                 Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), rentDuration); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
                 sys.getPayment()[Payment.getPaymentCount() - 1] = transaction; // Add to the payments array
                 utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
-                System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle.");
+                System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle."); //FIXME: Fix this error
         }
             
             System.out.println("\nPress Enter to Exit...   ");
@@ -523,15 +529,41 @@ public class TestCarRentalSystem{
         System.out.println("\n             Payment                ");
         System.out.println("\n=====================================");
 
-        System.out.print("Press Enter to continue to login or '0' to exit... ");
-        String choice = input.nextLine();//ask user if they want to continue to login or exit
-        System.out.println("\n");
+        System.out.println("Enter way to pay (1 for Cash, 2 for Card, 3 for Online Transfer): ");
+        int paymentMethod = Helper.getValidatedInt(input, "Please enter a number (1-3): ", 1, 3);
         // Check if user wants to exit
-        if (choice.equals("0")) {
+        if (paymentMethod == 0) {
         	Helper.clearScreen();
             return;
+        } else if (paymentMethod == 1) { //TODO: Get user input
+            System.out.println("Enter amount to pay: ");
+            int amount = Helper.getValidatedInt(input, "Please enter a valid amount: ", 1, Integer.MAX_VALUE);
+            payment = new Cash(loggedInCustomer.getCustomerID(), car.getCarID(), amount); //TODO: Get user input
+        } else if (paymentMethod == 2) {
+            System.out.print("Enter Card Number: ");
+            //FIXME: int cardNo = Helper.getValidatedInt(input, "Please enter a valid card number: ", 1000000000, 9999999999L);
+            System.out.print("Enter CVV: ");
+            String CCV = input.nextLine();
+            System.out.print("Enter Name on Card: ");
+            String nameOnCard = input.nextLine();
+            System.out.print("Enter Expiry Month: ");
+            String expiryMonth = input.nextLine();
+            System.out.print("Enter Expiry Year: ");
+            String expiryYear = input.nextLine();
+            payment = new Card(loggedInCustomer.getCustomerID(), car.getCarID(), cardNo, CCV, nameOnCard, expiryMonth, expiryYear); //TODO: Get user input
+            sys.getPayment()[Payment.getPaymentCount() - 1] = payment; // Add
+        } else if (paymentMethod == 3) {
+            System.out.print("Enter Account Number: ");
+            String accountNumber = input.nextLine();
+            System.out.print("Enter Account Name: ");
+            String accountName = input.nextLine();
+            System.out.print("Enter Bank Name: ");
+            String bankName = input.nextLine();
+            System.out.print("Enter SWIFT Code: ");
+            String swiftCode = input.nextLine();
+            payment = new OnlineTransfer(loggedInCustomer.getCustomerID(), car.getCarID(), 0, accountNumber, accountName, bankName, swiftCode); //TODO: Get user input
+            sys.getPayment()[Payment.getPaymentCount() - 1] = payment; // Add
         }
-
     }//end processPayment
 
     public static void viewHistory(Customer loggedInCustomer) { //TODO: Check When Data is Present
@@ -665,7 +697,7 @@ public class TestCarRentalSystem{
         Helper.clearScreen();
     }
 
-    public static void inspection(Staff loggedInStaff) { //TODO: Continue the code to make it functional
+    public static void inspection(Staff loggedInStaff) { //TODO: Continue the code to make it functional in calculation
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("             INSPECTION              ");
@@ -688,7 +720,21 @@ public class TestCarRentalSystem{
             if (carID.equalsIgnoreCase(inspectedCar)) {
                 System.out.println("Enter condition of inspected car(NO_DAMAGE/MINOR/MODERATE/MAJOR): ");
                 String condition = input.nextLine();
-                //Continue with saving the condition of the car to payment
+                if (condition == "NO_DAMAGE") {
+                    sys.getCars()[i].setStatus("available");
+                    System.out.println("Car is in good condition. Status set to available.");
+                } else if (condition == "MINOR") {
+                    sys.getCars()[i].setStatus("available");
+                    System.out.println("Car has minor damages. Status set to available.");
+                } else if (condition == "MODERATE") {
+                    sys.getCars()[i].setStatus("unavailable");
+                    System.out.println("Car has moderate damages. Status set to unavailable.");
+                } else if (condition == "MAJOR") {
+                    sys.getCars()[i].setStatus("unavailable");
+                    System.out.println("Car has major damages. Status set to unavailable.");
+                } else {
+                    System.out.println("Invalid condition input.");
+                }
             }
         }
     }

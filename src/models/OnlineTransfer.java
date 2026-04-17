@@ -29,6 +29,15 @@ public class OnlineTransfer extends Payment{
         this.reference = reference;
     }
 
+    public OnlineTransfer(String customerID, String carID, int accountNumber, String accountName, String bankName, String swiftCode, String reference) { //TODO
+        super(customerID, carID);
+        this.accountNumber = ""; // can be set later when payment is processed
+        this.accountName = ""; // can be set later when payment is processed
+        this.bankName = ""; // can be set later when payment is processed
+        this.swiftCode = ""; // can be set later when payment is processed
+        this.reference = ""; // can be set later when payment is processed
+    }   
+
     // ================= Getters =================
 
     public String getAccountNumber() {
