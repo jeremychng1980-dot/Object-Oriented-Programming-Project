@@ -1,24 +1,34 @@
 34
 ECONOMY
 CA0001|PHH 1001|Myvi|Perodua|100.0|5|12000|unavailable|100.0|true|6.2|no damage
+
 ECONOMY
 CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|unavailable|100.0|true|5.5|no damage
+
 ECONOMY
 CA0003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7|no damage
+
 ECONOMY
 CA0004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4|no damage
+
 ECONOMY
 CA0005|VAY 5005|Vios|Toyota|180.0|5|22000|available|100.0|false|5.8|no damage
+
 ECONOMY
 CA0006|BCC 6006|Iriz|Proton|95.0|5|30000|maintenance|50.0|true|6.6|no damage
+
 ECONOMY
 CA0007|KAA 7007|Bezza|Perodua|110.0|5|18000|available|100.0|false|5.0|no damage
+
 ECONOMY
 CA0008|MAB 8008|Almera|Nissan|160.0|5|28000|available|100.0|false|5.4|no damage
+
 ECONOMY
 CA0009|JCD 9009|Yaris|Toyota|190.0|5|12000|unavailable|100.0|true|5.7|no damage
+
 ECONOMY
 CA0010|PCE 1010|Jazz|Honda|170.0|5|35000|available|100.0|true|5.8|no damage
+
 SUV
 CA0011|VBH 2011|X70|Proton|280.0|5|8000|available|100.0|true|190|no damage
 SUV
@@ -61,6 +71,7 @@ LUXURY
 CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true|no damage
 ECONOMY
 CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0|no damage
+
 LUXURY
 CA0032|PEN 0000|Skyline GTR34|Nissan|100.0|5|0|available|100.0|true|true|no damage
 LUXURY

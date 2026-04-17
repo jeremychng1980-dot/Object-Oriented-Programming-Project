@@ -102,7 +102,7 @@ public class FileUploader {
                         writer.print(e.getFuelLevel() + "|");
                         writer.print(e.isHatchback() + "|");
                         writer.print(e.getFuelEfficiencyPer100KM() + "|");
-                        writer.println(e.getCondition());
+                        writer.print(e.getCondition());
                         writer.println();
                     } else if (cars[i] instanceof Luxury) {
                         writer.println("LUXURY");

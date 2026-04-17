@@ -639,6 +639,8 @@ public class TestCarRentalSystem{
         Car targetCar = sys.findCarById(carID);
         if (targetCar == null) {
             System.out.println("Cannot find the " + carID + " Car.");
+            System.out.print("\nPress Enter to continue...");
+            input.nextLine();
         } else {
             System.out.println("Inspecting Car ID: " + carID);
             System.out.println("Enter condition of the inspected car (no damage/minor/major/severe): ");
@@ -646,6 +648,8 @@ public class TestCarRentalSystem{
             targetCar.setCondition(condition); // Set the condition of the car based on staff input
             utils.FileUploader.saveCarToFile("cars.txt", sys.getCars()); // Save the updated car information to file
             System.out.println("Inspection completed. Car condition updated to: " + condition);
+            System.out.print("\nPress Enter to continue...");
+            input.nextLine();
         }
     }
 
