@@ -11,14 +11,14 @@ import java.io.*;
 public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
-    static CarRentalSystem sys = new CarRentalSystem();
-    static CarRentalSystem[] crs = new CarRentalSystem[100];
+    static CarRentalSystem sys = new CarRentalSystem(); 
 
     public static void main(String[] args) {
         // Load existing users from file
         sys.setCars(new Car[100]);
         utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
         utils.FileLoader.loadUsersFile("users.txt", users);
+        utils.FileLoader.loadPaymentFile("payments.txt", sys.getPayment());
 
 //-----------------------First Page---------------------    
         int choice = 0;
@@ -317,7 +317,7 @@ public class TestCarRentalSystem{
                 updateLicenseExpiryDate(loggedInCustomer);
                 break;
             case 3: 
-                rentVehicle(sys.getCars());
+                rentVehicle(loggedInCustomer, sys.getCars());
                 break;
             case 4:
                 checkout(loggedInCustomer, null, null);
@@ -422,7 +422,7 @@ public class TestCarRentalSystem{
 }      
 
 //Reservation (rentVehicle)
-    public static void rentVehicle(Car[] cars){
+    public static void rentVehicle(Customer customer, Car[] cars){
 
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -450,8 +450,7 @@ public class TestCarRentalSystem{
 
         } 
         else {
-            sys.changeStatus(targetCar); // change Status from unavailable to available
-
+            sys.changeStatus(targetCar); // change Status from available to unavailable, and also save the change to file
         }
              
         System.out.println("Press enter to return to Home page...");

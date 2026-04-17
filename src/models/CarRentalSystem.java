@@ -3,10 +3,7 @@ package models;
 import utils.Helper;
 
 public class CarRentalSystem {
-    private String approval;
-    private int rentDays;
-    private String condition;
-    private Car[] cars;
+    private Car[] cars = new Car[100];
     private Customer[] customers = new Customer[100];
     private Payment[] payments = new Payment[100];
 
@@ -21,9 +18,6 @@ public class CarRentalSystem {
     public CarRentalSystem(Customer[] customers, Car[] cars) {
         this.customers = customers;
         this.cars = cars;
-        approval = " ";
-        rentDays = 0;
-        condition = "none";
     }
 
     public CarRentalSystem(Customer[] customers, Payment[] payments) {
@@ -31,12 +25,13 @@ public class CarRentalSystem {
         this.payments = payments;
     }
 
+
     public CarRentalSystem(Customer[] customers, Car[] cars, Payment[] payments) {
         this.customers = customers;
         this.cars = cars;
         this.payments = payments;
     }
-    
+
     public Car[] getCars() {
         return cars;
     }
@@ -49,35 +44,12 @@ public class CarRentalSystem {
         return payments;
     }
 
-    public String getApproval() {
-        return approval;
-    }
-
-    public int getRentDays() {
-        return rentDays;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
     public void setCars(Car[] cars) {
         this.cars = cars;
     }
 
     public void setCustomers(Customer[] customers) {
         this.customers = customers;
-    }
-
-    public void setApproval(String newApproval) {
-        this.approval = newApproval;
-    }
-
-    public void setRentDays(int newRentDays) {
-        this.rentDays = newRentDays;
-    }
-    public void seCondition(String newCondition) {
-        this.condition = newCondition;
     }
     
     public Car findCarById(String carID) {
@@ -139,6 +111,11 @@ public class CarRentalSystem {
         else {
             System.out.println("\nError, the garage is full, can not add new vehicle.");
             }
+    }
+
+    public void calculateRentalFee(Car targetCar, int rentDays) {
+        double rentalFee = targetCar.calcRentalFee(rentDays);
+        System.out.println("\nThe rental fee for " + rentDays + " day(s) is: RM " + String.format("%.2f", rentalFee));
     }
 
 }// End of CarRentalSystem

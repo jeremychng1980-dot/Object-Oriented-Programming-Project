@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -231,5 +232,74 @@ public class FileLoader {
             System.out.println("Error reading car file: " + e.getMessage());
         }
 
+    }
+
+    public static void loadPaymentFile(String filename, Payment[] payments) {
+        File file = new File(filename);
+        
+        if (!file.exists()) {
+            System.out.println("No existing file found");
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if (line == null) {
+                return;
+            }
+
+            int totalPayments = Integer.parseInt(line.trim());
+            int count = 0;
+
+            for (int i = 0; i < totalPayments; i++) {
+                String dataLine = reader.readLine();
+                if (dataLine == null) break;
+                
+                // Expected format:
+                // paymentID|date|amount|deposit|damageCharge|customerID|carID|paymentType|...
+                String[] parts = dataLine.split("\\|");
+                
+                String paymentID = parts[0];
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1]);
+                double amount = Double.parseDouble(parts[2]);
+                double deposit = Double.parseDouble(parts[3]);
+                double damageCharge = Double.parseDouble(parts[4]);
+                String customerID = parts[5];
+                String carID = parts[6];
+                String paymentType = parts[7];
+                
+                PaymentMethod paymentMethod = null;
+                switch (paymentType) {
+                    case "CASH":
+                        double amountReceived = Double.parseDouble(parts[8]);
+                        paymentMethod = new Cash(amountReceived);
+                        break;
+                    case "CARD":
+                        paymentMethod = new Card(parts[8], parts[9], parts[10], parts[11], parts[12]);
+                        break;
+                    case "ONLINETRANSFER":
+                        paymentMethod = new OnlineTransfer(parts[8], parts[9], parts[10], parts[11], parts[12]);
+                        break;
+                    default:
+                        System.out.println("Unknown payment type: " + paymentType);
+                        break;
+                }
+                
+                Payment payment = new Payment(date, amount, paymentMethod);
+                payment.setPaymentID(paymentID);
+                payment.setDeposit(deposit);
+                payment.setDamageCharge(damageCharge);
+                payment.setCustomerID(customerID);
+                payment.setCarID(carID);
+                
+                payments[count++] = payment;
+            }
+            Payment.setPaymentCounter(count); // Update the static paymentCounter variable
+            
+        } catch (IOException e) {
+            System.out.println("Error reading payment file: " + e.getMessage());
+        } catch (ParseException e) {
+            System.out.println("Error parsing date in payment file: " + e.getMessage());
+        }
     }
 }

@@ -15,6 +15,9 @@ public class Payment {
     private double damageCharge;
     private double deposit;
 
+    //Referenced characteristics
+    private String customerID; //Who paid
+    private String carID;      //Which car the payment is for
 
     // ================= Constructors =================
     public Payment() {
@@ -64,6 +67,22 @@ public class Payment {
         return paymentMethod;
     }
 
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public String getCarID() {
+        return carID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
+    }
+
+    public void setCarID(String carID) {
+        this.carID = carID;
+    }
+
 
     // ================= Setters =================
     public void setDate(Date date) {
@@ -91,6 +110,18 @@ public class Payment {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+    
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
+        try {
+            int value = Integer.parseInt(paymentID.substring(1));
+            if (value > paymentCounter) {
+                paymentCounter = value;
+            }
+        } catch (NumberFormatException e) {
+            // ignore invalid format
+        }
     }
 
 

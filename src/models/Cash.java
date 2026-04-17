@@ -1,7 +1,7 @@
 package models;
 
 
-public class Cash implements PaymentMethod{
+public class Cash extends Payment implements PaymentMethod {
 //data properties
     private double amountReceived;
 

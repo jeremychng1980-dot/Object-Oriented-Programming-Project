@@ -1,6 +1,6 @@
 package models;
 
-public class OnlineTransfer implements PaymentMethod {
+public class OnlineTransfer extends Payment implements PaymentMethod {
 
     // ================= Data Properties =================
     private String accountNumber;

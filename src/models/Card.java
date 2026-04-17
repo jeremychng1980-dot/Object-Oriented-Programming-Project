@@ -1,6 +1,6 @@
 package models;
 
-public class Card implements PaymentMethod {
+public class Card extends Payment implements PaymentMethod {
 //data properties
     private String cardNo;
     private String CCV;

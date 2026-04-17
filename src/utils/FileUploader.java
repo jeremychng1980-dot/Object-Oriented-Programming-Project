@@ -148,4 +148,66 @@ public class FileUploader {
 
     }
 
+    public static void savePaymentsToFile(String filename, Payment[] payments) {
+        PrintWriter writer = null;
+        
+        try {
+            writer = new PrintWriter(new FileWriter(filename));
+
+            int actualCount = 0;
+            for (int i = 0; i < payments.length; i++) {
+                if (payments[i] != null) actualCount++;
+            }
+
+            writer.println(actualCount);
+            for (int i = 0; i < payments.length; i++) {
+                Payment p = payments[i];
+                if (p != null) {
+                    // Format: paymentID|date|amount|deposit|damageCharge|customerID|carID|paymentType|...payment data...
+                    writer.print(p.getPaymentID() + "|");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    writer.print(sdf.format(p.getDate()) + "|");
+                    writer.print(p.getAmount() + "|");
+                    writer.print(p.getDeposit() + "|");
+                    writer.print(p.getDamageCharge() + "|");
+                    writer.print(p.getCustomerID() + "|");
+                    writer.print(p.getCarID() + "|");
+
+                    PaymentMethod method = p.getPaymentMethod();
+                    if (method instanceof Cash) {
+                        Cash cash = (Cash) method;
+                        writer.print("CASH|");
+                        writer.print(cash.getAmountReceived());
+                    } else if (method instanceof Card) {
+                        Card card = (Card) method;
+                        writer.print("CARD|");
+                        writer.print(card.getCardNo() + "|");
+                        writer.print(card.getCCV() + "|");
+                        writer.print(card.getNameOnCard() + "|");
+                        writer.print(card.getExpiryMonth() + "|");
+                        writer.print(card.getExpiryYear());
+                    } else if (method instanceof OnlineTransfer) {
+                        OnlineTransfer ot = (OnlineTransfer) method;
+                        writer.print("ONLINETRANSFER|");
+                        writer.print(ot.getAccountNumber() + "|");
+                        writer.print(ot.getAccountName() + "|");
+                        writer.print(ot.getBankName() + "|");
+                        writer.print(ot.getSwiftCode() + "|");
+                        writer.print(ot.getReference());
+                    } else {
+                        writer.print("UNKNOWN");
+                    }
+
+                    writer.println();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving payments to file: ");
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+    }
+
 }// end of class
