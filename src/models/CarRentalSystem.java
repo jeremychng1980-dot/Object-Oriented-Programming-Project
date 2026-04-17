@@ -85,6 +85,28 @@ public class CarRentalSystem {
         System.out.println("Total car count: " + Car.getCarCount());
     }
 
+    public void displayRentedCars() {
+        System.out.println("\n=====================================");
+        System.out.println("           View Rented Vehicles           ");
+        System.out.println("=====================================");
+        System.out.println("\n==========================================================================");
+        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
+        System.out.println("--------------------------------------------------------------------------");
+
+        boolean hasRentedCars = false;
+        for (int i = 0; i < Car.getCarCount(); i++) {
+            if (cars[i] != null && cars[i].getStatus().equalsIgnoreCase("unavailable")) {
+                System.out.println(cars[i].toString());
+                hasRentedCars = true;
+            }
+        }
+
+        if (!hasRentedCars) {
+            System.out.println("                     [ Currently no rented vehicle record ]                      ");
+        }
+        System.out.println("==========================================================================");
+    }
+
     public void changeStatus(Car targetCar) { 
  
         String status = targetCar.getStatus();

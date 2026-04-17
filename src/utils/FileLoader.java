@@ -65,7 +65,7 @@ public class FileLoader {
                     License license = new License(licenseNo, licenseExpireDate);
                     Customer customer = new Customer(loginID, password, name, gender, 
                                                     phoneNo, email, license);
-                    customer.setCustID(custID);
+                    customer.setCustomerID(custID);
                     
                     users[count] = customer;
                     count++;

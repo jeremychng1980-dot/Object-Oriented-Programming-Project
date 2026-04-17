@@ -31,7 +31,7 @@ public class Customer extends User {
     }
     
     // Getters
-    public String getCustID() {
+    public String getCustomerID() {
         return custID;
     }
     
@@ -56,7 +56,7 @@ public class Customer extends User {
         this.license = license;
     }
     
-    public void setCustID(String custID) {
+    public void setCustomerID(String custID) {
     this.custID = custID;
 }
 //------------------------------------------validate register email----------------------------------------------    

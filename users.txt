@@ -1,4 +1,4 @@
-4
+5
 ADMIN
 A001|Beh|pw|Beh|M|0121234567
 STAFF
@@ -8,4 +8,4 @@ C001|pwd01|money|Lim Giap Zhen|F|0124296805|john@gmail.com|070521040299|2026-07-
 CUSTOMER
 C002|sexy|baby|i am giapzhen|F|0121234561|giapzhensexybaby@gmail.com|010101010101|2026-04-07
 CUSTOMER
-C003|Customer3|password123|Customer Name|M|1234567890|customer@gmail.com|011001011110|2099-12-12
+C003|Customer|pw|customerName|M|0113332123|customer@gmail.com|070707070707|2026-11-30

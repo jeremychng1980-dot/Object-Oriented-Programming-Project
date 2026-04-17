@@ -2,6 +2,15 @@ package models;
 
 import java.util.Date;
 
+/* TODO:
+Add damage condition
+Set fixed value for each level of condition
+Display penalty rate for each
+Add to finalPayment
+Reservation should know estimation of how much
+Each car has their own rental rate
+ */
+
 public class Payment {
 
     // ================= Data Properties =================
@@ -13,7 +22,7 @@ public class Payment {
     private String paymentID;
     private PaymentMethod paymentMethod;
     private double damageCharge;
-    private double deposit; //TODO
+    private double deposit; //TODO: Can be implemented later
 
     //Referenced characteristics
     private String customerID; //Who paid
@@ -30,6 +39,12 @@ public class Payment {
         this.date = date;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+    }
+
+    public Payment(String carID, String damageCondition) {
+        this.paymentID = generatePaymentID();
+        this.carID = carID;
+        this.damageCharge = calculateDamageCharge(damageCondition);
     }
 
     // ================= ID Generation =================
@@ -73,6 +88,10 @@ public class Payment {
 
     public String getCarID() {
         return carID;
+    }
+
+    public static int getPaymentCount() {
+        return paymentCounter;
     }
 
     public void setCustomerID(String customerID) {
@@ -132,6 +151,21 @@ public class Payment {
                "\nDate: " + date +
                "\nAmount: " + amount +
                "\nPayment Method: " + paymentMethod;
+    }
+
+    public double calculateDamageCharge(String damageCondition) {
+        switch (damageCondition.toUpperCase()) {
+            case "NO_DAMAGE":
+                return 0.0;
+            case "MINOR":
+                return 100.0; // Example charge for minor damage
+            case "MODERATE":
+                return 500.0; // Example charge for moderate damage
+            case "MAJOR":
+                return 1000.0; // Example charge for major damage
+            default:
+                throw new IllegalArgumentException("Invalid damage condition: " + damageCondition);
+        }
     }
 
 

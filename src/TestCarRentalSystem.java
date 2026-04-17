@@ -11,6 +11,7 @@ import java.io.*;
 public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
+    static Payment[] payments = new Payment[100];
     static CarRentalSystem sys = new CarRentalSystem(); 
 
     public static void main(String[] args) {
@@ -72,37 +73,37 @@ public class TestCarRentalSystem{
         System.out.println("       CUSTOMER REGISTRATION         ");
         System.out.println("=====================================");
        
-    String loginID = "";
-    String password = "";
-    String name = "";
-    char gender = ' ';
-    String phoneNo = "";
-    String email = "";
-    String drivingLicenseNo = "";      
-    Date licenseExpireDate = null;      
-    
-    System.out.print("Press Enter to continue to register or '0' to exit... ");
-    
-    String userChoice = input.nextLine();//ask user if they want to return or proceed to register
-    System.out.println("\n");
+        String loginID = "";
+        String password = "";
+        String name = "";
+        char gender = ' ';
+        String phoneNo = "";
+        String email = "";
+        String drivingLicenseNo = "";      
+        Date licenseExpireDate = null;      
         
-    // Check if user wants to exit
-    if (userChoice.equals("0")) {
-       Helper.clearScreen();
-       return;
-    }
+        System.out.print("Press Enter to continue to register or '0' to exit... ");
         
-    // LOGIN ID
-    boolean loginValid = false;
-    while (!loginValid) {
-        try {
-            System.out.print("Enter Login ID: ");
-            loginID = input.nextLine();//get the login ID input
-            loginID = User.validateNonEmpty(loginID, "Login ID");//call the method for non empty checking
-            loginValid = true;
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage() + "\n");//prompt error message if its empty 
+        String userChoice = input.nextLine();//ask user if they want to return or proceed to register
+        System.out.println("\n");
+            
+        // Check if user wants to exit
+        if (userChoice.equals("0")) {
+        Helper.clearScreen();
+        return;
         }
+        
+        // LOGIN ID
+        boolean loginValid = false;
+        while (!loginValid) {
+            try {
+                System.out.print("Enter Login ID: ");
+                loginID = input.nextLine();//get the login ID input
+                loginID = User.validateNonEmpty(loginID, "Login ID");//call the method for non empty checking
+                loginValid = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\n");//prompt error message if its empty 
+            }
     }
     
     // PASSWORD
@@ -362,7 +363,7 @@ public class TestCarRentalSystem{
 }
 
 //Modify Customer License Expiry Date
-	public static void updateLicenseExpiryDate(Customer customer) {
+	public static void updateLicenseExpiryDate(Customer customer) { //TODO: Can reference validation from here, try to reuse that part
 	Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("      Modify License Expired Date      ");
@@ -379,15 +380,15 @@ public class TestCarRentalSystem{
    
     System.out.print("\nPress Enter to continue to modify or '0' to exit... ");
         
-        String choice = input.nextLine();//ask user if they want to continue to login or exit
+    String choice = input.nextLine();//ask user if they want to continue to login or exit
         
         // Check if user wants to exit
-        if (choice.equals("0")) {
-        	Helper.clearScreen();
-            return;
-        }
+    if (choice.equals("0")) {
+        Helper.clearScreen();
+        return;
+    }
 	
-	 boolean valid = false;
+	boolean valid = false;
     while (!valid) {
         try {
             System.out.print("\nEnter New License Expired Date: ");
@@ -422,7 +423,7 @@ public class TestCarRentalSystem{
 }      
 
 //Reservation (rentVehicle)
-    public static void rentVehicle(Customer customer, Car[] cars){
+    public static void rentVehicle(Customer customer, Car[] cars){ //TODO: Stop customer from renting cars if license is EXPIRED
 
         Helper.clearScreen();
         System.out.println("\n=====================================");
@@ -457,7 +458,7 @@ public class TestCarRentalSystem{
 
     } // end rentVehicle
 
-    public static void checkout(Customer loggedInCustomer, Car car, Payment payment){ //FIXME
+    public static void checkout(Customer loggedInCustomer, Car car, Payment payment){ //FIXME: Incomplete method
         
         System.out.println("\n=====================================");
         System.out.println("\n             Check  Out              ");
@@ -490,7 +491,7 @@ public class TestCarRentalSystem{
         }
     }//end Checkout
     
-    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment) { //TODO
+    public static void processReturn(Customer loggedInCustomer, Car car, Payment payment) { //TODO: Incomplete method
         String damages = "abc"; //PLACEHOLDER VALUE
 
         if (damages.equalsIgnoreCase("none")) {
@@ -516,8 +517,28 @@ public class TestCarRentalSystem{
 
     }//end processPayment
 
-    public static void viewHistory(Customer loggedInCustomer) { //TODO
+    public static void viewHistory(Customer loggedInCustomer) { //TODO: Check When Data is Present
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("             HISTORY RECORD           ");
+        System.out.println("=====================================");
+        String customerID = loggedInCustomer.getCustomerID();
+        System.out.println("History record for Customer ID: " + customerID);
 
+        for (int i = 0; i < Payment.getPaymentCounter(); i++) {
+            Payment payment = sys.getPayment()[i];
+            if (payment != null && payment.getCustomerID().equals(customerID)) {
+                System.out.println("Payment ID: " + payment.getPaymentID() + ", Date: " + payment.getDate() + ", Amount: " + payment.getAmount());
+                System.out.print("\nPress Enter to Exit...   ");
+                input.nextLine();  // Wait for user to press Enter
+                return;
+            } 
+        }
+
+        System.out.println("No record found!");
+        System.out.print("\nPress Enter to Exit...   ");
+        input.nextLine();  // Wait for user to press Enter
+        return;
     }   
 
 //Staff Login
@@ -627,7 +648,7 @@ public class TestCarRentalSystem{
         Helper.clearScreen();
     }
 
-    public static void inspection(Staff loggedInStaff) { //TODO
+    public static void inspection(Staff loggedInStaff) { //TODO: Continue the code to make it functional
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("             INSPECTION              ");
@@ -642,7 +663,17 @@ public class TestCarRentalSystem{
                 return;
         } 
 
-        System.out.println("Enter Car");
+        sys.displayRentedCars();
+        System.out.println("Enter Car ID to Inspect: ");
+        String inspectedCar = input.nextLine();
+        for(int i = 0; i < sys.getCars().length; i++) {
+            String carID = sys.getCars()[i].getCarID();
+            if (carID.equalsIgnoreCase(inspectedCar)) {
+                System.out.println("Enter condition of inspected car(NO_DAMAGE/MINOR/MODERATE/MAJOR): ");
+                String condition = input.nextLine();
+                //Continue with saving the condition of the car to payment
+            }
+        }
     }
 
 //Admin Login

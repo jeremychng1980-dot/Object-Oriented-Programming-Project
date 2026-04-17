@@ -27,8 +27,8 @@ public class License {
     
     public Date getLicenseExpireDate() {
         return licenseExpireDate;
-    
     }
+
     public void setDrivingLicenseNo(String drivingLicenseNo) {
         this.drivingLicenseNo = drivingLicenseNo;
     }
@@ -42,54 +42,54 @@ public class License {
 }
 
 //-----------------------------------Register customer driving license date expired method-------------------------
-     public static Date validateRegisterLicenseDate(String RegisterLicenseExpireDate) {
+    public static Date validateRegisterLicenseDate(String RegisterLicenseExpireDate) { //TODO: Can reference this for date validation
 
-    String trimmed = User.validateNonEmpty(RegisterLicenseExpireDate, "License Expire Date");
-    
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    sdf.setLenient(false);  // makes sure that invalid fate fails (e.g. 2026-02-31 will fails)
-    
-    Date expiryDate;
-    try {
-        expiryDate = sdf.parse(trimmed);//try to convert the string to date object
-    } catch (ParseException e) {
-        throw new IllegalArgumentException("Invalid date! Please use yyyy-MM-dd format and Enter a Valid Date!(e.g., 2025-12-31)");//if fails custom message 
+        String trimmed = User.validateNonEmpty(RegisterLicenseExpireDate, "License Expire Date");
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);  // makes sure that invalid fate fails (e.g. 2026-02-31 will fails)
+        
+        Date expiryDate;
+        try {
+            expiryDate = sdf.parse(trimmed);//try to convert the string to date object
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date! Please use yyyy-MM-dd format and Enter a Valid Date!(e.g., 2025-12-31)");//if fails custom message 
+        }
+        
+        //check if license expired
+        Date today = new Date();//get today's date
+        if (expiryDate.before(today)) { //compares date whether it is before today or it is today
+            throw new IllegalArgumentException("License has already expired! Please enter a future date.");//custom message if it ald expired
+        }
+        
+        return expiryDate;//return the value if no error
     }
-    
-    //check if license expired
-    Date today = new Date();//get today's date
-    if (expiryDate.before(today)) { //compares date whether it is before today or it is today
-        throw new IllegalArgumentException("License has already expired! Please enter a future date.");//custom message if it ald expired
-    }
-    
-    return expiryDate;//return the value if no error
-}
 //-------------------------------Method to check if the date is expired--------------------------------
     public boolean isExpired() {
-    Date today = new Date();
-    return licenseExpireDate.before(today);
-}
+        Date today = new Date();
+        return licenseExpireDate.before(today);
+    }
 
 //------------------------------Update License Expire Date Method-----------------------------
-public void updateLicenseExpiryDate(String newLicenseExpiryDateStr, Date currentExpiryDate) {
- 
-    Date newLicenseExpiryDate = validateRegisterLicenseDate(newLicenseExpiryDateStr);//call the method to check
-  
-    if (!newLicenseExpiryDate.after(currentExpiryDate)) {
-        throw new IllegalArgumentException("New license expiry date must be AFTER the current expiry date!"); // Check if the new date is after current expiry date
+    public void updateLicenseExpiryDate(String newLicenseExpiryDateStr, Date currentExpiryDate) {
     
-	}
-	setLicenseExpireDate(newLicenseExpiryDate);
-}
+        Date newLicenseExpiryDate = validateRegisterLicenseDate(newLicenseExpiryDateStr);//call the method to check
+    
+        if (!newLicenseExpiryDate.after(currentExpiryDate)) {
+            throw new IllegalArgumentException("New license expiry date must be AFTER the current expiry date!"); // Check if the new date is after current expiry date
+        
+        }
+        setLicenseExpireDate(newLicenseExpiryDate);
+    }
 
 //--------------------------------Equals Method----------------------------------------  
     public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    License other = (License) obj;
-    return this.drivingLicenseNo.equals(other.drivingLicenseNo);
-}
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        License other = (License) obj;
+        return this.drivingLicenseNo.equals(other.drivingLicenseNo);
+    }
 
 //--------------------------------ToString Method----------------------------------
     public String toString() {

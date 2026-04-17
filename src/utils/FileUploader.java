@@ -22,7 +22,7 @@ public class FileUploader {
                     writer.println("CUSTOMER");
                     Customer c = (Customer) u;
                     // Format: custID|loginID|password|name|gender|phoneNo|email|licenseNo|expiryDate
-                    writer.print(c.getCustID() + "|");
+                    writer.print(c.getCustomerID() + "|");
                     writer.print(c.getLoginID() + "|");
                     writer.print(c.getPassword() + "|");
                     writer.print(c.getName() + "|");
