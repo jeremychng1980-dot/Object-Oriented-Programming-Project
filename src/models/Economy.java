@@ -5,12 +5,12 @@ public class Economy extends Car{
     private double fuelEfficiencyPer100KM;
     
     public Economy(){
-        this("", "","",0.0, 0, 0, "", 0.0, false, 0.0, "no damage");
+        this("", "","",0.0, 0, 0, "", 0.0, false, 0.0);
     }
 
     public Economy(String plateNumber, String model, String brand, double dailyRate,int seatingCapacity, 
-                int mileage, String status, double fuelLevel, boolean isHatchback, double fuelEfficiencyPer100KM, String condition) {
-        super(plateNumber, model, brand, dailyRate, seatingCapacity, mileage, status, fuelLevel, condition);
+                int mileage, String status, double fuelLevel, boolean isHatchback, double fuelEfficiencyPer100KM){
+        super(plateNumber, model, brand, dailyRate, seatingCapacity, mileage, status, fuelLevel);
         this.isHatchback = isHatchback;
         this.fuelEfficiencyPer100KM = fuelEfficiencyPer100KM;
     }

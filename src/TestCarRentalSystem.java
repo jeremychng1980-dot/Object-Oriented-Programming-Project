@@ -630,30 +630,7 @@ public class TestCarRentalSystem{
     }
 
     public static void inspection(Staff loggedInStaff) { //TODO
-        Helper.clearScreen();
-        System.out.println("\n=====================================");
-        System.out.println("             Inspection              ");
-        System.out.println("=====================================");
 
-        sys.displayAllCars();
-        System.out.println("Enter Car ID for Inspection: ");
-        String carID = input.nextLine();
-
-        Car targetCar = sys.findCarById(carID);
-        if (targetCar == null) {
-            System.out.println("Cannot find the " + carID + " Car.");
-            System.out.print("\nPress Enter to continue...");
-            input.nextLine();
-        } else {
-            System.out.println("Inspecting Car ID: " + carID);
-            System.out.println("Enter condition of the inspected car (no damage/minor/major/severe): ");
-            String condition = input.nextLine();
-            targetCar.setCondition(condition); // Set the condition of the car based on staff input
-            utils.FileUploader.saveCarToFile("cars.txt", sys.getCars()); // Save the updated car information to file
-            System.out.println("Inspection completed. Car condition updated to: " + condition);
-            System.out.print("\nPress Enter to continue...");
-            input.nextLine();
-        }
     }
 
 //Admin Login
@@ -811,7 +788,6 @@ public class TestCarRentalSystem{
         double rate = Helper.getValidatedDouble(input, "Enter Daily Rate: ");
         int seats = Helper.getValidatedInt(input, "Enter Seating Capacity: ", 2, 7);
         int mileage = Helper.getValidatedInt(input, "Enter Mileage: ", 0, 100000);
-        String condition = "no damage"; // default condition for new car
 
         Car newCar = null;
 
@@ -822,7 +798,7 @@ public class TestCarRentalSystem{
                 System.out.print("Fuel Efficiency (L/100km): ");
                 double eff = input.nextDouble();
                 //  status default is "available", fuelLevel 100.0
-                newCar = new Economy(plate, model, brand, rate, seats, mileage, "available", 100.0, isHb, eff, condition);
+                newCar = new Economy(plate, model, brand, rate, seats, mileage, "available", 100.0, isHb, eff);
                 break;
 
             case 2: // SUV
@@ -830,7 +806,7 @@ public class TestCarRentalSystem{
                 boolean fwd = input.nextBoolean();
                 System.out.print("Ground Clearance (mm): ");
                 int gc = input.nextInt();
-                newCar = new SUV(plate, model, brand, rate, seats, mileage, "available", 100.0, fwd, gc, condition);
+                newCar = new SUV(plate, model, brand, rate, seats, mileage, "available", 100.0, fwd, gc);
                 break;
 
             case 3: // Luxury
@@ -838,7 +814,7 @@ public class TestCarRentalSystem{
                 boolean leather = input.nextBoolean();
                 System.out.print("Has Sunroof? (true/false): ");
                 boolean sunroof = input.nextBoolean();
-                newCar = new Luxury(plate, model, brand, rate, seats, mileage, "available", 100.0, leather, sunroof, condition);
+                newCar = new Luxury(plate, model, brand, rate, seats, mileage, "available", 100.0, leather, sunroof);
                 break;
         }
 

@@ -12,16 +12,15 @@ public abstract class Car{
     private String status;
     private double fuelLevel;
     private int reservationCount = 0;
-    private String condition;
 
     // constructor
 
     public Car(){
-        this("", "","",0.0, 0, 0, "", 0.0, "no damage");
+        this("", "","",0.0, 0, 0, "", 0.0);
     };
 
     public Car(String plateNumber, String model, String brand, double dailyRate, 
-               int seatingCapacity, int mileage, String status, double fuelLevel, String condition) {
+               int seatingCapacity, int mileage, String status, double fuelLevel){
         carID = String.format("CA%04d", carCount + 1);
         this.plateNumber = plateNumber;
         this.model = model;
@@ -31,7 +30,6 @@ public abstract class Car{
         this.mileage = mileage;
         this.status = status;
         this.fuelLevel = fuelLevel;
-        this.condition = condition;
         carCount++;
     }
 
@@ -79,10 +77,6 @@ public abstract class Car{
     public int getReservationCount() {
         return reservationCount;
     }
-
-    public String getCondition() {
-        return condition;
-    }
     // setter
     public void setCarID(String carID){
         this.carID = carID;
@@ -107,17 +101,14 @@ public abstract class Car{
     public void setReservationCount(int reservationCount) {
         this.reservationCount = reservationCount;   
     }
-    
-    public void setCondition(String condition) {
-        this.condition = condition;
-    }
+
 
 // other methods
 	public abstract double calcRentalFee(int day);
 
 	public String toString(){
-		return String.format("%s |  %s | %s %s |  %.2f |  %d |  %d  | %s |  %.1f%% | %s", 
-                carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelLevel, condition);
+		return String.format("%s |  %s | %s %s |  %.2f |  %d |  %d  | %s |  %.1f%%", 
+                carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelLevel);
 	}
     
     public boolean equals(Object o){ 

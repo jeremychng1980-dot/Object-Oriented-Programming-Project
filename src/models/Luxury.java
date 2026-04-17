@@ -5,12 +5,12 @@ public class Luxury extends Car{
 	private boolean hasSunroof;
 	
 	public Luxury(){
-		this("", "", "",0.0, 0, 0, "", 0.0 ,false, false, "no damage");
+		this("", "", "",0.0, 0, 0, "", 0.0 ,false, false);
 	}
 	
 	public Luxury(String plateNumber, String model, String brand, double dailyRate, int seatingCapacity, 
-		int mileage, String status, double fuelLevel, boolean hasLeatherSeats, boolean hasSunroof, String condition) {
-			super(plateNumber, model, brand, dailyRate, seatingCapacity, mileage, status, fuelLevel, condition);
+		int mileage, String status, double fuelLevel, boolean hasLeatherSeats, boolean hasSunroof){
+			super(plateNumber, model, brand, dailyRate, seatingCapacity, mileage, status, fuelLevel);
 			this.hasLeatherSeats = hasLeatherSeats;
 			this.hasSunroof = hasSunroof;
 	}

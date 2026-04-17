@@ -101,8 +101,7 @@ public class FileUploader {
                         writer.print(e.getStatus() + "|");
                         writer.print(e.getFuelLevel() + "|");
                         writer.print(e.isHatchback() + "|");
-                        writer.print(e.getFuelEfficiencyPer100KM() + "|");
-                        writer.print(e.getCondition());
+                        writer.print(e.getFuelEfficiencyPer100KM());
                         writer.println();
                     } else if (cars[i] instanceof Luxury) {
                         writer.println("LUXURY");
@@ -118,8 +117,7 @@ public class FileUploader {
                         writer.print(l.getStatus() + "|");
                         writer.print(l.getFuelLevel() + "|");
                         writer.print(l.isHasLeatherSeats() + "|");
-                        writer.print(l.isHasSunroof() + "|");
-                        writer.print(l.getCondition());
+                        writer.print(l.isHasSunroof());
                         writer.println();
                     } else if (cars[i] instanceof SUV) {
                         writer.println("SUV");
@@ -135,8 +133,7 @@ public class FileUploader {
                         writer.print(s.getStatus() + "|");
                         writer.print(s.getFuelLevel() + "|");
                         writer.print(s.isFourWheelDrive() + "|");
-                        writer.print(s.getGroundClearance() + "|");
-                        writer.print(s.getCondition());
+                        writer.print(s.getGroundClearance());
                         writer.println();
                     }
                 }
