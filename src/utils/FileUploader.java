@@ -72,7 +72,7 @@ public class FileUploader {
     }
     }
 
-    public static void saveCarToFile(String filename, Car[] cars) {
+    public static void saveCarsToFile(String filename, Car[] cars) {
         PrintWriter writer = null;
         
         try {
@@ -163,7 +163,7 @@ public class FileUploader {
             for (int i = 0; i < payments.length; i++) {
                 Payment p = payments[i];
                 if (p != null) {
-                    // Format: paymentID|date|amount|deposit|damageCharge|customerID|carID|paymentType|...payment data...
+                    // Format: paymentID|date|amount|deposit|damageCharge|customerID|carID|
                     writer.print(p.getPaymentID() + "|");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     writer.print(sdf.format(p.getDate()) + "|");
@@ -173,31 +173,31 @@ public class FileUploader {
                     writer.print(p.getCustomerID() + "|");
                     writer.print(p.getCarID() + "|");
 
-                    PaymentMethod method = p.getPaymentMethod();
-                    if (method instanceof Cash) {
-                        Cash cash = (Cash) method;
+                    if (p.getPaymentMethod() instanceof Cash) {
+                        Cash cash = (Cash) p.getPaymentMethod();
                         writer.print("CASH|");
                         writer.print(cash.getAmountReceived());
-                    } else if (method instanceof Card) {
-                        Card card = (Card) method;
+                    } else if (p.getPaymentMethod() instanceof Card) {
+                        Card card = (Card) p.getPaymentMethod();
                         writer.print("CARD|");
                         writer.print(card.getCardNo() + "|");
                         writer.print(card.getCCV() + "|");
                         writer.print(card.getNameOnCard() + "|");
                         writer.print(card.getExpiryMonth() + "|");
                         writer.print(card.getExpiryYear());
-                    } else if (method instanceof OnlineTransfer) {
-                        OnlineTransfer ot = (OnlineTransfer) method;
+                    } else if (p.getPaymentMethod() instanceof OnlineTransfer) {
+                        OnlineTransfer transfer = (OnlineTransfer) p.getPaymentMethod();
                         writer.print("ONLINETRANSFER|");
-                        writer.print(ot.getAccountNumber() + "|");
-                        writer.print(ot.getAccountName() + "|");
-                        writer.print(ot.getBankName() + "|");
-                        writer.print(ot.getSwiftCode() + "|");
-                        writer.print(ot.getReference());
+                        writer.print(transfer.getAccountNumber() + "|");
+                        writer.print(transfer.getAccountName() + "|");
+                        writer.print(transfer.getBankName() + "|");
+                        writer.print(transfer.getSwiftCode() + "|");
+                        writer.print(transfer.getReference());
                     } else {
-                        writer.print("UNKNOWN");
+                        writer.print("NULL");
                     }
 
+                    writer.print(p.getRentDuration());
                     writer.println();
                 }
             }

@@ -11,7 +11,8 @@ import java.io.*;
 public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
-    static Payment[] payments = new Payment[100];
+    static Payment[] payments = new Payment[100]; //Payment polymorphic array
+    static Car[] cars = new Car[100]; //Car polymorphic array
     static CarRentalSystem sys = new CarRentalSystem(); 
 
     public static void main(String[] args) {
@@ -451,6 +452,7 @@ public class TestCarRentalSystem{
         } 
         else {
             sys.changeStatus(targetCar); // change Status from available to unavailable, and also save the change to file
+            
         }
              
         System.out.println("Press enter to return to Home page...");
@@ -473,22 +475,24 @@ public class TestCarRentalSystem{
             return;
         }
 
+        sys.displayAvailableCars();
         System.out.print("Enter the Vehicle's Car ID: ");
         String carId = input.nextLine();
         Car targetCar = sys.findCarById(carId);
         
         if (targetCar == null) {
             System.out.println("Cannot find the " + carId + " Car.");
-        } else {
-            if (targetCar.getStatus().equalsIgnoreCase("unavailable")) { // if not available then can check out
-                targetCar.setStatus("available"); 
-                System.out.println("Successful , You have checked out the " + carId + " Vehicle.");
-                Helper.delay(5);
-            } else { // car available
-                System.out.println("Current car status is " + targetCar.getStatus() + ", so not checked out yet.");
-            }
-            
+        } else if (targetCar.getStatus().equalsIgnoreCase("available")) { // if not available then can check out
+                int rentDuration = Helper.getValidatedInt(input, "Please enter the amount of days you want to rent the vehicle: ", 1, Integer.MAX_VALUE);
+
+                Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), 0); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
+                utils.FileUploader.saveCarsToFile("cars.txt", cars); //save the change of car status to file
+                utils.FileUploader.savePaymentsToFile("payment.txt", payments); //save the payment record
+                System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle.");
         }
+            
+            System.out.println("\nPress Enter to Exit...   ");
+            input.nextLine();  // Wait for user to press Enter
     }//end Checkout
     
     public static void processReturn(Customer loggedInCustomer, Car car, Payment payment) { //TODO: Incomplete method
@@ -889,7 +893,7 @@ public class TestCarRentalSystem{
             
             target.setMileage(target.getMileage() + additionalKm);
             
-            utils.FileUploader.saveCarToFile("cars.txt", sys.getCars());
+            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
             
             System.out.println("\nMileage updated successfully!");
         } 
@@ -915,7 +919,7 @@ public class TestCarRentalSystem{
         if (target != null) {
             target.setStatus("maintenance");
 
-            utils.FileUploader.saveCarToFile("cars.txt", sys.getCars());
+            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
             
             System.out.println("\nVehicle " + carID + " is already in maintenance.");
         } 

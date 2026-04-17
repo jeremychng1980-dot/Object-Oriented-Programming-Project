@@ -107,6 +107,28 @@ public class CarRentalSystem {
         System.out.println("==========================================================================");
     }
 
+    public void displayAvailableCars() {
+        System.out.println("\n=====================================");
+        System.out.println("           View Available Vehicles           ");
+        System.out.println("=====================================");
+        System.out.println("\n==========================================================================");
+        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
+        System.out.println("--------------------------------------------------------------------------");
+
+        boolean hasAvailableCars = false;
+        for (int i = 0; i < Car.getCarCount(); i++) {
+            if (cars[i] != null && cars[i].getStatus().equalsIgnoreCase("available")) {
+                System.out.println(cars[i].toString());
+                hasAvailableCars = true;
+            }
+        }
+
+        if (!hasAvailableCars) {
+            System.out.println("                     [ Currently no available vehicle record ]                      ");
+        }
+        System.out.println("==========================================================================");
+    }
+
     public void changeStatus(Car targetCar) { 
  
         String status = targetCar.getStatus();
@@ -115,7 +137,7 @@ public class CarRentalSystem {
                 targetCar.setStatus("unavailable"); 
                 System.out.println("Successful , You have booked the " + targetCar.getCarID() + " Vehicle.");
                 Helper.delay(5);
-                utils.FileUploader.saveCarToFile("cars.txt", cars);
+                utils.FileUploader.saveCarsToFile("cars.txt", cars);
             } 
         else { // car unavailable -> cannot book reservation
                 System.out.println("Current car status is " + targetCar.getStatus() + ", so unable to rent.");
@@ -127,7 +149,7 @@ public class CarRentalSystem {
         if (Car.getCarCount() < cars.length) {
             cars[Car.getCarCount()] = newCar;
 
-            utils.FileUploader.saveCarToFile(filename, cars); 
+            utils.FileUploader.saveCarsToFile(filename, cars); 
             System.out.println("\nVehicle record has been uploaded to the system.");
         } 
         else {
