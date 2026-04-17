@@ -13,7 +13,7 @@ public class Payment {
     private String paymentID;
     private PaymentMethod paymentMethod;
     private double damageCharge;
-    private double deposit;
+    private double deposit; //TODO
 
     //Referenced characteristics
     private String customerID; //Who paid

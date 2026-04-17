@@ -11,7 +11,6 @@ public abstract class Car{
     private int mileage;
     private String status;
     private double fuelLevel;
-    private int reservationCount = 0;
 
     // constructor
 
@@ -74,9 +73,6 @@ public abstract class Car{
         return Car.carCount;
     }
 
-    public int getReservationCount() {
-        return reservationCount;
-    }
     // setter
     public void setCarID(String carID){
         this.carID = carID;
@@ -97,11 +93,6 @@ public abstract class Car{
     public static void setCarCount(int carCount){
         Car.carCount = carCount;
     }
-
-    public void setReservationCount(int reservationCount) {
-        this.reservationCount = reservationCount;   
-    }
-
 
 // other methods
 	public abstract double calcRentalFee(int day);

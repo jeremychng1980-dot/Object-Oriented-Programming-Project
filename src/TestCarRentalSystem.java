@@ -447,7 +447,6 @@ public class TestCarRentalSystem{
         
         if (targetCar == null) {
             System.out.println("Cannot find the " + carID + " Car.");
-
         } 
         else {
             sys.changeStatus(targetCar); // change Status from available to unavailable, and also save the change to file
@@ -629,7 +628,21 @@ public class TestCarRentalSystem{
     }
 
     public static void inspection(Staff loggedInStaff) { //TODO
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("             INSPECTION              ");
+        System.out.println("=====================================");
 
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+            	Helper.clearScreen();
+                return;
+        } 
+
+        System.out.println("Enter Car");
     }
 
 //Admin Login
