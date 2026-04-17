@@ -199,9 +199,10 @@ public class FileUploader {
                         writer.print(transfer.getReference());
                     } else {
                         writer.print("NULL|");
-                        writer.print(p.getRentDuration());
+                        
                     }
 
+                    writer.print(p.getRentDuration());
                     writer.println();  // End the line
                 }
             }

@@ -2,7 +2,7 @@ package models;
 
 import java.util.Date;
 
-/* TODO:
+/* TODO: Notes
 Add damage condition
 Set fixed value for each level of condition
 Display penalty rate for each

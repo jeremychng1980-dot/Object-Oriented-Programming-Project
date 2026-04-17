@@ -516,7 +516,20 @@ public class TestCarRentalSystem{
         return;
     }
 
-    public static void processPayment(Customer loggedInCustomer, Car car, Payment payment){ //TODO
+    public static void processPayment(Customer loggedInCustomer, Car car, Payment payment){ //TODO: Incomplete method
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("\n             Payment                ");
+        System.out.println("\n=====================================");
+
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        System.out.println("\n");
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
+        }
 
     }//end processPayment
 
