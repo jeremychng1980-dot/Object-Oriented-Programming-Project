@@ -115,6 +115,10 @@ public class Payment {
         return paymentCounter;
     }
 
+    public static void setPaymentCount(int count) {
+        paymentCounter = count;
+    }
+
     public int getRentDuration() {
         return rentDuration;
     }

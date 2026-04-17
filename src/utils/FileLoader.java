@@ -245,11 +245,15 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             
-            while (line == null) {
+            if (line == null) {
                 return;
             }
 
-            for (int i = 0; i < Payment.getPaymentCount(); i++) {
+            int totalPayments = Integer.parseInt(line.trim());
+            int count = 0;  // Track number of payments loaded
+            
+            // Read each payment
+            for (int i = 0; i < totalPayments; i++) {
                 String paymentType = reader.readLine();
                 if (paymentType == null) break;
 
@@ -272,7 +276,7 @@ public class FileLoader {
                     double amountReceived = Double.parseDouble(parts[9]);
                     Cash cashPayment = new Cash(paymentID, date, amount, deposit, damageCondition,
                                                 customerID, carID, rentDuration, amountReceived);
-                    payments[i] = cashPayment;
+                    payments[count] = cashPayment;
                     
                 } else if (paymentType.equals("CARD")) {
                     String cardNo = parts[9];
@@ -283,7 +287,7 @@ public class FileLoader {
                     Card cardPayment = new Card(paymentID, date, amount, deposit, damageCondition,
                                                 customerID, carID, rentDuration,
                                                 cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
-                    payments[i] = cardPayment;
+                    payments[count] = cardPayment;
                     
                 } else if (paymentType.equals("ONLINETRANSFER")) {
                     String accountNumber = parts[9];
@@ -296,9 +300,13 @@ public class FileLoader {
                                                                         carID, rentDuration,
                                                                         accountNumber, accountName,
                                                                         bankName, swiftCode, reference);
-                    payments[i] = transferPayment;
+                    payments[count] = transferPayment;
                 }
-            } 
+                count++;
+            }
+            
+            // Set the payment counter to the loaded count
+            Payment.setPaymentCount(totalPayments);
             
         } catch (IOException e) {
             System.out.println("Error reading payment file: " + e.getMessage());

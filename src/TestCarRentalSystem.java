@@ -20,7 +20,7 @@ public class TestCarRentalSystem{
         sys.setCars(new Car[100]);
         utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
         utils.FileLoader.loadUsersFile("users.txt", users);
-        utils.FileLoader.loadPaymentFile("payments.txt", sys.getPayment());
+        utils.FileLoader.loadPaymentFile("payment.txt", sys.getPayment());
 
 //-----------------------First Page---------------------    
         int choice = 0;
@@ -460,7 +460,7 @@ public class TestCarRentalSystem{
 
     } // end rentVehicle
 
-    public static void checkout(Customer loggedInCustomer, Car car, Payment payment){ //FIXME: Incomplete method
+    public static void checkout(Customer loggedInCustomer, Car car, Payment payments){ //FIXME: Incomplete method
         
         System.out.println("\n=====================================");
         System.out.println("\n             Check  Out              ");
@@ -485,8 +485,9 @@ public class TestCarRentalSystem{
         } else if (targetCar.getStatus().equalsIgnoreCase("available")) { // if not available then can check out
                 int rentDuration = Helper.getValidatedInt(input, "Please enter the amount of days you want to rent the vehicle: ", 1, Integer.MAX_VALUE);
 
-                Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), 0); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
-                utils.FileUploader.savePaymentsToFile("payment.txt", payments); //save the payment record
+                Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), rentDuration); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
+                sys.getPayment()[Payment.getPaymentCount() - 1] = transaction; // Add to the payments array
+                utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
                 System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle.");
         }
             
