@@ -244,75 +244,61 @@ public class FileLoader {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
-            if (line == null) {
+            
+            while (line == null) {
                 return;
             }
 
-            int totalPayments = Integer.parseInt(line.trim());
-            int count = 0;
+            for (int i = 0; i < Payment.getPaymentCount(); i++) {
+                String paymentType = reader.readLine();
+                if (paymentType == null) break;
 
-            for (int i = 0; i < totalPayments; i++) {
                 String dataLine = reader.readLine();
                 if (dataLine == null) break;
-                
+
                 String[] parts = dataLine.split("\\|");
-                
+                // parts[0]=paymentID, [1]=date, [2]=amount, [3]=deposit, [4]=damageCondition,
+                // [5]=customerID, [6]=carID, [7]=rentDuration, [8]=paymentMethod, [9...]=payment details
                 String paymentID = parts[0];
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1]);
                 double amount = Double.parseDouble(parts[2]);
                 double deposit = Double.parseDouble(parts[3]);
-                double damageCharge = Double.parseDouble(parts[4]);
+                String damageCondition = parts[4];
                 String customerID = parts[5];
                 String carID = parts[6];
-                String paymentType = parts[7];
-                int rentDuration = Integer.parseInt(parts[8]);  // Now at index 8
+                int rentDuration = Integer.parseInt(parts[7]);
                 
-                PaymentMethod paymentMethod = null;
-                int nextIndex = 9;  // Payment-specific fields start here
-                
-                switch (paymentType) {
-                    case "CASH":
-                        double amountReceived = Double.parseDouble(parts[nextIndex]);
-                        paymentMethod = new Cash(amountReceived);
-                        break;
-                    case "CARD":
-                        paymentMethod = new Card(parts[nextIndex], parts[nextIndex+1], 
-                                            parts[nextIndex+2], parts[nextIndex+3], 
-                                            parts[nextIndex+4]);
-                        break;
-                    case "ONLINETRANSFER":
-                        paymentMethod = new OnlineTransfer(parts[nextIndex], parts[nextIndex+1], 
-                                                        parts[nextIndex+2], parts[nextIndex+3], 
-                                                        parts[nextIndex+4]);
-                        break;
-                    default:
-                        System.out.println("Unknown payment type: " + paymentType);
-                        continue;
+                if (paymentType.equals("CASH")) {
+                    double amountReceived = Double.parseDouble(parts[9]);
+                    Cash cashPayment = new Cash(paymentID, date, amount, deposit, damageCondition,
+                                                customerID, carID, rentDuration, amountReceived);
+                    payments[i] = cashPayment;
+                    
+                } else if (paymentType.equals("CARD")) {
+                    String cardNo = parts[9];
+                    String CCV = parts[10];
+                    String nameOnCard = parts[11];
+                    String expiryMonth = parts[12];
+                    String expiryYear = parts[13];
+                    Card cardPayment = new Card(paymentID, date, amount, deposit, damageCondition,
+                                                customerID, carID, rentDuration,
+                                                cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
+                    payments[i] = cardPayment;
+                    
+                } else if (paymentType.equals("ONLINETRANSFER")) {
+                    String accountNumber = parts[9];
+                    String accountName = parts[10];
+                    String bankName = parts[11];
+                    String swiftCode = parts[12];
+                    String reference = parts[13];
+                    OnlineTransfer transferPayment = new OnlineTransfer(paymentID, date, amount, deposit,
+                                                                        damageCondition, customerID,
+                                                                        carID, rentDuration,
+                                                                        accountNumber, accountName,
+                                                                        bankName, swiftCode, reference);
+                    payments[i] = transferPayment;
                 }
-                
-                Payment payment = new Payment(date, amount, paymentMethod);
-                payment.setPaymentID(paymentID);
-                payment.setDeposit(deposit);
-                payment.setDamageCharge(damageCharge);
-                payment.setCustomerID(customerID);
-                payment.setCarID(carID);
-                payment.setRentDuration(rentDuration);
-                
-                // Update payment counter if needed
-                int idNum = Integer.parseInt(paymentID.substring(1));
-                if (idNum >= Payment.getPaymentCounter()) {
-                    Payment.setPaymentCounter(idNum + 1);
-                }
-                
-                payments[count++] = payment;
-            }
-            
-            // Ensure counter is at least as high as loaded count
-            if (count > Payment.getPaymentCounter()) {
-                Payment.setPaymentCounter(count);
-            }
-            
-            System.out.println("Successfully loaded " + count + " payments");
+            } 
             
         } catch (IOException e) {
             System.out.println("Error reading payment file: " + e.getMessage());

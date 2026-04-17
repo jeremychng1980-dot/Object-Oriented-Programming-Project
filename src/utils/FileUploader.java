@@ -174,20 +174,20 @@ public class FileUploader {
                     writer.print(p.getCarID() + "|");
 
                     // Write payment type and rent duration first
-                    if (p.getPaymentMethod() instanceof Cash) {
-                        Cash cash = (Cash) p.getPaymentMethod();
+                    if (p instanceof Cash) {
+                        Cash cash = (Cash) p;
                         writer.print("CASH|");
                         writer.print(cash.getAmountReceived());
-                    } else if (p.getPaymentMethod() instanceof Card) {
-                        Card card = (Card) p.getPaymentMethod();
+                    } else if (p instanceof Card) {
+                        Card card = (Card) p;
                         writer.print("CARD|");
                         writer.print(card.getCardNo() + "|");
                         writer.print(card.getCCV() + "|");
                         writer.print(card.getNameOnCard() + "|");
                         writer.print(card.getExpiryMonth() + "|");
                         writer.print(card.getExpiryYear());
-                    } else if (p.getPaymentMethod() instanceof OnlineTransfer) {
-                        OnlineTransfer transfer = (OnlineTransfer) p.getPaymentMethod();
+                    } else if (p instanceof OnlineTransfer) {
+                        OnlineTransfer transfer = (OnlineTransfer) p;
                         writer.print("ONLINETRANSFER|");
                         writer.print(transfer.getAccountNumber() + "|");
                         writer.print(transfer.getAccountName() + "|");

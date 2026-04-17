@@ -20,7 +20,6 @@ public class Payment {
 
     // Payment
     private String paymentID;
-    private PaymentMethod paymentMethod;
     private int rentDuration; // can be used to calculate amount based on car's daily rate
     private double damageCharge;
     private double deposit; //TODO: Can be implemented later
@@ -31,11 +30,11 @@ public class Payment {
 
     // ================= Constructors =================
     public Payment() {
-        this(generatePaymentID(), new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, null, 0);
+        this(generatePaymentID(), new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, 0);
     }
 
     public Payment(String paymentID, Date date, double amount, double deposit, String damageCondition, 
-        String customerID, String carID, PaymentMethod paymentMethod, int rentDuration) {
+        String customerID, String carID, int rentDuration) {
         this.paymentID = generatePaymentID();
         date = new Date();
         this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
@@ -43,7 +42,6 @@ public class Payment {
         this.damageCharge = calculateDamageCharge(damageCondition);
         this.customerID = customerID;
         this.carID = carID;
-        this.paymentMethod = paymentMethod;
         this.rentDuration = rentDuration;
     }
 
@@ -55,15 +53,13 @@ public class Payment {
         this.damageCharge = calculateDamageCharge(damageCondition);
         this.customerID = customerID;
         this.carID = carID;
-        this.paymentMethod = null; // can be set later when payment method is chosen
         this.rentDuration = 0; // can be set later when rental duration is known
     }
 
-    public Payment(Date date, double amount, PaymentMethod paymentMethod) {
+    public Payment(Date date, double amount) {
         this.paymentID = generatePaymentID();
         this.date = date;
         this.amount = amount;
-        this.paymentMethod = paymentMethod;
     }
 
     public Payment(String customerID, String carID, int rentDuration) {
@@ -73,7 +69,6 @@ public class Payment {
         this.damageCharge = calculateDamageCharge("NO_DAMAGE");
         this.customerID = customerID;
         this.carID = carID;
-        this.paymentMethod = null; // can be set later when payment method is chosen
         this.rentDuration = rentDuration; // can be set later when rental duration is known
     }
 
@@ -106,10 +101,6 @@ public class Payment {
 
     public static int getPaymentCounter() {
         return paymentCounter;
-    }
-
-    public PaymentMethod getPaymentMethod()  {
-        return paymentMethod;
     }
 
     public String getCustomerID() {
@@ -164,10 +155,6 @@ public class Payment {
     public void setRentDuration(int rentDuration) {
         this.rentDuration = rentDuration;
     }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
     
     public void setPaymentID(String paymentID) {
         this.paymentID = paymentID;
@@ -187,8 +174,7 @@ public class Payment {
     public String paymentToString() {
         return "Payment ID: " + paymentID +
                "\nDate: " + date +
-               "\nAmount: " + amount +
-               "\nPayment Method: " + paymentMethod;
+               "\nAmount: " + amount;
     }
 
     public double calculateDamageCharge(String damageCondition) {

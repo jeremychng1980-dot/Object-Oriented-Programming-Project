@@ -1,6 +1,7 @@
 package models;
+import java.util.Date;
 
-public class OnlineTransfer extends Payment implements PaymentMethod {
+public class OnlineTransfer extends Payment{
 
     // ================= Data Properties =================
     private String accountNumber;
@@ -13,11 +14,14 @@ public class OnlineTransfer extends Payment implements PaymentMethod {
 
     // No-args constructor
     public OnlineTransfer() {
-        this("", "", "", "", "");
+        this("", null, 0.0, 0.0, "", "", "", 0, "", "", "", "", "");
     }
 
-    public OnlineTransfer(String accountNumber, String accountName, String bankName,
+    public OnlineTransfer(String paymentID, Date date, double amount, double deposit, String damageCondition, 
+                            String customerID, String carID, int rentDuration,
+                            String accountNumber, String accountName, String bankName,
                           String swiftCode, String reference) {
+        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration);
         this.accountNumber = accountNumber;
         this.accountName = accountName;
         this.bankName = bankName;

@@ -1,6 +1,6 @@
 package models;
-
-public class Card extends Payment implements PaymentMethod {
+import java.util.Date;
+public class Card extends Payment {
 //data properties
     private String cardNo;
     private String CCV;
@@ -11,11 +11,14 @@ public class Card extends Payment implements PaymentMethod {
 //methods
     // no-args constructor
     public Card() {
-        this("", "", "", "","");
+        this("", null, 0.0, 0.0, "", "", "", 0, "", "", "", "", "");
     }
     
     // constructor with args
-    public Card(String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) {
+    public Card(String paymentID, Date date, double amount, double deposit, String damageCondition, 
+        String customerID, String carID, int rentDuration,String cardNo, String CCV, 
+        String nameOnCard, String expiryMonth, String expiryYear) {
+        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration);
         this.cardNo = cardNo;
         this.CCV = CCV;
         this.nameOnCard = nameOnCard;

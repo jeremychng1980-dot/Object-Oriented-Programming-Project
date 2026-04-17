@@ -1,21 +1,22 @@
 package models;
+import java.util.Date;
 
 
-public class Cash extends Payment implements PaymentMethod {
+public class Cash extends Payment{
 //data properties
     private double amountReceived;
 
 //methods
     // no-args constructor
     public Cash() {
-        this(0.0f);
+        this("", null, 0.0, 0.0, "", "", "", 0, 0.0);
     }
     
     // constructor with args
-    public Cash(double amountReceived){
-
+    public Cash(String paymentID, Date date, double amount, double deposit, String damageCondition, 
+        String customerID, String carID, int rentDuration, double amountReceived){
+        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration);
         this.amountReceived = amountReceived;
-        
     }
 
     // getters
