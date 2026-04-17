@@ -43,6 +43,9 @@ public class TestCarRentalSystem{
                     customerRegistration();//to customer registration page
                     break;
                 case 3:
+                    System.out.println("\n? Staff login coming soon!");
+                    System.out.println("Press Enter to continue...");
+                    input.nextLine();
                     staffLogin(); //To staff login page
                     break;
                 case 4:
@@ -654,65 +657,65 @@ public class TestCarRentalSystem{
     }
 
 //Admin Login
-    public static void adminLogin() {
-        boolean loggedIn = false;
-            Helper.clearScreen();
-            System.out.println("\n=====================================");
-            System.out.println("            ADMIN LOGIN              ");
-            System.out.println("=====================================");
-            
-            System.out.print("Press Enter to continue to login or '0' to exit... ");
-            String choice = input.nextLine();//ask user if they want to continue to login or exit
-            System.out.println("\n");
-            // Check if user wants to exit
-            if (choice.equals("0")) {
-                Helper.clearScreen();
-                return;
-            }
-            
-            while (!loggedIn) {
-            String loginID = "";
-            String password = "";
-            
-            // LOGIN ID 
-            boolean loginValid = false;
-            while (!loginValid) {
-                try {
-                    System.out.print("Enter Login ID: ");
-                    loginID = input.nextLine();
-                    loginID = User.validateNonEmpty(loginID, "Login ID");//call the method to check if empty
-                    loginValid = true;
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage() + "\n");//prompt the custom message if empty 
-                }
-            }
-            
-            // PASSWORD
-            boolean passwordValid = false;
-            while (!passwordValid) {
-                try {
-                    System.out.print("Enter Password: ");
-                    password = input.nextLine();
-                    password = User.validateNonEmpty(password, "Password");//call method to check if empty
-                    passwordValid = true;
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage() + "\n");//prompt the custom message if empty
-                }
-            }
-            
-            for (int i = 0; i < User.getUserCount(); i++) { //go through all the user
-                if (users[i] instanceof Admin) { //check if it is a admin, skip the staff object in the array
-                    Admin a = (Admin) users[i]; //
-                    if (a.verifyLogin(loginID, password)) { //call the methods on this specific admin object
-                        adminMenu(a); //if login successfully pass the specific object to adminMenu
-                        return;  // Exit method after successful login
-                    }
-            
-            }
-            
-            System.out.println("\nInvalid Admin login credentials!");
-            System.out.println("Please try again.\n");
+ public static void adminLogin() {
+    boolean loggedIn = false;
+        Helper.clearScreen();
+        System.out.println("\n=====================================");
+        System.out.println("            ADMIN LOGIN              ");
+        System.out.println("=====================================");
+        
+        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        String choice = input.nextLine();//ask user if they want to continue to login or exit
+        System.out.println("\n");
+        // Check if user wants to exit
+        if (choice.equals("0")) {
+        	Helper.clearScreen();
+            return;
         }
+        
+        while (!loggedIn) {
+        String loginID = "";
+        String password = "";
+        
+        // LOGIN ID 
+        boolean loginValid = false;
+        while (!loginValid) {
+            try {
+                System.out.print("Enter Login ID: ");
+                loginID = input.nextLine();
+                loginID = User.validateNonEmpty(loginID, "Login ID");//call the method to heck if empty
+                loginValid = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\n");//prompt the custom message if empty 
+            }
+        }
+        
+        // PASSWORD
+        boolean passwordValid = false;
+        while (!passwordValid) {
+            try {
+                System.out.print("Enter Password: ");
+                password = input.nextLine();
+                password = User.validateNonEmpty(password, "Password");//call method to check if empty
+                passwordValid = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\n");//prompt the custom message if empty
+            }
+        }
+        
+        for (int i = 0; i < User.getUserCount(); i++) { //go through all the user
+            if (users[i] instanceof Admin) { //check if it is a admin, skip the staff object in the array
+                Admin a = (Admin) users[i]; //
+                if (a.verifyLogin(loginID, password)) { //call the methods on this specific admin object
+                    adminMenu(a); //if login successfully pass the specific object to adminMenu
+                    return;  // Exit method after successful login
+                }
+        
+        }
+        
+        System.out.println("\nInvalid Admin login credentials!");
+        System.out.println("Please try again.\n");
+    }
     }   
 }// end of admin login
 
