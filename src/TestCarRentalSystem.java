@@ -12,6 +12,7 @@ public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
     static CarRentalSystem sys = new CarRentalSystem(new Customer[100], new Car[100], new Payment[100]); 
+    Customer[] custs = new Customer[100];
 
     public static void main(String[] args) {
         // Load existing users from file
@@ -462,7 +463,7 @@ public class TestCarRentalSystem{
                 System.out.println("\nThe rental fee for " + rentDays + " day(s) is: RM " + String.format("%.2f", rentalFee));
 
                 targetCar.setStatus("unavailable"); // change Status from available to unavailable, and also save the change to file
-                System.out.println("Successful , You have booked the " + targetCar.getCarID() + " Vehicle.");
+                System.out.println("Successful, You have booked the " + targetCar.getCarID() + " Vehicle.");
                 Helper.delay(200);
 
                 utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars()); 
@@ -497,10 +498,10 @@ public class TestCarRentalSystem{
 
         sys.displayAvailableCars();
 
-        System.out.println("\n=== Your Pending Reservations ===");
+        System.out.println("\n=== Your Pending Reservations ===\n");
         boolean hasReservation = false;
         // if customer has reserved car then display the details
-        for (int i = 0; i < sys.getPayment().length; i++) {
+        for (int i = 0; i < Payment.getPaymentCounter(); i++) {
 
                 Payment transaction = sys.getPayment()[i];
 
@@ -528,6 +529,9 @@ public class TestCarRentalSystem{
                     sys.getPayment()[Payment.getPaymentCounter()] = transaction;
                     utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
                     System.out.println("You have successfully checked out the " + bookedCar.getCarID() + " Vehicle.");
+                    System.out.println("=================================\n");
+                    System.out.print("\nPress Enter to return to Home Page...   ");
+                    input.nextLine();  // Wait for user to press Enter
                     }
                 }
             
@@ -544,7 +548,6 @@ public class TestCarRentalSystem{
         }
         Car targetCar = sys.findCarById(carId);
         
-
         if (targetCar == null) {
             System.out.println("Cannot find the " + carId + " Car.");
         } else if (targetCar.getStatus().equalsIgnoreCase("available")) { // if available then can check out
@@ -556,8 +559,9 @@ public class TestCarRentalSystem{
                 System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle."); //FIXME: Fix this error
         }
             
-            System.out.println("\nPress Enter to return to Home Page...   ");
+            System.out.print("\nPress Enter to return to Home Page...   ");
             input.nextLine();  // Wait for user to press Enter
+            return;
     }//end Checkout
     
     public static void processReturn(Customer loggedInCustomer) { //TODO: Incomplete method
@@ -574,10 +578,10 @@ public class TestCarRentalSystem{
             // status == false --> not make payment (not return yet)
             if (transaction != null && transaction.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && transaction.getStatus() == false) {
                 Car bookedCar = sys.findCarById(transaction.getCarID());
-                System.out.print(bookedCar.toString());
+
                 if (bookedCar != null) {
                     System.out.println(bookedCar.toString());
-                    System.out.println("[CHECKOUT] Car ID: " + transaction.getCarID() + " | Duration: " + transaction.getRentDuration() + " days | Est. Fee: RM " + transaction.getAmount());
+                    System.out.println("\n[CHECKOUT] Car ID: " + transaction.getCarID() + " | Duration: " + transaction.getRentDuration() + " days | Est. Fee: RM " + transaction.getAmount());
                     System.out.print("\nPress enter to return car or '0' to exit... ");
                         String choice = input.nextLine().trim();
                         if (choice.equals("0")) {
@@ -588,28 +592,26 @@ public class TestCarRentalSystem{
                     String carID = input.nextLine();
                     
                     if(carID.equalsIgnoreCase(transaction.getCarID() ) ){
-                            Car returnedCar = sys.findCarById(carID);
-                            // process inspection
-                        // IMPORTANT NEED TO COMPLETE
+                        Car returnedCar = sys.findCarById(carID);
                         
-                        double totalAmount = Helper.getValidatedDouble(input, "Please Pay : RM" + "HERE PUT THE TOTAL AMOUNT");// !!!! complete it
-                        totalAmount += transaction.getAmount();
-                        
-                        System.out.println("Processing Payment.....");
-                        Helper.delay(4);
-                        System.out.println("Payment received successfully.");
+                        returnedCar.setStatus("pending");// after returning, waiting staff to inspect
+                        utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
 
-                        sys.getPayment()[Payment.getPaymentCounter()] = transaction;
+                        //sys.getPayment()[Payment.getPaymentCounter()] = transaction;
                         utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
                         System.out.println("You have successfully returned the " + returnedCar.getCarID() + " Vehicle.");
                         }
 
                 } 
+            }else{
+                System.out.println("You currently no rented any vehicel.");
             }
 
 
         } // end of for
 
+        System.out.println("\nPress Enter to return to Home Page...   ");
+        input.nextLine();  // Wait for user to press Enter
     }
 
     public static void processPayment(Customer loggedInCustomer){ //TODO: Incomplete method

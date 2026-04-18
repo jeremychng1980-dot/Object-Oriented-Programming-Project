@@ -133,18 +133,6 @@ public class CarRentalSystem {
         System.out.println("==========================================================================");
     }
 
-    public void changeStatus(Car targetCar) { 
- 
-        String status = targetCar.getStatus();
-
-        if (status.equalsIgnoreCase("available")) {// car available -> book reservation
-                targetCar.setStatus("unavailable"); 
-                System.out.println("Successful , You have booked the " + targetCar.getCarID() + " Vehicle.");
-                Helper.delay(5);
-                utils.FileUploader.saveCarsToFile("cars.txt", cars);
-            } 
-
-    }
 
     public void addCarToSystem(String filename, Car newCar) {
         if (Car.getCarCount() < cars.length) {
@@ -169,6 +157,7 @@ public class CarRentalSystem {
         for (int i = 0; i < payments.length; i++) {
         if (payments[i] == null) {
             payments[i] = newPay;
+            break; // once store then break if no will fill up whole array
             }
         } //  end of for
         utils.FileUploader.savePaymentsToFile("payment.txt", payments);
