@@ -143,9 +143,6 @@ public class CarRentalSystem {
                 Helper.delay(5);
                 utils.FileUploader.saveCarsToFile("cars.txt", cars);
             } 
-        else { // car unavailable -> cannot book reservation
-                System.out.println("Current car status is " + targetCar.getStatus() + ", so unable to rent.");
-            }
 
     }
 
@@ -172,10 +169,9 @@ public class CarRentalSystem {
         for (int i = 0; i < payments.length; i++) {
         if (payments[i] == null) {
             payments[i] = newPay;
-
-            utils.FileUploader.savePaymentsToFile("payment.txt", payments);
             }
-        }
+        } //  end of for
+        utils.FileUploader.savePaymentsToFile("payment.txt", payments);
     }
 
 }// End of CarRentalSystem

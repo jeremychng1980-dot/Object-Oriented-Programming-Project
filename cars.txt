@@ -56,11 +56,11 @@ CA0027|PHM 8027|Model 3|Tesla|700.0|5|5000|available|100.0|true|true
 LUXURY
 CA0028|BGN 9028|S90|Volvo|680.0|5|18000|maintenance|100.0|true|true
 LUXURY
-CA0029|VFN 1029|911|Porsche|1500.0|2|3000|available|100.0|true|false
+CA0029|VFN 1029|911|Porsche|1500.0|2|3000|unavailable|100.0|true|false
 LUXURY
 CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true
 ECONOMY
-CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0
+CA0031|PEN 1234|Civic|Honda|10.0|5|0|unavailable|100.0|true|100.0
 LUXURY
 CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|0|unavailable|100.0|true|true
 LUXURY
