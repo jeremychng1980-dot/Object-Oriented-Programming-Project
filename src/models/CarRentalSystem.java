@@ -168,21 +168,14 @@ public class CarRentalSystem {
 
     public void reservationRecord(Customer customer, Car car, double rentalFee, int rentDays) {
         Payment newPay = new Payment(customer.getCustomerID(), car.getCarID(),rentalFee, rentDays);
-        boolean isSaved = false;
-
-        System.out.println("newPay: " + newPay.getCustomerID() + newPay.getCarID() + newPay.getAmount() + newPay.getRentDuration());
 
         for (int i = 0; i < payments.length; i++) {
         if (payments[i] == null) {
             payments[i] = newPay;
-            isSaved = true;
-            break;
+
+            utils.FileUploader.savePaymentsToFile("payment.txt", payments);
             }
         }
-        if (!isSaved) {
-        System.out.println("Error: System cannot record this payment, database is full.");
-            }
-
     }
 
 }// End of CarRentalSystem

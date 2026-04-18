@@ -31,10 +31,10 @@ public class Payment {
 
     // ================= Constructors =================
     public Payment() {
-        this(" ", new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, 0, false);
+        this(new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, 0, false);
     }
 
-    public Payment(String paymentID, Date date, double amount, double deposit, String damageCondition, 
+    public Payment(Date date, double amount, double deposit, String damageCondition, 
         String customerID, String carID, int rentDuration, boolean status) {
         this.paymentID = generatePaymentID();
         date = new Date();
@@ -78,6 +78,7 @@ public class Payment {
 
     public Payment(String customerID, String carID, double amount, int rentDuration) {
         date = new Date();
+        this.paymentID = generatePaymentID();
         this.amount = amount;
         this.deposit = 0.0; // can be set based on car type or rental duration
         this.damageCharge = calculateDamageCharge("NO_DAMAGE");

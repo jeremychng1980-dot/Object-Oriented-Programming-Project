@@ -14,14 +14,14 @@ public class OnlineTransfer extends Payment{
 
     // No-args constructor
     public OnlineTransfer() {
-        this(" ", null, 0.0, 0.0, "", "", "", 0, false,"", "", "", "", "");
+        this(null, 0.0, 0.0, "", "", "", 0, false,"", "", "", "", "");
     }
 
-    public OnlineTransfer(String paymentID, Date date, double amount, double deposit, String damageCondition, 
+    public OnlineTransfer(Date date, double amount, double deposit, String damageCondition, 
                             String customerID, String carID, int rentDuration, boolean status,
                             String accountNumber, String accountName, String bankName,
                           String swiftCode, String reference) {
-        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration, status);
+        super(date, amount, deposit, damageCondition, customerID, carID, rentDuration, status);
         this.accountNumber = accountNumber;
         this.accountName = accountName;
         this.bankName = bankName;

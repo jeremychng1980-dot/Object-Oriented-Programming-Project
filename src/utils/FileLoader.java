@@ -275,8 +275,9 @@ public class FileLoader {
                 
                 if (paymentType.equals("CASH")) {
                     double amountReceived = Double.parseDouble(parts[10]);
-                    Cash cashPayment = new Cash(paymentID, date, amount, deposit, damageCondition,
+                    Cash cashPayment = new Cash(date, amount, deposit, damageCondition,
                                                 customerID, carID, rentDuration,status, amountReceived);
+                    cashPayment.setPaymentID(paymentID);
                     payments[count] = cashPayment;
                     
                 } else if (paymentType.equals("CARD")) {
@@ -285,9 +286,10 @@ public class FileLoader {
                     String nameOnCard = parts[12];
                     String expiryMonth = parts[13];
                     String expiryYear = parts[14];
-                    Card cardPayment = new Card(paymentID, date, amount, deposit, damageCondition,
+                    Card cardPayment = new Card(date, amount, deposit, damageCondition,
                                                 customerID, carID, rentDuration, status,
                                                 cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
+                    cardPayment.setPaymentID(paymentID);
                     payments[count] = cardPayment;
                     
                 } else if (paymentType.equals("ONLINETRANSFER")) {
@@ -296,11 +298,12 @@ public class FileLoader {
                     String bankName = parts[12];
                     String swiftCode = parts[13];
                     String reference = parts[14];
-                    OnlineTransfer transferPayment = new OnlineTransfer(paymentID, date, amount, deposit,
+                    OnlineTransfer transferPayment = new OnlineTransfer(date, amount, deposit,
                                                                         damageCondition, customerID,
                                                                         carID, rentDuration, status,
                                                                         accountNumber, accountName,
                                                                         bankName, swiftCode, reference);
+                    transferPayment.setPaymentID(paymentID);
                     payments[count] = transferPayment;
                 }
                 count++;

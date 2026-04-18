@@ -62,7 +62,7 @@ CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true
 ECONOMY
 CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0
 LUXURY
-CA0032|PEN 0000|Skyline GTR34|Nissan|100.0|5|0|available|100.0|true|true
+CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|0|unavailable|100.0|true|true
 LUXURY
 CA0033|PME 2237|Madza MX5|Madza|100.0|5|0|unavailable|100.0|true|true
 LUXURY

@@ -172,6 +172,7 @@ public class FileUploader {
                     writer.print(p.getDamageCharge() + "|");
                     writer.print(p.getCustomerID() + "|");
                     writer.print(p.getCarID() + "|");
+                    writer.print(p.getRentDuration() + "|");
                     writer.print(p.getStatus() + "|");
 
                     // Write payment type and rent duration first
@@ -200,7 +201,7 @@ public class FileUploader {
                         
                     }
 
-                    writer.print(p.getRentDuration());
+                    
                     writer.println();  // End the line
                 }
             }
