@@ -16,7 +16,7 @@ public class Payment {
     // ================= Data Properties =================
     private Date date;
     private double amount;//amount received from customer
-    private static int paymentCounter;
+    private static int paymentCounter = 0;
 
     // Payment
     private String paymentID;

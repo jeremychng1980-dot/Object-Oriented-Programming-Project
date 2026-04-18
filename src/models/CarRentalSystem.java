@@ -3,9 +3,9 @@ package models;
 import utils.Helper;
 
 public class CarRentalSystem {
-    private Car[] cars = new Car[100];
-    private Customer[] customers = new Customer[100];
-    private Payment[] payments = new Payment[100];
+    private Car[] cars;
+    private Customer[] customers;
+    private Payment[] payments;
 
     public CarRentalSystem(){
         this(null, null, null);
@@ -50,6 +50,10 @@ public class CarRentalSystem {
 
     public void setCustomers(Customer[] customers) {
         this.customers = customers;
+    }
+
+    public void setPayments(Payment[] payments){
+        this.payments = payments;
     }
     
     public Car findCarById(String carID) {
@@ -164,8 +168,21 @@ public class CarRentalSystem {
 
     public void reservationRecord(Customer customer, Car car, double rentalFee, int rentDays) {
         Payment newPay = new Payment(customer.getCustomerID(), car.getCarID(),rentalFee, rentDays);
-        int tempCounter = Payment.getPaymentCounter() + 1;
-        payments[tempCounter - 1] = newPay;
+        boolean isSaved = false;
+
+        System.out.println("newPay: " + newPay.getCustomerID() + newPay.getCarID() + newPay.getAmount() + newPay.getRentDuration());
+
+        for (int i = 0; i < payments.length; i++) {
+        if (payments[i] == null) {
+            payments[i] = newPay;
+            isSaved = true;
+            break;
+            }
+        }
+        if (!isSaved) {
+        System.out.println("Error: System cannot record this payment, database is full.");
+            }
+
     }
 
 }// End of CarRentalSystem

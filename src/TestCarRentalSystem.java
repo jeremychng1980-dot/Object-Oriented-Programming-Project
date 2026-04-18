@@ -11,11 +11,10 @@ import java.io.*;
 public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
-    static CarRentalSystem sys = new CarRentalSystem(); 
+    static CarRentalSystem sys = new CarRentalSystem(new Customer[100], new Car[100], new Payment[100]); 
 
     public static void main(String[] args) {
         // Load existing users from file
-        sys.setCars(new Car[100]);
         utils.FileLoader.loadCarFile("cars.txt", sys.getCars());
         utils.FileLoader.loadUsersFile("users.txt", users);
         utils.FileLoader.loadPaymentFile("payment.txt", sys.getPayment());
@@ -465,6 +464,7 @@ public class TestCarRentalSystem{
             sys.reservationRecord(customer, targetCar, rentalFee, rentDays);
         }
              
+        input.nextLine(); 
         System.out.println("Press enter to return to Home page...");
         input.nextLine();
 
@@ -584,7 +584,6 @@ public class TestCarRentalSystem{
         } else if (paymentMethod == 2) {
             System.out.print("Enter Card Number: ");
             String cardNo = input.nextLine();
-            //FIXME: int cardNo = Helper.getValidatedInt(input, "Please enter a valid card number: ", 1000000000, 9999999999L);
             System.out.print("Enter CVV: ");
             String CCV = input.nextLine();
             System.out.print("Enter Name on Card: ");

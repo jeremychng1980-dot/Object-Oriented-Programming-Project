@@ -1,10 +1,10 @@
 34
 ECONOMY
-CA0001|PHH 1001|Myvi|Perodua|100.0|5|12000|unavailable|100.0|true|6.2
+CA0001|PHH 1001|Myvi|Perodua|100.0|5|12000|available|100.0|true|6.2
 ECONOMY
-CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|unavailable|100.0|true|5.5
+CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|available|100.0|true|5.5
 ECONOMY
-CA0003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7
+CA0003|SAB 3003|Saga|Proton|90.0|5|45000|available|85.0|false|6.7
 ECONOMY
 CA0004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4
 ECONOMY
@@ -20,9 +20,9 @@ CA0009|JCD 9009|Yaris|Toyota|190.0|5|12000|unavailable|100.0|true|5.7
 ECONOMY
 CA0010|PCE 1010|Jazz|Honda|170.0|5|35000|available|100.0|true|5.8
 SUV
-CA0011|VBH 2011|X70|Proton|280.0|5|8000|available|100.0|true|190
+CA0011|VBH 2011|X70|Proton|280.0|5|8000|unavailable|100.0|true|190
 SUV
-CA0012|WRC 3012|X50|Proton|220.0|5|15000|available|100.0|false|170
+CA0012|WRC 3012|X50|Proton|220.0|5|15000|unavailable|100.0|false|170
 SUV
 CA0013|VCS 4013|CR-V|Honda|350.0|5|25000|available|100.0|false|200
 SUV
@@ -64,6 +64,6 @@ CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0
 LUXURY
 CA0032|PEN 0000|Skyline GTR34|Nissan|100.0|5|0|available|100.0|true|true
 LUXURY
-CA0033|PME 2237|Madza MX5|Madza|100.0|5|0|available|100.0|true|true
+CA0033|PME 2237|Madza MX5|Madza|100.0|5|0|unavailable|100.0|true|true
 LUXURY
 CA0034|PWN 9331|Astina|Mazda|100.0|5|0|unavailable|100.0|true|true
