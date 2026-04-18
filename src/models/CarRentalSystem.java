@@ -89,7 +89,7 @@ public class CarRentalSystem {
         System.out.println("Total car count: " + Car.getCarCount());
     }
 
-    public void displayRentedCars() {
+    public void displayReturnedCars() {
         System.out.println("\n=====================================");
         System.out.println("           View Rented Vehicles           ");
         System.out.println("=====================================");
@@ -97,15 +97,15 @@ public class CarRentalSystem {
         System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
         System.out.println("--------------------------------------------------------------------------");
 
-        boolean hasRentedCars = false;
+        boolean hasReturnedCars = false;
         for (int i = 0; i < Car.getCarCount(); i++) {
-            if (cars[i] != null && cars[i].getStatus().equalsIgnoreCase("unavailable")) {
+            if (cars[i] != null && cars[i].getStatus().equalsIgnoreCase("pending")) {
                 System.out.println(cars[i].toString());
-                hasRentedCars = true;
+                hasReturnedCars = true;
             }
         }
 
-        if (!hasRentedCars) {
+        if (!hasReturnedCars) {
             System.out.println("                     [ Currently no rented vehicle record ]                      ");
         }
         System.out.println("==========================================================================");

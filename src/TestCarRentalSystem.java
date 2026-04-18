@@ -43,9 +43,6 @@ public class TestCarRentalSystem{
                     customerRegistration();//to customer registration page
                     break;
                 case 3:
-                    System.out.println("\n? Staff login coming soon!");
-                    System.out.println("Press Enter to continue...");
-                    input.nextLine();
                     staffLogin(); //To staff login page
                     break;
                 case 4:
@@ -508,7 +505,6 @@ public class TestCarRentalSystem{
             if (transaction != null && transaction.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && transaction.getDeposit() == 0.0) {
                 hasReservation = true;
                 Car bookedCar = sys.findCarById(transaction.getCarID());
-                System.out.print(bookedCar.toString());
                 if (bookedCar != null) {
                     System.out.println(bookedCar.toString());
                     System.out.println("[RESERVED] Car ID: " + transaction.getCarID() + " | Duration: " + transaction.getRentDuration() + " days | Est. Fee: RM " + transaction.getAmount());
@@ -526,12 +522,12 @@ public class TestCarRentalSystem{
                     System.out.println("Deposit received successfully.");
 
                     transaction.setDeposit(deposit);
-                    sys.getPayment()[Payment.getPaymentCounter()] = transaction;
                     utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
                     System.out.println("You have successfully checked out the " + bookedCar.getCarID() + " Vehicle.");
-                    System.out.println("=================================\n");
+                    System.out.println("=================================");
                     System.out.print("\nPress Enter to return to Home Page...   ");
                     input.nextLine();  // Wait for user to press Enter
+                    return;
                     }
                 }
             
@@ -556,12 +552,13 @@ public class TestCarRentalSystem{
                 Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), rentDuration); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
                 sys.getPayment()[Payment.getPaymentCounter() - 1] = transaction; // Add to the payments array
                 utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
-                System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle."); //FIXME: Fix this error
+                System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle."); 
+                
         }
-            
-            System.out.print("\nPress Enter to return to Home Page...   ");
-            input.nextLine();  // Wait for user to press Enter
-            return;
+        System.out.print("\nPress Enter to return to Home Page...   ");
+        input.nextLine();  // Wait for user to press Enter
+        return;    
+        
     }//end Checkout
     
     public static void processReturn(Customer loggedInCustomer) { //TODO: Incomplete method
@@ -571,47 +568,69 @@ public class TestCarRentalSystem{
         System.out.println("\n           Process Return            ");
         System.out.println("\n=====================================");
 
+        boolean hasPendingReturn = false;
+
+        // 1st : display all waiting returned car
         for (int i = 0; i < sys.getPayment().length; i++) {
+            Payment tempPayment = sys.getPayment()[i];
 
-            Payment transaction = sys.getPayment()[i];
+            // find the customer not yet make payment by using the payment status, car unavailable means car still not returned
+            if (tempPayment != null && tempPayment.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && tempPayment.getStatus() == false) {
+                Car bookedCar = sys.findCarById(tempPayment.getCarID());
 
-            // status == false --> not make payment (not return yet)
-            if (transaction != null && transaction.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && transaction.getStatus() == false) {
-                Car bookedCar = sys.findCarById(transaction.getCarID());
-
-                if (bookedCar != null) {
-                    System.out.println(bookedCar.toString());
-                    System.out.println("\n[CHECKOUT] Car ID: " + transaction.getCarID() + " | Duration: " + transaction.getRentDuration() + " days | Est. Fee: RM " + transaction.getAmount());
-                    System.out.print("\nPress enter to return car or '0' to exit... ");
-                        String choice = input.nextLine().trim();
-                        if (choice.equals("0")) {
-                        Helper.clearScreen();
-                        return;
-                            }
-                    System.out.print("Enter the car ID you want to return: ");
-                    String carID = input.nextLine();
-                    
-                    if(carID.equalsIgnoreCase(transaction.getCarID() ) ){
-                        Car returnedCar = sys.findCarById(carID);
-                        
-                        returnedCar.setStatus("pending");// after returning, waiting staff to inspect
-                        utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
-
-                        //sys.getPayment()[Payment.getPaymentCounter()] = transaction;
-                        utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
-                        System.out.println("You have successfully returned the " + returnedCar.getCarID() + " Vehicle.");
-                        }
-
-                } 
-            }else{
-                System.out.println("You currently no rented any vehicel.");
+                // only when car is unavailable then return
+                if (bookedCar != null && bookedCar.getStatus().equalsIgnoreCase("unavailable")) {
+                    hasPendingReturn = true;
+                    // display payment ID
+                    System.out.println("\n[Order ID: " + tempPayment.getPaymentID() + "] Car ID: " + tempPayment.getCarID() + " | Model: " + bookedCar.getBrand() + " " + bookedCar.getModel());
+                    System.out.println("   Rent Duration: " + tempPayment.getRentDuration() + " days | Est. Fee: RM " + tempPayment.getAmount());
+                }
             }
+        }
 
+        if (!hasPendingReturn) {
+            System.out.println("\nYou have no vehicles to return at the moment.");
+            System.out.print("\nPress Enter to return to Home Page...   ");
+            input.nextLine();
+            return;
+        }
 
-        } // end of for
+        System.out.println("\n=====================================");
+        // 2nd : Payment Id to find transaction 
+        System.out.print("Enter the [Payment ID] of the car you want to return (or '0' to exit): ");
+        String targetPaymentID = input.nextLine().trim();
 
-        System.out.println("\nPress Enter to return to Home Page...   ");
-        input.nextLine();  // Wait for user to press Enter
+        if (targetPaymentID.equals("0")) {
+            Helper.clearScreen();
+            return;
+        }
+
+        // return car using Payment ID
+        Payment targetPayment = null;
+        Car returnedCar = null;
+
+        for (int i = 0; i < sys.getPayment().length; i++) {
+            Payment p = sys.getPayment()[i];
+            if (p != null && p.getPaymentID().equalsIgnoreCase(targetPaymentID)) {
+                targetPayment = p;
+                returnedCar = sys.findCarById(p.getCarID());
+                break; // find out , stop looping
+            }
+        }
+
+        if (targetPayment == null || returnedCar == null) {
+            System.out.println("Error: Cannot find an active rental record with Order ID: " + targetPaymentID);
+        } else {
+            // find the car change to status, waiting staff to inspect
+            returnedCar.setStatus("pending");
+            utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
+
+            System.out.println("\nSuccessful, You have returned the " + returnedCar.getCarID() + " Vehicle.");
+            System.out.println("Please wait for staff inspection.");
+        }
+
+        System.out.print("\nPress Enter to return to Home Page...   ");
+        input.nextLine();
     }
 
     public static void processPayment(Customer loggedInCustomer){ //TODO: Incomplete method
@@ -620,23 +639,98 @@ public class TestCarRentalSystem{
         System.out.println("\n             Payment                ");
         System.out.println("\n=====================================");
 
-        System.out.println("Enter way to pay (1 for Cash, 2 for Card, 3 for Online Transfer): ");
-        int paymentMethod = Helper.getValidatedInt(input, "Please enter a number (1-3): ", 1, 3);
-        // Check if user wants to exit
-        if (paymentMethod == 0) {
-        	Helper.clearScreen();
+        // payment status if false represent not pay amount yet
+        System.out.println("\n====== Your Pending Bills ======");
+
+        boolean hasBill = false;
+        
+        for (int i = 0; i < sys.getPayment().length; i++) {
+            Payment tempPayment= sys.getPayment()[i];
+            // find the customer and related bill
+            if (tempPayment != null && tempPayment.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && tempPayment.getStatus() == false) {
+                hasBill = true;
+                double balance = tempPayment.getAmount() + tempPayment.getDamageCharge() - tempPayment.getDeposit();
+                System.out.println("Car ID: " + tempPayment.getCarID());
+                System.out.println("Total Rent: RM " + tempPayment.getAmount() + " | Damage: RM " + tempPayment.getDamageCharge() + " | Deposit Paid: RM " + tempPayment.getDeposit());
+                System.out.println("Balance Due: RM " + balance);
+                System.out.println("---------------------------------");
+            }
+        }
+
+        if (!hasBill) {
+            System.out.println("You have no pending payments. Everything is settled!");
+            System.out.print("\nPress Enter to return...");
+            input.nextLine();
             return;
-        } else if (paymentMethod == 1) { //TODO: Get user input
-            System.out.println("Enter amount to pay: ");
-            int amount = Helper.getValidatedInt(input, "Please enter a valid amount: ", 1, Integer.MAX_VALUE);
-           /*  
-            for(int i = 0; i < sys.getPayment().length; i++){
-                Payment tempPayment = new Cash(loggedInCustomer.getCustomerID(), sys.getCars()[i].getCarID(), amount)
+        }
+
+        // find the bill
+        System.out.print("\nPress enter to proceed to payment (or '0' to exit): ");
+        String choice = input.nextLine();
+            if (choice.equals("0")) {
+                Helper.clearScreen();
+                return;
+            }
+        System.out.print("Enter the car ID (or '0' to exit): ");
+        String targetCarID = input.nextLine().trim();
+
+        if (targetCarID.equals("0")) {
+            Helper.clearScreen();
+            return;
+        }
+
+        // find the bill array index 
+        int targetIndex = -1;
+        Payment pendingBill = null;
+        for (int i = 0; i < sys.getPayment().length; i++) {
+            Payment tempPayment = sys.getPayment()[i];
+            if (tempPayment != null && tempPayment.getCarID().equalsIgnoreCase(targetCarID) && tempPayment.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && tempPayment.getStatus() == false) {
+                targetIndex = i;
+                pendingBill = tempPayment;
+                break;
+            }
+        }
+
+        if (pendingBill == null) {
+            System.out.println("Cannot find a pending bill for Car ID: " + targetCarID);
+            System.out.print("Press Enter to return...");
+            input.nextLine();
+            return;
+        }
+
+        double toBePaid = pendingBill.getAmount() + pendingBill.getDamageCharge() - pendingBill.getDeposit();
+
+        // select payment method
+        System.out.println("\nBalance to pay: RM " + toBePaid);
+        System.out.println("Enter way to pay (1: Cash, 2: Card, 3: Online Transfer, 0: Exit): ");
+        int paymentMethod = Helper.getValidatedInt(input, "Please enter a number (0-3): ", 0, 3);
+
+        if (paymentMethod == 0) {
+            Helper.clearScreen();
+            return;
+        }
+
+        Payment finalizedPayment = null;
+        input.nextLine(); // clear buffer
+        if (paymentMethod == 1) { 
+            // --- CASH ---
+            System.out.print("Enter amount received (RM): ");
+            double amountReceived = Helper.getValidatedDouble(input, "Please enter a valid amount: RM ");
+            input.nextLine(); // clear buffer
+            
+            if (amountReceived < toBePaid) {
+                System.out.println("Insufficient amount. Payment failed.");
+                return;
             }
             
-            payment = new Cash(loggedInCustomer.getCustomerID(), car.getCarID(), amount); //TODO: Get user input
-            */
-        } else if (paymentMethod == 2) {
+            System.out.println("Change returned: RM " + (amountReceived - toBePaid));
+            // create Cash object
+            finalizedPayment = new Cash(pendingBill.getDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                        "Processed", loggedInCustomer.getCustomerID(), targetCarID, 
+                                        pendingBill.getRentDuration(), true, amountReceived);
+
+        } else if (paymentMethod == 2) { 
+            // --- CARD ---
             System.out.print("Enter Card Number: ");
             String cardNo = input.nextLine();
             System.out.print("Enter CVV: ");
@@ -647,9 +741,14 @@ public class TestCarRentalSystem{
             String expiryMonth = input.nextLine();
             System.out.print("Enter Expiry Year: ");
             String expiryYear = input.nextLine();
-            //payment = new Card(loggedInCustomer.getCustomerID(), car.getCarID(), cardNo, CCV, nameOnCard, expiryMonth, expiryYear); //TODO: Get user input
-           // sys.getPayment()[Payment.getPaymentCounter() - 1] = payment; // Add
-        } else if (paymentMethod == 3) {
+            
+            finalizedPayment = new Card(pendingBill.getDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                        "Processed", loggedInCustomer.getCustomerID(), targetCarID, 
+                                        pendingBill.getRentDuration(), true, 
+                                        cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
+
+        } else if (paymentMethod == 3) { 
+            // --- ONLINE TRANSFER ---
             System.out.print("Enter Account Number: ");
             String accountNumber = input.nextLine();
             System.out.print("Enter Account Name: ");
@@ -658,12 +757,35 @@ public class TestCarRentalSystem{
             String bankName = input.nextLine();
             System.out.print("Enter SWIFT Code: ");
             String swiftCode = input.nextLine();
-           // payment = new OnlineTransfer(loggedInCustomer.getCustomerID(), car.getCarID(), 0, accountNumber, accountName, bankName, swiftCode); //TODO: Get user input
-           // sys.getPayment()[Payment.getPaymentCounter() - 1] = payment; // Add
+            System.out.print("Enter Reference Note: ");
+            String reference = input.nextLine();
+            
+            finalizedPayment = new OnlineTransfer(pendingBill.getDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                    "Processed", loggedInCustomer.getCustomerID(), targetCarID, 
+                                    pendingBill.getRentDuration(), true, 
+                                    accountNumber, accountName, bankName, swiftCode, reference);
         }
-    }//end processPayment
 
-    public static void viewHistory(Customer loggedInCustomer) { //TODO: Check When Data is Present
+        // 
+        if (finalizedPayment != null) {
+            //  PaymentID & DamageCharge
+            finalizedPayment.setPaymentID(pendingBill.getPaymentID());
+            finalizedPayment.setDamageCharge(pendingBill.getDamageCharge());
+            
+            System.out.println("Processing Payment.....");
+            Helper.delay(3);
+            
+            sys.getPayment()[targetIndex] = finalizedPayment; 
+            utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
+            
+            System.out.println("✅ Payment successful! Thank you for using our service.");
+        }
+        
+        System.out.print("\nPress Enter to return to menu... ");
+        input.nextLine();
+    }   
+
+    public static void viewHistory(Customer loggedInCustomer) {
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("             HISTORY RECORD           ");
@@ -685,7 +807,7 @@ public class TestCarRentalSystem{
         System.out.print("\nPress Enter to Exit...   ");
         input.nextLine();  // Wait for user to press Enter
         return;
-    }   
+    } // end of viewHistory
 
 //Staff Login
     public static void staffLogin() {
@@ -794,7 +916,7 @@ public class TestCarRentalSystem{
         Helper.clearScreen();
     }
 
-    public static void inspection(Staff loggedInStaff) { //TODO: Continue the code to make it functional in calculation
+    public static void inspection(Staff loggedInStaff) { 
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("             INSPECTION              ");
@@ -809,42 +931,71 @@ public class TestCarRentalSystem{
                 return;
         } 
 
-        sys.displayRentedCars();
-        System.out.println("Enter Car ID to Inspect: ");
+        sys.displayReturnedCars();
+        System.out.print("Enter Car ID to Inspect: ");
         String inspectedCarID = input.nextLine();
+
         for(int i = 0; i < sys.getCars().length; i++) {
             String carID = sys.getCars()[i].getCarID();
 
             if (carID.equalsIgnoreCase(inspectedCarID)) {
+                Car targetCar = sys.getCars()[i];
+
+                Payment targetPayment = null;
+                for (int j = 0; j < sys.getPayment().length; j++) {
+                    Payment p = sys.getPayment()[j];
+                    if (p != null && p.getCarID() != null && p.getCarID().trim().equalsIgnoreCase(inspectedCarID.trim())) {
+                        targetPayment = p;
+                        break;
+                        }
+                }
+
+                if (targetPayment == null) {
+                    System.out.println("Error: Cannot find an active payment record for this car.");
+                    break; 
+                }
+
                 System.out.println("1. no damage\n2. minor\n3. moderate\n4. major");
-                System.out.println("Enter condition of inspected car: ");
+                System.out.print("Enter condition of inspected car: ");
                 int condition = input.nextInt();
+                input.nextLine(); // clear buffer
+
                 if (condition == 1) {
-                    sys.getCars()[i].setStatus("available");
-                    sys.getPayment()[i].setDamageCharge(sys.getPayment()[i].calculateDamageCharge("no_damage"));
+                    targetCar.setStatus("available");
+                    targetPayment.setDamageCharge(targetPayment.calculateDamageCharge("no_damage"));
                     System.out.println("Car is in good condition. Status set to available.");
 
                 } else if (condition == 2) {
-                    sys.getCars()[i].setStatus("available");
-                    sys.getPayment()[i].setDamageCharge(sys.getPayment()[i].calculateDamageCharge("minor"));
+                    targetCar.setStatus("available");
+                    targetPayment.setDamageCharge(targetPayment.calculateDamageCharge("minor"));
                     System.out.println("Car has minor damages. Status set to available.");
 
                 } else if (condition == 3) {
-                    sys.getCars()[i].setStatus("maintenance");
-                    sys.getPayment()[i].setDamageCharge(sys.getPayment()[i].calculateDamageCharge("moderate"));
+                    targetCar.setStatus("maintenance");
+                    targetPayment.setDamageCharge(targetPayment.calculateDamageCharge("moderate"));
                     System.out.println("Car has moderate damages. Status set to maintenance.");
 
                 } else if (condition == 4) {
-                    sys.getCars()[i].setStatus("maintenance");
-                    sys.getPayment()[i].setDamageCharge(sys.getPayment()[i].calculateDamageCharge("major"));
+                    targetCar.setStatus("maintenance");
+                    targetPayment.setDamageCharge(targetPayment.calculateDamageCharge("major"));
                     System.out.println("Car has major damages. Status set to maintenance.");
 
                 } else {
                     System.out.println("Invalid condition input.");
                 }
+
+                utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
+                utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
+                
+                break; // stop for
             }
         }
+
+        System.out.print("\nPress Enter to return to Home Page...   ");
+        input.nextLine();  // Wait for user to press Enter
     }
+
+    
 
 //Admin Login
  public static void adminLogin() {

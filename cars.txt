@@ -16,17 +16,17 @@ CA0007|KAA 7007|Bezza|Perodua|110.0|5|18000|available|100.0|false|5.0
 ECONOMY
 CA0008|MAB 8008|Almera|Nissan|160.0|5|28000|available|100.0|false|5.4
 ECONOMY
-CA0009|JCD 9009|Yaris|Toyota|190.0|5|12000|unavailable|100.0|true|5.7
+CA0009|JCD 9009|Yaris|Toyota|190.0|5|12000|available|100.0|true|5.7
 ECONOMY
 CA0010|PCE 1010|Jazz|Honda|170.0|5|35000|available|100.0|true|5.8
 SUV
-CA0011|VBH 2011|X70|Proton|280.0|5|8000|unavailable|100.0|true|190
+CA0011|VBH 2011|X70|Proton|280.0|5|8000|available|100.0|true|190
 SUV
-CA0012|WRC 3012|X50|Proton|220.0|5|15000|unavailable|100.0|false|170
+CA0012|WRC 3012|X50|Proton|220.0|5|15000|available|100.0|false|170
 SUV
 CA0013|VCS 4013|CR-V|Honda|350.0|5|25000|available|100.0|false|200
 SUV
-CA0014|BDE 5014|HR-V|Honda|280.0|5|12000|unavailable|90.0|false|185
+CA0014|BDE 5014|HR-V|Honda|280.0|5|12000|available|90.0|false|185
 SUV
 CA0015|AFG 6015|Fortuner|Toyota|450.0|7|40000|available|100.0|true|220
 SUV
@@ -50,7 +50,7 @@ CA0024|BGL 5024|530e|BMW|750.0|5|15000|available|100.0|true|true
 LUXURY
 CA0025|VEM 6025|E250|Mercedes|800.0|5|20000|available|100.0|true|true
 LUXURY
-CA0026|WAM 7026|ES250|Lexus|650.0|5|10000|unavailable|100.0|true|true
+CA0026|WAM 7026|ES250|Lexus|650.0|5|10000|available|100.0|true|true
 LUXURY
 CA0027|PHM 8027|Model 3|Tesla|700.0|5|5000|available|100.0|true|true
 LUXURY
@@ -60,10 +60,10 @@ CA0029|VFN 1029|911|Porsche|1500.0|2|3000|available|100.0|true|false
 LUXURY
 CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true
 ECONOMY
-CA0031|PEN 1234|Civic|Honda|10.0|5|0|pending|100.0|true|100.0
+CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0
 LUXURY
-CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|42341|unavailable|100.0|true|true
+CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|42341|available|100.0|true|true
 LUXURY
-CA0033|PME 2237|Madza MX5|Madza|100.0|5|15000|unavailable|100.0|true|true
+CA0033|PME 2237|Madza MX5|Madza|100.0|5|15000|available|100.0|true|true
 LUXURY
-CA0034|PWN 9331|Astina|Mazda|100.0|5|45215|unavailable|100.0|true|true
+CA0034|PWN 9331|Astina|Mazda|100.0|5|45215|pending|100.0|true|true
