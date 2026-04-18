@@ -262,7 +262,7 @@ public class FileLoader {
 
                 String[] parts = dataLine.split("\\|");
                 // parts[0]=paymentID, [1]=date, [2]=amount, [3]=deposit, [4]=damageCondition,
-                // [5]=customerID, [6]=carID, [7]=rentDuration, [8]=paymentMethod, [9...]=payment details
+                // [5]=customerID, [6]=carID, [7]=rentDuration, [8]=status,  [9]=paymentMethod, [10...]payment details
                 String paymentID = parts[0];
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1]);
                 double amount = Double.parseDouble(parts[2]);
@@ -271,33 +271,34 @@ public class FileLoader {
                 String customerID = parts[5];
                 String carID = parts[6];
                 int rentDuration = Integer.parseInt(parts[7]);
+                boolean status = Boolean.parseBoolean(parts[8]);
                 
                 if (paymentType.equals("CASH")) {
-                    double amountReceived = Double.parseDouble(parts[9]);
+                    double amountReceived = Double.parseDouble(parts[10]);
                     Cash cashPayment = new Cash(paymentID, date, amount, deposit, damageCondition,
-                                                customerID, carID, rentDuration, amountReceived);
+                                                customerID, carID, rentDuration,status, amountReceived);
                     payments[count] = cashPayment;
                     
                 } else if (paymentType.equals("CARD")) {
-                    String cardNo = parts[9];
-                    String CCV = parts[10];
-                    String nameOnCard = parts[11];
-                    String expiryMonth = parts[12];
-                    String expiryYear = parts[13];
+                    String cardNo = parts[10];
+                    String CCV = parts[11];
+                    String nameOnCard = parts[12];
+                    String expiryMonth = parts[13];
+                    String expiryYear = parts[14];
                     Card cardPayment = new Card(paymentID, date, amount, deposit, damageCondition,
-                                                customerID, carID, rentDuration,
+                                                customerID, carID, rentDuration, status,
                                                 cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
                     payments[count] = cardPayment;
                     
                 } else if (paymentType.equals("ONLINETRANSFER")) {
-                    String accountNumber = parts[9];
-                    String accountName = parts[10];
-                    String bankName = parts[11];
-                    String swiftCode = parts[12];
-                    String reference = parts[13];
+                    String accountNumber = parts[10];
+                    String accountName = parts[11];
+                    String bankName = parts[12];
+                    String swiftCode = parts[13];
+                    String reference = parts[14];
                     OnlineTransfer transferPayment = new OnlineTransfer(paymentID, date, amount, deposit,
                                                                         damageCondition, customerID,
-                                                                        carID, rentDuration,
+                                                                        carID, rentDuration, status,
                                                                         accountNumber, accountName,
                                                                         bankName, swiftCode, reference);
                     payments[count] = transferPayment;
@@ -306,7 +307,7 @@ public class FileLoader {
             }
             
             // Set the payment counter to the loaded count
-            Payment.setPaymentCount(totalPayments);
+            Payment.setPaymentCounter(totalPayments);
             
         } catch (IOException e) {
             System.out.println("Error reading payment file: " + e.getMessage());

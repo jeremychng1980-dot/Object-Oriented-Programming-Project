@@ -172,6 +172,7 @@ public class FileUploader {
                     writer.print(p.getDamageCharge() + "|");
                     writer.print(p.getCustomerID() + "|");
                     writer.print(p.getCarID() + "|");
+                    writer.print(p.getStatus() + "|");
 
                     // Write payment type and rent duration first
                     if (p instanceof Cash) {

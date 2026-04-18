@@ -109,7 +109,7 @@ public class CarRentalSystem {
 
     public void displayAvailableCars() {
         System.out.println("\n=====================================");
-        System.out.println("           View Available Vehicles           ");
+        System.out.println("       View Available Vehicles        ");
         System.out.println("=====================================");
         System.out.println("\n==========================================================================");
         System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
@@ -157,9 +157,15 @@ public class CarRentalSystem {
             }
     }
 
-    public void calculateRentalFee(Car targetCar, int rentDays) {
+    public double calculateRentalFee(Car targetCar, int rentDays) {
         double rentalFee = targetCar.calcRentalFee(rentDays);
-        System.out.println("\nThe rental fee for " + rentDays + " day(s) is: RM " + String.format("%.2f", rentalFee));
+        return rentalFee;
+    }
+
+    public void reservationRecord(Customer customer, Car car, double rentalFee, int rentDays) {
+        Payment newPay = new Payment(customer.getCustomerID(), car.getCarID(),rentalFee, rentDays);
+        int tempCounter = Payment.getPaymentCounter() + 1;
+        payments[tempCounter - 1] = newPay;
     }
 
 }// End of CarRentalSystem

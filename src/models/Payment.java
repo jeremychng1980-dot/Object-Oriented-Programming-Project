@@ -27,14 +27,15 @@ public class Payment {
     //Referenced characteristics
     private String customerID; //Who paid
     private String carID;      //Which car the payment is for
+    private boolean status;  // true represent has completed the payment, false --> not yet
 
     // ================= Constructors =================
     public Payment() {
-        this(generatePaymentID(), new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, 0);
+        this(" ", new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, 0, false);
     }
 
     public Payment(String paymentID, Date date, double amount, double deposit, String damageCondition, 
-        String customerID, String carID, int rentDuration) {
+        String customerID, String carID, int rentDuration, boolean status) {
         this.paymentID = generatePaymentID();
         date = new Date();
         this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
@@ -43,6 +44,7 @@ public class Payment {
         this.customerID = customerID;
         this.carID = carID;
         this.rentDuration = rentDuration;
+        this.status = status;
     }
 
     public Payment(String customerID, String carID, String damageCondition) {
@@ -54,6 +56,7 @@ public class Payment {
         this.customerID = customerID;
         this.carID = carID;
         this.rentDuration = 0; // can be set later when rental duration is known
+        this.status = false;
     }
 
     public Payment(Date date, double amount) {
@@ -70,6 +73,18 @@ public class Payment {
         this.customerID = customerID;
         this.carID = carID;
         this.rentDuration = rentDuration; // can be set later when rental duration is known
+        this.status = false;
+    }
+
+    public Payment(String customerID, String carID, double amount, int rentDuration) {
+        date = new Date();
+        this.amount = amount;
+        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.damageCharge = calculateDamageCharge("NO_DAMAGE");
+        this.customerID = customerID;
+        this.carID = carID;
+        this.rentDuration = rentDuration;
+        this.status = false;
     }
 
     public Payment(String customerID, String carID) {
@@ -121,20 +136,15 @@ public class Payment {
         return carID;
     }
 
-    public static int getPaymentCount() {
-        return paymentCounter;
-    }
-
-    public static void setPaymentCount(int count) {
-        paymentCounter = count;
-    }
-
     public int getRentDuration() {
         return rentDuration;
     }
 
+    public boolean getStatus(){
+        return status;
+    }
 
-
+    // ================= Setters =================
     public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
@@ -143,8 +153,10 @@ public class Payment {
         this.carID = carID;
     }
 
+    public void setStatus(boolean status){
+        this.status = status;
+    }
 
-    // ================= Setters =================
     public void setDate(Date date) {
         this.date = date;
     }

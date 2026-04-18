@@ -9,13 +9,13 @@ public class Cash extends Payment{
 //methods
     // no-args constructor
     public Cash() {
-        this("", null, 0.0, 0.0, "", "", "", 0, 0.0);
+        this("", null, 0.0, 0.0, "", "", "", 0, false, 0.0);
     }
     
     // constructor with args
     public Cash(String paymentID, Date date, double amount, double deposit, String damageCondition, 
-        String customerID, String carID, int rentDuration, double amountReceived){
-        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration);
+        String customerID, String carID, int rentDuration, boolean status, double amountReceived){
+        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration, status);
         this.amountReceived = amountReceived;
     }
 

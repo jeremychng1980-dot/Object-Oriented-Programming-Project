@@ -11,8 +11,6 @@ import java.io.*;
 public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
     static User[] users = new User[100]; //User polymorphic array
-    static Payment[] payments = new Payment[100]; //Payment polymorphic array
-    static Car[] cars = new Car[100]; //Car polymorphic array
     static CarRentalSystem sys = new CarRentalSystem(); 
 
     public static void main(String[] args) {
@@ -319,10 +317,10 @@ public class TestCarRentalSystem{
                 updateLicenseExpiryDate(loggedInCustomer);
                 break;
             case 3: 
-                rentVehicle(loggedInCustomer, sys.getCars());
+                rentVehicle(loggedInCustomer);
                 break;
             case 4:
-                checkout(loggedInCustomer, null, null);
+                checkout(loggedInCustomer);
                 break;
             case 5:
                 processReturn(loggedInCustomer, null, null);
@@ -424,7 +422,7 @@ public class TestCarRentalSystem{
 }      
 
 //Reservation (rentVehicle)
-    public static void rentVehicle(Customer customer, Car[] cars){ 
+    public static void rentVehicle(Customer customer){ 
         if (customer.getLicense().isExpired()) {
             System.out.println("\nYour license is expired. You cannot rent a vehicle until you update your license expiry date.");
             System.out.println("Press Enter to return to the menu...");
@@ -448,31 +446,38 @@ public class TestCarRentalSystem{
             return;
         }
 
-        System.out.print("\n\nEnter the Vehicle's Car ID: ");
+        System.out.print("Enter the Vehicle's Car ID: ");
         String carID = input.nextLine();
+        System.out.print("Enter the days you want to rent: ");
+        int rentDays = input.nextInt();
 
         Car targetCar = sys.findCarById(carID);
-        
+
+
         if (targetCar == null) {
             System.out.println("Cannot find the " + carID + " Car.");
         } 
         else {
+            double rentalFee = sys.calculateRentalFee(targetCar, rentDays);
+            System.out.println("\nThe rental fee for " + rentDays + " day(s) is: RM " + String.format("%.2f", rentalFee));
+
             sys.changeStatus(targetCar); // change Status from available to unavailable, and also save the change to file
-            
+            sys.reservationRecord(customer, targetCar, rentalFee, rentDays);
         }
              
         System.out.println("Press enter to return to Home page...");
         input.nextLine();
 
+
     } // end rentVehicle
 
-    public static void checkout(Customer loggedInCustomer, Car car, Payment payments){
+    public static void checkout(Customer loggedInCustomer){
         
         System.out.print("\n=====================================");
         System.out.print("\n             Check  Out              ");
         System.out.print("\n=====================================");
 
-        System.out.print("Press Enter to continue to login or '0' to exit... ");
+        System.out.print("\nPress Enter to continue to login or '0' to exit... ");
         String choice = input.nextLine();//ask user if they want to continue to login or exit
         System.out.println("\n");
         // Check if user wants to exit
@@ -482,17 +487,54 @@ public class TestCarRentalSystem{
         }
 
         sys.displayAvailableCars();
+
+        System.out.println("\n=== Your Pending Reservations ===");
+        boolean hasReservation = false;
+        // if customer has reserved car then display the details
+        for (int i = 0; i < sys.getPayment().length; i++) {
+
+                Payment transaction = sys.getPayment()[i];
+            
+
+            if (transaction != null && transaction.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && transaction.getDeposit() == 0) {
+                hasReservation = true;
+                Car bookedCar = sys.findCarById(transaction.getCarID());
+                if (bookedCar != null) {
+                    System.out.println(bookedCar.toString());
+                    System.out.println("[RESERVED] Car ID: " + transaction.getCarID() + " | Duration: " + transaction.getRentDuration() + " days | Est. Fee: RM " + transaction.getAmount());
+                    System.out.println("Are you want to check out this car or '0' to exit.");
+                        choice = input.nextLine().trim();
+                        if (choice.equals("0")) {
+                        Helper.clearScreen();
+                        return;
+                            }
+                    System.out.println("Please pay the deposit of RM " + (transaction.getAmount() / 5) ); // receive deposit
+                    double deposit = input.nextDouble();
+                    transaction.setDeposit(deposit);
+                    sys.getPayment()[Payment.getPaymentCounter() - 1] = transaction;
+                    utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
+                    System.out.println("You have successfully checked out the " + bookedCar.getCarID() + " Vehicle.");
+                    }
+                }
+            
+        }// end of for
+        if (!hasReservation) 
+        System.out.println("You have no pending reservations. You can select an available car to rent now.");
+        System.out.println("=================================\n");
+        
+
         System.out.print("Enter the Vehicle's Car ID: ");
         String carId = input.nextLine();
         Car targetCar = sys.findCarById(carId);
         
+
         if (targetCar == null) {
             System.out.println("Cannot find the " + carId + " Car.");
-        } else if (targetCar.getStatus().equalsIgnoreCase("available")) { // if not available then can check out
-                int rentDuration = Helper.getValidatedInt(input, "Please enter the amount of days you want to rent the vehicle: ", 1, Integer.MAX_VALUE);
+        } else if (targetCar.getStatus().equalsIgnoreCase("available")) { // if available then can check out
+                int rentDuration = Helper.getValidatedInt(input, "Please enter the amount of days you want to rent the vehicle: ", 1, 30);
 
                 Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), rentDuration); // create a new payment object with customer ID and car ID, amount can be calculated later in processPayment
-                sys.getPayment()[Payment.getPaymentCount() - 1] = transaction; // Add to the payments array
+                sys.getPayment()[Payment.getPaymentCounter() - 1] = transaction; // Add to the payments array
                 utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment()); //save the payment record
                 System.out.println("You have successfully checked out the " + targetCar.getCarID() + " Vehicle."); //FIXME: Fix this error
         }
@@ -541,6 +583,7 @@ public class TestCarRentalSystem{
             payment = new Cash(loggedInCustomer.getCustomerID(), car.getCarID(), amount); //TODO: Get user input
         } else if (paymentMethod == 2) {
             System.out.print("Enter Card Number: ");
+            String cardNo = input.nextLine();
             //FIXME: int cardNo = Helper.getValidatedInt(input, "Please enter a valid card number: ", 1000000000, 9999999999L);
             System.out.print("Enter CVV: ");
             String CCV = input.nextLine();
@@ -551,7 +594,7 @@ public class TestCarRentalSystem{
             System.out.print("Enter Expiry Year: ");
             String expiryYear = input.nextLine();
             payment = new Card(loggedInCustomer.getCustomerID(), car.getCarID(), cardNo, CCV, nameOnCard, expiryMonth, expiryYear); //TODO: Get user input
-            sys.getPayment()[Payment.getPaymentCount() - 1] = payment; // Add
+            sys.getPayment()[Payment.getPaymentCounter() - 1] = payment; // Add
         } else if (paymentMethod == 3) {
             System.out.print("Enter Account Number: ");
             String accountNumber = input.nextLine();
@@ -562,7 +605,7 @@ public class TestCarRentalSystem{
             System.out.print("Enter SWIFT Code: ");
             String swiftCode = input.nextLine();
             payment = new OnlineTransfer(loggedInCustomer.getCustomerID(), car.getCarID(), 0, accountNumber, accountName, bankName, swiftCode); //TODO: Get user input
-            sys.getPayment()[Payment.getPaymentCount() - 1] = payment; // Add
+            sys.getPayment()[Payment.getPaymentCounter() - 1] = payment; // Add
         }
     }//end processPayment
 

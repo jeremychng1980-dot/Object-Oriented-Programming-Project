@@ -11,14 +11,14 @@ public class Card extends Payment {
 //methods
     // no-args constructor
     public Card() {
-        this("", null, 0.0, 0.0, "", "", "", 0, "", "", "", "", "");
+        this("", null, 0.0, 0.0, "", "", "", 0, false, "", "", "", "", "");
     }
     
     // constructor with args
     public Card(String paymentID, Date date, double amount, double deposit, String damageCondition, 
-        String customerID, String carID, int rentDuration,String cardNo, String CCV, 
+        String customerID, String carID, int rentDuration,boolean status, String cardNo, String CCV, 
         String nameOnCard, String expiryMonth, String expiryYear) {
-        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration);
+        super(paymentID, date, amount, deposit, damageCondition, customerID, carID, rentDuration, status);
         this.cardNo = cardNo;
         this.CCV = CCV;
         this.nameOnCard = nameOnCard;
@@ -26,7 +26,7 @@ public class Card extends Payment {
         this.expiryYear = expiryYear;
     }
 
-    public Card(String customerID, String carID, int cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) { //TODO
+    public Card(String customerID, String carID, String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) { //TODO
         super(customerID, carID);
         this.cardNo = ""; // can be set later when payment is processed
         this.CCV = ""; // can be set later when payment is processed
