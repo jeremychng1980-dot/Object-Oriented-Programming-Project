@@ -820,7 +820,7 @@ public static void checkout(Customer loggedInCustomer){
     input.nextLine();
 }
 
-    public static void processPayment(Customer loggedInCustomer){ 
+    public static void processPayment(Customer loggedInCustomer){  //TODO: input validation, return checkout and reserve date
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("\n             Payment                ");

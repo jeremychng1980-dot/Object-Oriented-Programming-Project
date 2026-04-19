@@ -40,7 +40,7 @@ CA0019|BFF 1019|X-Trail|Nissan|300.0|7|28000|unavailable|100.0|false|210|0|0.0
 SUV
 CA0020|VCG 2020|Ativa|Perodua|150.0|5|10000|unavailable|100.0|false|200|0|0.0
 LUXURY
-CA0021|W 2021 B|320i|BMW|550.0|5|5000|available|100.0|true|true|0|0.0
+CA0021|W 2021 B|320i|BMW|550.0|5|5000|maintenance|100.0|true|true|1|55000.0
 LUXURY
 CA0022|VCH 3022|C200|Mercedes|580.0|5|8000|available|100.0|true|true|0|0.0
 LUXURY
