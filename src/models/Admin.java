@@ -2,7 +2,7 @@ package models;
 
 public class Admin extends User {
    private String adminID;
-    private int adminCount;
+    private static int adminCount;
     
     public Admin() {
        this(" ", " ", " ", ' ', " ");   

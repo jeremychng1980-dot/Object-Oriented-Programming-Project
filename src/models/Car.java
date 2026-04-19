@@ -11,6 +11,8 @@ public abstract class Car{
     private int mileage;
     private String status;
     private double fuelLevel;
+    private int reservationCount;      // Track how many times this car has been reserved/rented
+    private double totalRevenue;
 
     // constructor
 
@@ -29,6 +31,8 @@ public abstract class Car{
         this.mileage = mileage;
         this.status = status;
         this.fuelLevel = fuelLevel;
+        this.reservationCount = 0;      // Initialize to 0
+        this.totalRevenue = 0.0;        // Initialize to 0
         carCount++;
     }
 
@@ -73,6 +77,14 @@ public abstract class Car{
         return Car.carCount;
     }
 
+    public int getReservationCount() {
+    return reservationCount;
+}
+
+    public double getTotalRevenue() {
+    return totalRevenue;
+    }
+
     // setter
     public void setCarID(String carID){
         this.carID = carID;
@@ -92,6 +104,14 @@ public abstract class Car{
 
     public static void setCarCount(int carCount){
         Car.carCount = carCount;
+    }
+
+    public void incrementReservationCount() {
+    this.reservationCount++;
+    }
+
+    public void addRevenue(double amount) {
+    this.totalRevenue += amount;
     }
 
 // other methods

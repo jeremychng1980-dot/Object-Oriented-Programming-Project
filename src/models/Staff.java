@@ -7,7 +7,7 @@ import java.text.ParseException;
 public class Staff extends User {  
     
     private String staffID;
-    private int staffCount;
+    private static int staffCount;
     private Date hireDate;
     
     public Staff() {

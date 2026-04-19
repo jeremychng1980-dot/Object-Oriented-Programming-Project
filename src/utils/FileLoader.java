@@ -173,10 +173,17 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean isHatchback = Boolean.parseBoolean(parts[9]);
                     double fuelEfficiencyPer100KM = Double.parseDouble(parts[10]);
+                    int reservationCount = Integer.parseInt(parts[11]);      // NEW
+                    double totalRevenue = Double.parseDouble(parts[12]);      // NEW
 
                         Economy eco = new Economy(plateNumber, model, brand, dailyRate, seatingCapacity, 
                                                 mileage, status, fuelLevel, isHatchback, fuelEfficiencyPer100KM);
-                        eco.setCarID(carID); 
+                        eco.setCarID(carID);
+                        // Set the loaded values
+                        for (int j = 0; j < reservationCount; j++) {
+                        eco.incrementReservationCount();
+                        }
+                        eco.addRevenue(totalRevenue);
                         cars[count++] = eco; 
 
 
@@ -197,11 +204,16 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean hasLeatherSeats = Boolean.parseBoolean(parts[9]);
                     boolean hasSunroof = Boolean.parseBoolean(parts[10]);
+                    int reservationCount = Integer.parseInt(parts[11]);      // NEW
+                    double totalRevenue = Double.parseDouble(parts[12]);      // NEW
                         Luxury lux = new Luxury(plateNumber, model, brand, dailyRate, seatingCapacity, 
                                                 mileage, status, fuelLevel, hasLeatherSeats, hasSunroof);
-                        lux.setCarID(carID); 
-                        cars[count++] = lux;
-
+                        lux.setCarID(carID);
+                    for (int j = 0; j < reservationCount; j++) {
+                    lux.incrementReservationCount();
+                    }
+                    lux.addRevenue(totalRevenue);
+                    cars[count++] = lux;
                          
                 } else if (carType.equals("SUV")) {
                     String dataline = reader.readLine();
@@ -220,9 +232,15 @@ public class FileLoader {
                     double fuelLevel = Double.parseDouble(parts[8]);
                     boolean fourWheelDrive = Boolean.parseBoolean(parts[9]);
                     int groundClearance = Integer.parseInt(parts[10]);
+                    int reservationCount = Integer.parseInt(parts[11]);      // NEW
+                    double totalRevenue = Double.parseDouble(parts[12]);      // NEW
                         SUV suv = new SUV(plateNumber, model, brand, dailyRate, seatingCapacity, 
                                             mileage, status, fuelLevel, fourWheelDrive, groundClearance);
-                        suv.setCarID(carID); 
+                        suv.setCarID(carID);
+                        for (int j = 0; j < reservationCount; j++) {
+                        suv.incrementReservationCount();
+                        }
+                        suv.addRevenue(totalRevenue);
                         cars[count++] = suv; 
                 }
             }// end of for loop

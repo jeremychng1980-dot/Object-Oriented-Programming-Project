@@ -76,80 +76,83 @@ public class FileUploader {
     }
 
     public static void saveCarsToFile(String filename, Car[] cars) {
-        PrintWriter writer = null;
-        
-        try {
-            writer = new PrintWriter(new FileWriter(filename));
+    PrintWriter writer = null;
+    
+    try {
+        writer = new PrintWriter(new FileWriter(filename));
 
-            int actualCount = 0;
-            for (int i = 0; i < cars.length; i++) {
-                if (cars[i] != null) actualCount++;
-            }
-
-            writer.println(actualCount);
-            for (int i = 0; i < cars.length; i++) {
-                Car c = cars[i];
-                if (c != null) {
-                    if (cars[i] instanceof Economy) {
-                        writer.println("ECONOMY");
-                        Economy e = (Economy) c;
-                        // Format: carID|plateNumber|model|brand|dailyRate|seatingCapacity|mileage|status|fuelLevel|isHatchback|fuelEfficiencyPer100KM
-                        writer.print(e.getCarID() + "|");
-                        writer.print(e.getPlateNumber() + "|");
-                        writer.print(e.getModel() + "|");
-                        writer.print(e.getBrand() + "|");
-                        writer.print(e.getDailyRate() + "|");
-                        writer.print(e.getSeatingCapacity() + "|");
-                        writer.print(e.getMileage() + "|");
-                        writer.print(e.getStatus() + "|");
-                        writer.print(e.getFuelLevel() + "|");
-                        writer.print(e.isHatchback() + "|");
-                        writer.print(e.getFuelEfficiencyPer100KM());
-                        writer.println();
-                    } else if (cars[i] instanceof Luxury) {
-                        writer.println("LUXURY");
-                        Luxury l = (Luxury) c;
-                        // Format: carID|plateNumber|model|brand|dailyRate|seatingCapacity|mileage|status|fuelLevel|hasLeatherSeats|hasSunroof
-                        writer.print(l.getCarID() + "|");
-                        writer.print(l.getPlateNumber() + "|");
-                        writer.print(l.getModel() + "|");
-                        writer.print(l.getBrand() + "|");
-                        writer.print(l.getDailyRate() + "|");
-                        writer.print(l.getSeatingCapacity() + "|");
-                        writer.print(l.getMileage() + "|");
-                        writer.print(l.getStatus() + "|");
-                        writer.print(l.getFuelLevel() + "|");
-                        writer.print(l.isHasLeatherSeats() + "|");
-                        writer.print(l.isHasSunroof());
-                        writer.println();
-                    } else if (cars[i] instanceof SUV) {
-                        writer.println("SUV");
-                        SUV s = (SUV) c;
-                        // Format: carID|plateNumber|model|brand|dailyRate|seatingCapacity|mileage|status|fuelLevel|fourWheelDrive|groundClearance
-                        writer.print(s.getCarID() + "|");
-                        writer.print(s.getPlateNumber() + "|");
-                        writer.print(s.getModel() + "|");
-                        writer.print(s.getBrand() + "|");
-                        writer.print(s.getDailyRate() + "|");
-                        writer.print(s.getSeatingCapacity() + "|");
-                        writer.print(s.getMileage() + "|");
-                        writer.print(s.getStatus() + "|");
-                        writer.print(s.getFuelLevel() + "|");
-                        writer.print(s.isFourWheelDrive() + "|");
-                        writer.print(s.getGroundClearance());
-                        writer.println();
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error saving cars to file: ");
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
+        int actualCount = 0;
+        for (int i = 0; i < cars.length; i++) {
+            if (cars[i] != null) actualCount++;
         }
 
+        writer.println(actualCount);
+        for (int i = 0; i < cars.length; i++) {
+            Car c = cars[i];
+            if (c != null) {
+                if (cars[i] instanceof Economy) {
+                    writer.println("ECONOMY");
+                    Economy e = (Economy) c;
+                    // ADD reservationCount and totalRevenue at the end
+                    writer.print(e.getCarID() + "|");
+                    writer.print(e.getPlateNumber() + "|");
+                    writer.print(e.getModel() + "|");
+                    writer.print(e.getBrand() + "|");
+                    writer.print(e.getDailyRate() + "|");
+                    writer.print(e.getSeatingCapacity() + "|");
+                    writer.print(e.getMileage() + "|");
+                    writer.print(e.getStatus() + "|");
+                    writer.print(e.getFuelLevel() + "|");
+                    writer.print(e.isHatchback() + "|");
+                    writer.print(e.getFuelEfficiencyPer100KM() + "|");
+                    writer.print(e.getReservationCount() + "|");      // NEW
+                    writer.print(e.getTotalRevenue());                // NEW
+                    writer.println();
+                } else if (cars[i] instanceof Luxury) {
+                    writer.println("LUXURY");
+                    Luxury l = (Luxury) c;
+                    writer.print(l.getCarID() + "|");
+                    writer.print(l.getPlateNumber() + "|");
+                    writer.print(l.getModel() + "|");
+                    writer.print(l.getBrand() + "|");
+                    writer.print(l.getDailyRate() + "|");
+                    writer.print(l.getSeatingCapacity() + "|");
+                    writer.print(l.getMileage() + "|");
+                    writer.print(l.getStatus() + "|");
+                    writer.print(l.getFuelLevel() + "|");
+                    writer.print(l.isHasLeatherSeats() + "|");
+                    writer.print(l.isHasSunroof() + "|");
+                    writer.print(l.getReservationCount() + "|");      // NEW
+                    writer.print(l.getTotalRevenue());                // NEW
+                    writer.println();
+                } else if (cars[i] instanceof SUV) {
+                    writer.println("SUV");
+                    SUV s = (SUV) c;
+                    writer.print(s.getCarID() + "|");
+                    writer.print(s.getPlateNumber() + "|");
+                    writer.print(s.getModel() + "|");
+                    writer.print(s.getBrand() + "|");
+                    writer.print(s.getDailyRate() + "|");
+                    writer.print(s.getSeatingCapacity() + "|");
+                    writer.print(s.getMileage() + "|");
+                    writer.print(s.getStatus() + "|");
+                    writer.print(s.getFuelLevel() + "|");
+                    writer.print(s.isFourWheelDrive() + "|");
+                    writer.print(s.getGroundClearance() + "|");
+                    writer.print(s.getReservationCount() + "|");      // NEW
+                    writer.print(s.getTotalRevenue());                // NEW
+                    writer.println();
+                }
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Error saving cars to file: ");
+    } finally {
+        if (writer != null) {
+            writer.close();
+        }
     }
+}
 
 
     public static void savePaymentsToFile(String filename, Payment[] payments) {
