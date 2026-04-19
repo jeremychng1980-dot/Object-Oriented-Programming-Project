@@ -104,7 +104,10 @@ public class Customer extends User {
     public boolean equals(Object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    
+    // Must be a Customer (not just any User)
+    if (!(obj instanceof Customer)) return false;
+    
     Customer other = (Customer) obj;
     return this.custID.equals(other.custID);
 }
