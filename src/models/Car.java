@@ -117,11 +117,13 @@ public abstract class Car{
 // other methods
 	public abstract double calcRentalFee(int day);
 
-	public String toString(){
-		return String.format("%s |  %s | %s %s |  %.2f |  %d |  %d  | %s |  %.1f%%", 
-                carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelLevel);
+    public String toString(){
+		String fuelStr = String.format("%.1f%%", fuelLevel);
+        return String.format("%-10s | %-10s | %-12s | %-12s | %-13.2f | %-7d | %-10d | %-11s | %-8s |", 
+            carID, plateNumber, brand, model, dailyRate, seatingCapacity, mileage, status, fuelStr);
 	}
-    
+
+
     public boolean equals(Object o){ 
 		Car c = (Car)o;
 	if(c instanceof Car){ // prevent tuntime error : ClassCastException

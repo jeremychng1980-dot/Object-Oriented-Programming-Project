@@ -1,7 +1,5 @@
 package models;
 
-import utils.Helper;
-
 public class CarRentalSystem {
     private Car[] cars;
     private Customer[] customers;
@@ -72,8 +70,9 @@ public class CarRentalSystem {
         System.out.println("           View All Vehicles           ");
         System.out.println("=====================================");
         System.out.println("\n==========================================================================");
-        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
-        System.out.println("--------------------------------------------------------------------------");
+        System.out.println(String.format("%-10s | %-10s | %-12s | %-12s | %-13s | %-7s | %-10s | %-11s | %-8s |", 
+        "Car ID", "Plate", "Brand", "Model", "DailyRate(RM)", "Seats", "Mileage(KM)", "Status", "Fuel"));
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
 
         if (Car.getCarCount() == 0) {
             System.out.println("                     [ Currently no available vehicle record ]                      ");
@@ -94,8 +93,9 @@ public class CarRentalSystem {
         System.out.println("           View Rented Vehicles           ");
         System.out.println("=====================================");
         System.out.println("\n==========================================================================");
-        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
-        System.out.println("--------------------------------------------------------------------------");
+        System.out.println(String.format("%-10s | %-10s | %-12s | %-12s | %-13s | %-7s | %-10s | %-11s | %-8s |", 
+        "Car ID", "Plate", "Brand", "Model", "DailyRate(RM)", "Seats", "Mileage(KM)", "Status", "Fuel"));
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
 
         boolean hasReturnedCars = false;
         for (int i = 0; i < Car.getCarCount(); i++) {
@@ -116,9 +116,9 @@ public class CarRentalSystem {
         System.out.println("       View Available Vehicles        ");
         System.out.println("=====================================");
         System.out.println("\n==========================================================================");
-        System.out.println("CarID       |Plate      |Brand      |Model      |DailyRate(RM)|Seats      |Mileage KM |Status     |Fuel       |");
-        System.out.println("--------------------------------------------------------------------------");
-
+        System.out.println(String.format("%-10s | %-10s | %-12s | %-12s | %-13s | %-7s | %-10s | %-11s | %-8s |", 
+        "Car ID", "Plate", "Brand", "Model", "DailyRate(RM)", "Seats", "Mileage(KM)", "Status", "Fuel"));
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
         boolean hasAvailableCars = false;
         for (int i = 0; i < Car.getCarCount(); i++) {
             if (cars[i] != null && cars[i].getStatus().equalsIgnoreCase("available")) {

@@ -4,7 +4,7 @@ CA0001|PHH 1001|Myvi|Perodua|100.0|5|12000|available|100.0|true|6.2|0|0.0
 ECONOMY
 CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|available|100.0|true|5.5|0|0.0
 ECONOMY
-CA0003|SAB 3003|Saga|Proton|90.0|5|45000|available|85.0|false|6.7|0|0.0
+CA0003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7|0|0.0
 ECONOMY
 CA0004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4|0|0.0
 ECONOMY
@@ -38,13 +38,13 @@ CA0018|WES 9018|Tiguan|Volkswagen|380.0|5|15000|available|100.0|false|191|0|0.0
 SUV
 CA0019|BFF 1019|X-Trail|Nissan|300.0|7|28000|available|100.0|false|210|0|0.0
 SUV
-CA0020|VCG 2020|Ativa|Perodua|150.0|5|10000|available|100.0|false|200|0|0.0
+CA0020|VCG 2020|Ativa|Perodua|150.0|5|10000|maintenance|100.0|false|200|2|48400.0
 LUXURY
 CA0021|W 2021 B|320i|BMW|550.0|5|5000|available|100.0|true|true|0|0.0
 LUXURY
 CA0022|VCH 3022|C200|Mercedes|580.0|5|8000|available|100.0|true|true|0|0.0
 LUXURY
-CA0023|PDK 4023|A4|Audi|500.0|5|12000|available|100.0|true|false|0|0.0
+CA0023|PDK 4023|A4|Audi|500.0|5|12000|unavailable|100.0|true|false|1|20700.0
 LUXURY
 CA0024|BGL 5024|530e|BMW|750.0|5|15000|available|100.0|true|true|0|0.0
 LUXURY

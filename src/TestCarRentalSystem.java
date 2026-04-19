@@ -2,11 +2,8 @@ import models.*;
 import utils.Helper;
 
 import java.util.Scanner;
-import java.util.InputMismatchException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.io.*;
 
 public class TestCarRentalSystem{
     static Scanner input = new Scanner(System.in); 
@@ -975,6 +972,19 @@ public static void checkout(Customer loggedInCustomer){
         System.out.println("\n             Payment                ");
         System.out.println("\n=====================================");
 
+        // Declarations
+        String cardNo = "";
+        String CCV = "";
+        String nameOnCard = "";
+        int expiryMonth = 0;
+        int expiryYear = 0;
+
+        String accountNumber = "";
+        String accountName = ""; 
+        String bankName = ""; 
+        String swiftCode = ""; 
+        String reference = "";
+
         // payment status if false represent not pay amount yet
         System.out.println("\n====== Your Pending Bills ======");
 
@@ -1092,12 +1102,10 @@ public static void checkout(Customer loggedInCustomer){
             return;
         }
 
-
         double toBePaid = pendingBill.getAmount() 
                         + pendingBill.getDamageCharge() 
                         - pendingBill.getDeposit();
 
-                        
         // select payment method
         System.out.println("\nTotal Amount to be paid: RM " + toBePaid);
         System.out.println("Enter way to pay (1: Cash, 2: Card, 3: Online Transfer, 0: Exit)");
@@ -1126,52 +1134,102 @@ public static void checkout(Customer loggedInCustomer){
             System.out.println(finalizedPayment.getPaymentDetails());
 
         } else if (paymentMethod == 2) { 
-            // --- CARD ---
-            String cardNo, CCV, nameOnCard;
-            int expiryMonth, expiryYear;
-
-            while (true) {
+            // ===== CARD =====
+        // CARD NUMBER
+        boolean cardValid = false;
+        while (!cardValid) {
+            try {
                 System.out.print("Enter Card Number: ");
                 cardNo = input.nextLine();
+
                 if (!Payment.isValidCardNumber(cardNo)) {
-                    System.out.println("Invalid card number (must be 16 digits).");
-                    continue;
+                    throw new IllegalArgumentException("Invalid card number (must be 16 digits).");
                 }
 
+                cardValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // CCV
+        boolean ccvValid = false;
+        while (!ccvValid) {
+            try {
                 System.out.print("Enter CCV: ");
                 CCV = input.nextLine();
+
                 if (!Payment.isValidCCV(CCV)) {
-                    System.out.println("Invalid CCV (3 or 4 digits).");
-                    continue;
+                    throw new IllegalArgumentException("Invalid CCV (3 or 4 digits).");
                 }
 
+                ccvValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // NAME ON CARD
+        boolean nameValid = false;
+        while (!nameValid) {
+            try {
                 System.out.print("Enter Name on Card: ");
                 nameOnCard = input.nextLine();
+
                 if (!Payment.isValidName(nameOnCard)) {
-                    System.out.println("Invalid name.");
-                    continue;
+                    throw new IllegalArgumentException("Invalid name.");
                 }
 
+                nameValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // EXPIRY MONTH
+        boolean monthValid = false;
+        while (!monthValid) {
+            try {
                 System.out.print("Enter Expiry Month: ");
                 expiryMonth = input.nextInt();
+                input.nextLine();
+
                 if (!Payment.isValidMonth(expiryMonth)) {
-                    System.out.println("Invalid month (1–12).");
-                    continue;
+                    throw new IllegalArgumentException("Invalid month (1–12).");
                 }
 
+                monthValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // EXPIRY YEAR
+        boolean yearValid = false;
+        while (!yearValid) {
+            try {
                 System.out.print("Enter Expiry Year: ");
                 expiryYear = input.nextInt();
+                input.nextLine();
+
                 if (!Payment.isValidYear(expiryYear)) {
-                    System.out.println("Invalid year.");
-                    continue;
+                    throw new IllegalArgumentException("Invalid year.");
                 }
 
                 if (!Payment.isCardNotExpired(expiryMonth, expiryYear)) {
-                    System.out.println("Card is expired.");
-                    continue;
+                    throw new IllegalArgumentException("Card is expired.");
                 }
-                break;
-            }//end of card validation
+
+                yearValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
 
             finalizedPayment = new Card(
                 pendingBill.getReserveDate(),
@@ -1187,38 +1245,115 @@ public static void checkout(Customer loggedInCustomer){
             System.out.println(finalizedPayment.getPaymentDetails());
 
         } else if (paymentMethod == 3) { 
-                // --- ONLINE TRANSFER ---
-                System.out.print("Enter Account Number: ");
-                String accountNumber = input.nextLine();
-                System.out.print("Enter Account Name: ");
-                String accountName = input.nextLine();
-                System.out.print("Enter Bank Name: ");
-                String bankName = input.nextLine();
-                System.out.print("Enter SWIFT Code: ");
-                String swiftCode = input.nextLine();
-                System.out.print("Enter Reference Note: ");
-                String reference = input.nextLine();
-                
-                finalizedPayment = new OnlineTransfer(pendingBill.getReserveDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
-                                        "NO_DAMAGE", loggedInCustomer.getCustomerID(), targetCarID, 
-                                        pendingBill.getRentDuration(), true, 
-                                        accountNumber, accountName, bankName, swiftCode, reference);
-                System.out.println(finalizedPayment.getPaymentDetails());
-            }
+        // ===== ONLINE TRANSFER =====
 
-        if (finalizedPayment != null) {
-            finalizedPayment.setPaymentID(pendingBill.getPaymentID());
-            finalizedPayment.setDamageCharge(pendingBill.getDamageCharge());
-            finalizedPayment.setCheckOutDate(pendingBill.getCheckOutDate());
-            finalizedPayment.setReturnDate(pendingBill.getReturnDate());
-            
-            System.out.println("Processing Payment.....");
-            Helper.delay(3);
-            
-            sys.getPayment()[targetIndex] = finalizedPayment; 
-            utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
-            
-            System.out.println("Payment successful! Thank you for using our service.");
+        // ACCOUNT NUMBER
+        boolean accountValid = false;
+        while (!accountValid) {
+            try {
+                System.out.print("Enter Account Number: ");
+                accountNumber = input.nextLine();
+
+                if (!Payment.isValidAccountNumber(accountNumber)) {
+                    throw new IllegalArgumentException("Invalid account number (8–20 digits).");
+                }
+
+                accountValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // ACCOUNT NAME
+        boolean accountNameValid = false;
+        while (!accountNameValid) {
+            try {
+                System.out.print("Enter Account Name: ");
+                accountName = input.nextLine();
+
+                if (!Payment.isValidAccountName(accountName)) {
+                    throw new IllegalArgumentException("Invalid account name.");
+                }
+
+                accountNameValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // BANK NAME
+        boolean bankValid = false;
+        while (!bankValid) {
+            try {
+                System.out.print("Enter Bank Name: ");
+                bankName = input.nextLine();
+
+                if (!Payment.isValidBankName(bankName)) {
+                    throw new IllegalArgumentException("Invalid bank name.");
+                }
+
+                bankValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // SWIFT CODE
+        boolean swiftValid = false;
+        while (!swiftValid) {
+            try {
+                System.out.print("Enter SWIFT Code: ");
+                swiftCode = input.nextLine();
+
+                if (!Payment.isValidSWIFTCode(swiftCode)) {
+                    throw new IllegalArgumentException("Invalid SWIFT code (8–11 alphanumeric characters).");
+                }
+
+                swiftValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+        // REFERENCE NOTE
+        boolean referenceValid = false;
+        while (!referenceValid) {
+            try {
+                System.out.print("Enter Reference Note: ");
+                reference = input.nextLine();
+
+                if (!Payment.isValidReference(reference)) {
+                    throw new IllegalArgumentException("Reference cannot be empty.");
+                }
+
+                referenceValid = true;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\nPlease re-enter the details.");
+            }
+        }
+
+            finalizedPayment = new OnlineTransfer(
+                pendingBill.getReserveDate(),
+                pendingBill.getAmount(),
+                pendingBill.getDeposit(),
+                "NO_DAMAGE",
+                loggedInCustomer.getCustomerID(),
+                targetCarID,
+                pendingBill.getRentDuration(),
+                true,
+                accountNumber,
+                accountName,
+                bankName,
+                swiftCode,
+                reference
+            );
+
+            System.out.println(finalizedPayment.getPaymentDetails());
         }
 
         // Add car status here

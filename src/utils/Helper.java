@@ -3,14 +3,11 @@ import models.Admin;
 import models.Customer;
 import models.User;
 import models.Staff;
-import models.License;
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.io.*;
+
+
 
 public class Helper {
 //-------Reusable Clear Screen Method--------

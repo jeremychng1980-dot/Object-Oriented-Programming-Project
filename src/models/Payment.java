@@ -216,18 +216,19 @@ public class Payment {
     }
 
     // ================= Other Methods =================
-    public String paymentToString() {
+    public String toString() {
         return "Payment ID: " + paymentID +
                "\nDate: " + reserveDate +
                "\nAmount: " + amount;
     }
 
     public String getPaymentDetails(){
-                return "Payment ID: " + paymentID +
+        return "Payment ID: " + paymentID +
                "\nDate: " + reserveDate +
                "\nAmount: " + amount;
     }
 
+    //============== Start Card Validation ==============
     public static boolean isValidCardNumber(String cardNo) {
         return cardNo.matches("\\d{16}");
     }
@@ -259,6 +260,30 @@ public class Payment {
             return false;
         }
     }
+    //=============== End Card Validation ===============
+
+    //=============== Start Online Transfer Validation ==================
+    public static boolean isValidAccountNumber(String acc) {
+        return acc != null && acc.matches("\\d{8,20}");
+    }
+
+    public static boolean isValidAccountName(String name) {
+        return name != null && name.matches("[a-zA-Z ]{2,50}");
+    }
+
+    public static boolean isValidBankName(String bank) {
+        return bank != null && bank.matches("[a-zA-Z ]{2,50}");
+    }
+
+    public static boolean isValidSWIFTCode(String swift) {
+        return swift != null && swift.matches("^[A-Za-z0-9]{8,11}$");
+    }
+
+    public static boolean isValidReference(String ref) {
+        return ref != null && !ref.trim().isEmpty();
+    }
+    //=============== End Online Transfer Validation ==================
+
 
         // ================= Date Validation Methods =================
         public static Date validateCheckoutDate(Date reserveDate, String checkoutDateStr) {
