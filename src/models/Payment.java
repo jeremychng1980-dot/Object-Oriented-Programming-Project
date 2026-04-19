@@ -1,7 +1,5 @@
 package models;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Payment {
@@ -31,11 +29,11 @@ public class Payment {
     public Payment(Date date, double amount, double deposit, String damageCondition, 
         String customerID, String carID, int rentDuration, boolean status) {
         this.paymentID = generatePaymentID();
-        this.reserveDate = new Date();
+        this.reserveDate = date;
         this.checkOutDate = null; // default null
         this.returnDate = null;   // default null
-        this.amount = 0.0; 
-        this.deposit = 0.0; 
+        this.amount = amount; 
+        this.deposit = deposit; 
         this.damageCharge = calculateDamageCharge(damageCondition);
         this.customerID = customerID;
         this.carID = carID;
@@ -48,8 +46,8 @@ public class Payment {
         this.reserveDate = new Date();
         this.checkOutDate = null;
         this.returnDate = null;
-        this.amount = 0.0; 
-        this.deposit = 0.0; 
+        /*this.amount = amount; 
+        this.deposit = deposit;*/ 
         this.damageCharge = calculateDamageCharge(damageCondition);
         this.customerID = customerID;
         this.carID = carID;
@@ -216,62 +214,6 @@ public class Payment {
         }
     }
 
-    // ================= Date Validation Methods =================
-      public static Date validateCheckoutDate(Date reserveDate, String checkoutDateStr) {
-        if (checkoutDateStr == null || checkoutDateStr.trim().isEmpty()) {
-            throw new IllegalArgumentException("Checkout date cannot be empty!");
-        }
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        
-        Date checkoutDate;
-        try {
-            checkoutDate = sdf.parse(checkoutDateStr.trim());
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid date format! Please use yyyy-MM-dd");
-        }
-        
-        if (!checkoutDate.after(reserveDate)) {
-            throw new IllegalArgumentException("Checkout date must be after the reservation date!");
-        }
-        
-        return checkoutDate;
-    }
-    
-    public static Date validateReturnDate(String returnDateStr) {
-        if (returnDateStr == null || returnDateStr.trim().isEmpty()) {
-            throw new IllegalArgumentException("Return date cannot be empty!");
-        }
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        
-        try {
-            return sdf.parse(returnDateStr.trim());
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid date format! Please use yyyy-MM-dd");
-        }
-    }
-    
-    public static double calculateLatePenalty(int rentDuration, Date checkoutDate, Date actualReturnDate) {
-        // Calculate expected return date (checkout + rent duration)
-        long oneDayInMillis = 24 * 60 * 60 * 1000;
-        long expectedReturnMillis = checkoutDate.getTime() + (rentDuration * oneDayInMillis);
-        Date expectedReturnDate = new Date(expectedReturnMillis);
-        
-        // If returned on or before expected date, no penalty
-        if (!actualReturnDate.after(expectedReturnDate)) {
-            return 0.0;
-        }
-        
-        // Calculate days late
-        long diffInMillis = actualReturnDate.getTime() - expectedReturnDate.getTime();
-        int daysLate = (int) (diffInMillis / oneDayInMillis);
-        
-        return daysLate * 50.0;
-    }
-
     // ================= Other Methods =================
     public String paymentToString() {
         return "Payment ID: " + paymentID +
@@ -279,6 +221,36 @@ public class Payment {
                "\nAmount: " + amount;
     }
 
+
+    public static boolean isValidCardNumber(String cardNo) {
+        return cardNo.matches("\\d{16}");
+    }
+
+    public static boolean isValidCCV(String ccv) {
+        return ccv.matches("\\d{3,4}");
+    }
+
+    public static boolean isValidName(String name) {
+        return name.matches("[a-zA-Z ]{2,50}");
+    }
+
+    public static boolean isValidMonth(String month) {
+        try {
+            int m = Integer.parseInt(month);
+            return m >= 1 && m <= 12;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isValidYear(String year) {
+        try {
+            int y = Integer.parseInt(year);
+            return y >= 2024;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     public double calculateDamageCharge(String damageCondition) {
         switch (damageCondition.toUpperCase()) {
             case "NO_DAMAGE":
