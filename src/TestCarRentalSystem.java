@@ -715,14 +715,60 @@ public static void checkout(Customer loggedInCustomer){
         return;
     }
     
-    Car targetCar = sys.findCarById(carId);
+   Car targetCar = sys.findCarById(carId);
     
     if (targetCar == null) {
         System.out.println("Cannot find the " + carId + " Car.");
     } else if (targetCar.getStatus().equalsIgnoreCase("available")) { 
         int rentDuration = Helper.getValidatedInt(input, "Please enter the amount of days you want to rent the vehicle: ", 1, 100);
 
+        double rentalFee = sys.calculateRentalFee(targetCar, rentDuration);
+
         Payment transaction = new Payment(loggedInCustomer.getCustomerID(), targetCar.getCarID(), rentDuration); 
+        transaction.setAmount(rentalFee); 
+        transaction.setCheckOutDate(new Date()); 
+        
+        double depositAmount = rentalFee / 5.0;
+        System.out.println("Deposit required: RM " + String.format("%.2f", depositAmount));
+        
+        double deposit = 0;
+        boolean validDeposit = false;
+        
+        while (!validDeposit) {
+            try {
+                System.out.print("Enter deposit amount (RM): ");
+                String depositInput = input.nextLine().trim();
+                
+                if (depositInput == null || depositInput.isEmpty()) {
+                    System.out.println("Deposit cannot be empty!");
+                    continue;
+                }
+                
+                deposit = Double.parseDouble(depositInput);
+                
+                if (deposit < depositAmount) {
+                    System.out.println("Deposit must be at least RM " + String.format("%.2f", depositAmount));
+                    System.out.println("   You entered RM " + String.format("%.2f", deposit));
+                } else if (deposit < 0) {
+                    System.out.println("Deposit cannot be negative!");
+                } else {
+                    validDeposit = true;
+                }
+                
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+            }
+        }
+        
+        if (deposit > depositAmount) {
+            System.out.println("Change returned: RM " + String.format("%.2f", (deposit - depositAmount)));
+        }
+        
+        System.out.println("Processing Payment.....");
+        Helper.delay(4);
+        System.out.println("Deposit received successfully.");
+        
+        transaction.setDeposit(depositAmount); // 正式把押金金额写进账单
         
         boolean isSaved = false;
         for(int i = 0; i < sys.getPayment().length; i++) {
@@ -748,7 +794,8 @@ public static void checkout(Customer loggedInCustomer){
     System.out.print("\nPress Enter to return to Home Page...   ");
     input.nextLine();  // Wait for user to press Enter
     return;    
-}
+} // end of checkout method
+
     
    public static void processReturn(Customer loggedInCustomer) {
     
