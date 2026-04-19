@@ -10,7 +10,7 @@ CA0004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4
 ECONOMY
 CA0005|VAY 5005|Vios|Toyota|180.0|5|22000|available|100.0|false|5.8
 ECONOMY
-CA0006|BCC 6006|Iriz|Proton|95.0|5|30000|maintenance|50.0|true|6.6
+CA0006|BCC 6006|Iriz|Proton|95.0|5|30000|available|50.0|true|6.6
 ECONOMY
 CA0007|KAA 7007|Bezza|Perodua|110.0|5|18000|available|100.0|false|5.0
 ECONOMY
@@ -54,16 +54,16 @@ CA0026|WAM 7026|ES250|Lexus|650.0|5|10000|available|100.0|true|true
 LUXURY
 CA0027|PHM 8027|Model 3|Tesla|700.0|5|5000|available|100.0|true|true
 LUXURY
-CA0028|BGN 9028|S90|Volvo|680.0|5|18000|maintenance|100.0|true|true
+CA0028|BGN 9028|S90|Volvo|680.0|5|18000|available|100.0|true|true
 LUXURY
 CA0029|VFN 1029|911|Porsche|1500.0|2|3000|available|100.0|true|false
 LUXURY
-CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true
+CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|available|100.0|true|true
 ECONOMY
 CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0
 LUXURY
-CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|42341|available|100.0|true|true
+CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|42341|unavailable|100.0|true|true
 LUXURY
 CA0033|PME 2237|Madza MX5|Madza|100.0|5|15000|unavailable|100.0|true|true
 LUXURY
-CA0034|PWN 9331|Astina|Mazda|100.0|5|45215|available|100.0|true|true
+CA0034|PWN 9331|Astina|Mazda|100.0|5|45215|unavailable|100.0|true|true

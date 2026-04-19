@@ -254,31 +254,28 @@ public class FileLoader {
             
             // Read each payment
             for (int i = 0; i < totalPayments; i++) {
-                String paymentType = reader.readLine();
-                if (paymentType == null) break;
-
                 String dataLine = reader.readLine();
-                if (dataLine == null) break;
+                if (dataLine == null || dataLine.trim().isEmpty()) break;
 
                 String[] parts = dataLine.split("\\|");
-                // parts[0]=paymentID, [1]=date, [2]=amount, [3]=deposit, [4]=damageCondition,
-                // [5]=customerID, [6]=carID, [7]=rentDuration, [8]=status,  [9]=paymentMethod, [10...]payment details
+                
                 String paymentID = parts[0];
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1]);
                 double amount = Double.parseDouble(parts[2]);
                 double deposit = Double.parseDouble(parts[3]);
-                String damageCondition = parts[4];
+                double damageCharge = Double.parseDouble(parts[4]);
                 String customerID = parts[5];
                 String carID = parts[6];
                 int rentDuration = Integer.parseInt(parts[7]);
                 boolean status = Boolean.parseBoolean(parts[8]);
                 
+                String paymentType = parts[9]; 
+
+                Payment p = null;
+                
                 if (paymentType.equals("CASH")) {
                     double amountReceived = Double.parseDouble(parts[10]);
-                    Cash cashPayment = new Cash(date, amount, deposit, damageCondition,
-                                                customerID, carID, rentDuration,status, amountReceived);
-                    cashPayment.setPaymentID(paymentID);
-                    payments[count] = cashPayment;
+                    p = new Cash(date, amount, deposit, "Processed", customerID, carID, rentDuration, status, amountReceived);
                     
                 } else if (paymentType.equals("CARD")) {
                     String cardNo = parts[10];
@@ -286,11 +283,7 @@ public class FileLoader {
                     String nameOnCard = parts[12];
                     String expiryMonth = parts[13];
                     String expiryYear = parts[14];
-                    Card cardPayment = new Card(date, amount, deposit, damageCondition,
-                                                customerID, carID, rentDuration, status,
-                                                cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
-                    cardPayment.setPaymentID(paymentID);
-                    payments[count] = cardPayment;
+                    p = new Card(date, amount, deposit, "Processed", customerID, carID, rentDuration, status, cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
                     
                 } else if (paymentType.equals("ONLINETRANSFER")) {
                     String accountNumber = parts[10];
@@ -298,26 +291,33 @@ public class FileLoader {
                     String bankName = parts[12];
                     String swiftCode = parts[13];
                     String reference = parts[14];
-                    OnlineTransfer transferPayment = new OnlineTransfer(date, amount, deposit,
-                                                                        damageCondition, customerID,
-                                                                        carID, rentDuration, status,
-                                                                        accountNumber, accountName,
-                                                                        bankName, swiftCode, reference);
-                    transferPayment.setPaymentID(paymentID);
-                    payments[count] = transferPayment;
+                    p = new OnlineTransfer(date, amount, deposit, "Processed", customerID, carID, rentDuration, status, accountNumber, accountName, bankName, swiftCode, reference);
+                    
+                } else {
+                    p = new Payment(customerID, carID, rentDuration);
+                    p.setDate(date);
+                    p.setAmount(amount);
+                    p.setDeposit(deposit);
+                    p.setStatus(status);
                 }
-                count++;
+                
+                if (p != null) {
+                    p.setPaymentID(paymentID);
+                    try {
+                        p.setDamageCharge(damageCharge);
+                    } catch (Exception e) {} 
+                    
+                    payments[count] = p;
+                    count++;
+                }
             }
             
             // Set the payment counter to the loaded count
             Payment.setPaymentCounter(totalPayments);
             
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error reading payment file: " + e.getMessage());
-        } catch (ParseException e) {
-            System.out.println("Error parsing date in payment file: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Error parsing number in payment file: " + e.getMessage());
         }
     }
+
 }
