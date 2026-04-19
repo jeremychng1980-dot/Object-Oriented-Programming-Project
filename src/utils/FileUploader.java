@@ -1,5 +1,8 @@
 package utils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -148,6 +151,7 @@ public class FileUploader {
 
     }
 
+
     public static void savePaymentsToFile(String filename, Payment[] payments) {
         PrintWriter writer = null;
         
@@ -163,10 +167,16 @@ public class FileUploader {
             for (int i = 0; i < payments.length; i++) {
                 Payment p = payments[i];
                 if (p != null) {
-                    // Format: paymentID|date|amount|deposit|damageCharge|customerID|carID|PAYMENT_TYPE|rentDuration|payment-specific-fields
-                    writer.print(p.getPaymentID() + "|");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    writer.print(sdf.format(p.getDate()) + "|");
+                    
+                    // Format: paymentID|reserveDate|checkOutDate|returnDate|amount|deposit|damageCharge|customerID|carID|rentDuration|status|PAYMENT_TYPE|payment-specific-fields
+                    writer.print(p.getPaymentID() + "|");
+                    writer.print(sdf.format(p.getReserveDate()) + "|");
+                    
+                    // if no value then put null
+                    writer.print((p.getCheckOutDate() != null ? sdf.format(p.getCheckOutDate()) : "NULL_DATE") + "|");
+                    writer.print((p.getReturnDate() != null ? sdf.format(p.getReturnDate()) : "NULL_DATE") + "|");
+
                     writer.print(p.getAmount() + "|");
                     writer.print(p.getDeposit() + "|");
                     writer.print(p.getDamageCharge() + "|");
@@ -198,9 +208,7 @@ public class FileUploader {
                         writer.print(transfer.getReference());
                     } else {
                         writer.print("NULL|");
-                        
                     }
-
                     
                     writer.println();  // End the line
                 }

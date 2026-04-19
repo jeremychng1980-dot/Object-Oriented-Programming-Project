@@ -2,27 +2,19 @@ package models;
 
 import java.util.Date;
 
-/* TODO: Notes
-Add damage condition
-Set fixed value for each level of condition
-Display penalty rate for each
-Add to finalPayment
-Reservation should know estimation of how much
-Each car has their own rental rate
- */
-
 public class Payment {
 
     // ================= Data Properties =================
-    private Date date;
+    private Date reserveDate;
     private double amount;//amount received from customer
     private static int paymentCounter = 0;
-
+    private Date returnDate;   
+    private Date checkOutDate; 
     // Payment
     private String paymentID;
     private int rentDuration; // can be used to calculate amount based on car's daily rate
     private double damageCharge;
-    private double deposit; //TODO: Can be implemented later
+    private double deposit; 
 
     //Referenced characteristics
     private String customerID; //Who paid
@@ -37,9 +29,11 @@ public class Payment {
     public Payment(Date date, double amount, double deposit, String damageCondition, 
         String customerID, String carID, int rentDuration, boolean status) {
         this.paymentID = generatePaymentID();
-        date = new Date();
-        this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
-        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.reserveDate = new Date();
+        this.checkOutDate = null; // default null
+        this.returnDate = null;   // default null
+        this.amount = 0.0; 
+        this.deposit = 0.0; 
         this.damageCharge = calculateDamageCharge(damageCondition);
         this.customerID = customerID;
         this.carID = carID;
@@ -49,38 +43,46 @@ public class Payment {
 
     public Payment(String customerID, String carID, String damageCondition) {
         this.paymentID = generatePaymentID();
-        date = new Date();
-        this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
-        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.reserveDate = new Date();
+        this.checkOutDate = null;
+        this.returnDate = null;
+        this.amount = 0.0; 
+        this.deposit = 0.0; 
         this.damageCharge = calculateDamageCharge(damageCondition);
         this.customerID = customerID;
         this.carID = carID;
-        this.rentDuration = 0; // can be set later when rental duration is known
+        this.rentDuration = 0; 
         this.status = false;
     }
 
     public Payment(Date date, double amount) {
         this.paymentID = generatePaymentID();
-        this.date = date;
+        this.reserveDate = date;
+        this.checkOutDate = null;
+        this.returnDate = null;
         this.amount = amount;
     }
 
     public Payment(String customerID, String carID, int rentDuration) {
-        date = new Date();
-        this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
-        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.reserveDate = new Date();
+        this.checkOutDate = null;
+        this.returnDate = null;
+        this.amount = 0.0; 
+        this.deposit = 0.0; 
         this.damageCharge = calculateDamageCharge("NO_DAMAGE");
         this.customerID = customerID;
         this.carID = carID;
-        this.rentDuration = rentDuration; // can be set later when rental duration is known
+        this.rentDuration = rentDuration; 
         this.status = false;
     }
 
     public Payment(String customerID, String carID, double amount, int rentDuration) {
-        date = new Date();
+        this.reserveDate = new Date();
+        this.checkOutDate = null;
+        this.returnDate = null;
         this.paymentID = generatePaymentID();
         this.amount = amount;
-        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.deposit = 0.0; 
         this.damageCharge = calculateDamageCharge("NO_DAMAGE");
         this.customerID = customerID;
         this.carID = carID;
@@ -89,13 +91,15 @@ public class Payment {
     }
 
     public Payment(String customerID, String carID) {
-        date = new Date();
-        this.amount = 0.0; // amount can be calculated later based on rental duration and car rate
-        this.deposit = 0.0; // can be set based on car type or rental duration
+        this.reserveDate = new Date();
+        this.checkOutDate = null;
+        this.returnDate = null;
+        this.amount = 0.0; 
+        this.deposit = 0.0; 
         this.damageCharge = calculateDamageCharge("NO_DAMAGE");
         this.customerID = customerID;
         this.carID = carID;
-        this.rentDuration = 0; // can be set later when rental duration is known
+        this.rentDuration = 0; 
     }
 
     // ================= ID Generation =================
@@ -109,8 +113,16 @@ public class Payment {
         return paymentID;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getReserveDate() {
+        return reserveDate;
+    }
+
+    public Date getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public Date getReturnDate() {
+        return returnDate;
     }
 
     public double getAmount() {
@@ -159,7 +171,15 @@ public class Payment {
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.reserveDate = date;
+    }
+
+    public void setCheckOutDate(Date checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
     }
 
     public void setAmount(double amount) {
@@ -173,7 +193,6 @@ public class Payment {
     public void setDamageCharge(double damageCharge) {
         this.damageCharge = damageCharge;
     }
-
 
     public static void setPaymentCounter(int paymentCounter) {
         Payment.paymentCounter = paymentCounter;
@@ -195,12 +214,10 @@ public class Payment {
         }
     }
 
-
     // ================= Other Methods =================
-
     public String paymentToString() {
         return "Payment ID: " + paymentID +
-               "\nDate: " + date +
+               "\nDate: " + reserveDate +
                "\nAmount: " + amount;
     }
 
@@ -209,16 +226,15 @@ public class Payment {
             case "NO_DAMAGE":
                 return 0.0;
             case "MINOR":
-                return 100.0; // Example charge for minor damage
+                return 100.0; 
             case "MODERATE":
-                return 500.0; // Example charge for moderate damage
+                return 500.0; 
             case "MAJOR":
-                return 1000.0; // Example charge for major damage
+                return 1000.0; 
             default:
                 throw new IllegalArgumentException("Invalid damage condition: " + damageCondition);
         }
     }
-
 
     public boolean equals(Object obj) {
         if (this == obj)

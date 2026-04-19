@@ -251,6 +251,7 @@ public class FileLoader {
 
             int totalPayments = Integer.parseInt(line.trim());
             int count = 0;  // Track number of payments loaded
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
             
             // Read each payment
             for (int i = 0; i < totalPayments; i++) {
@@ -260,42 +261,46 @@ public class FileLoader {
                 String[] parts = dataLine.split("\\|");
                 
                 String paymentID = parts[0];
-                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(parts[1]);
-                double amount = Double.parseDouble(parts[2]);
-                double deposit = Double.parseDouble(parts[3]);
-                double damageCharge = Double.parseDouble(parts[4]);
-                String customerID = parts[5];
-                String carID = parts[6];
-                int rentDuration = Integer.parseInt(parts[7]);
-                boolean status = Boolean.parseBoolean(parts[8]);
+                Date reserveDate = sdf.parse(parts[1]);
                 
-                String paymentType = parts[9]; 
+                Date checkOutDate = parts[2].equals("NULL_DATE") ? null : sdf.parse(parts[2]);
+                Date returnDate = parts[3].equals("NULL_DATE") ? null : sdf.parse(parts[3]);
+                
+                double amount = Double.parseDouble(parts[4]);
+                double deposit = Double.parseDouble(parts[5]);
+                double damageCharge = Double.parseDouble(parts[6]);
+                String customerID = parts[7];
+                String carID = parts[8];
+                int rentDuration = Integer.parseInt(parts[9]);
+                boolean status = Boolean.parseBoolean(parts[10]);
+                
+                String paymentType = parts[11]; 
 
                 Payment p = null;
                 
                 if (paymentType.equals("CASH")) {
-                    double amountReceived = Double.parseDouble(parts[10]);
-                    p = new Cash(date, amount, deposit, "Processed", customerID, carID, rentDuration, status, amountReceived);
+                    double amountReceived = Double.parseDouble(parts[12]);
+                    p = new Cash(reserveDate, amount, deposit, "Processed", customerID, carID, rentDuration, status, amountReceived);
                     
                 } else if (paymentType.equals("CARD")) {
-                    String cardNo = parts[10];
-                    String CCV = parts[11];
-                    String nameOnCard = parts[12];
-                    String expiryMonth = parts[13];
-                    String expiryYear = parts[14];
-                    p = new Card(date, amount, deposit, "Processed", customerID, carID, rentDuration, status, cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
+                    String cardNo = parts[12];
+                    String CCV = parts[13];
+                    String nameOnCard = parts[14];
+                    String expiryMonth = parts[15];
+                    String expiryYear = parts[16];
+                    p = new Card(reserveDate, amount, deposit, "Processed", customerID, carID, rentDuration, status, cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
                     
                 } else if (paymentType.equals("ONLINETRANSFER")) {
-                    String accountNumber = parts[10];
-                    String accountName = parts[11];
-                    String bankName = parts[12];
-                    String swiftCode = parts[13];
-                    String reference = parts[14];
-                    p = new OnlineTransfer(date, amount, deposit, "Processed", customerID, carID, rentDuration, status, accountNumber, accountName, bankName, swiftCode, reference);
+                    String accountNumber = parts[12];
+                    String accountName = parts[13];
+                    String bankName = parts[14];
+                    String swiftCode = parts[15];
+                    String reference = parts[16];
+                    p = new OnlineTransfer(reserveDate, amount, deposit, "Processed", customerID, carID, rentDuration, status, accountNumber, accountName, bankName, swiftCode, reference);
                     
                 } else {
                     p = new Payment(customerID, carID, rentDuration);
-                    p.setDate(date);
+                    p.setDate(reserveDate);
                     p.setAmount(amount);
                     p.setDeposit(deposit);
                     p.setStatus(status);
@@ -303,6 +308,8 @@ public class FileLoader {
                 
                 if (p != null) {
                     p.setPaymentID(paymentID);
+                    p.setCheckOutDate(checkOutDate);
+                    p.setReturnDate(returnDate);     
                     try {
                         p.setDamageCharge(damageCharge);
                     } catch (Exception e) {} 

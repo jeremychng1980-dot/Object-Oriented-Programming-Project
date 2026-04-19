@@ -673,24 +673,48 @@ public class TestCarRentalSystem{
         boolean hasBill = false;
         
         for (int i = 0; i < sys.getPayment().length; i++) {
-            Payment tempPayment= sys.getPayment()[i];
+            Payment tempPayment = sys.getPayment()[i];
+            
             // find the customer and related bill
             if (tempPayment != null && tempPayment.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && tempPayment.getStatus() == false) {
                 
                 // if car is pending means staff has not inspect the car
                 Car targetCar = sys.findCarById(tempPayment.getCarID());
-                if(targetCar != null && targetCar.getStatus().equalsIgnoreCase("Pending")){
-                    System.out.println("Car ID: " + tempPayment.getCarID());
-                    System.out.println("[WAITING] Please wait for staff to inspect the car before paying.");
+                if (targetCar != null) {
+                    if (tempPayment.getDeposit() == 0.0) {
+                        // 1st: reserve but no check out, no show 
+                    } 
+                    else if (targetCar.getStatus().equalsIgnoreCase("unavailable")) {
+                        // 2nd: vehicle drived by customer, no show 
+                    } 
+                    else if (targetCar.getStatus().equalsIgnoreCase("pending")) {
+                        // 3rd: just returned wait staff inspect 
+                        System.out.println("Car ID: " + tempPayment.getCarID());
+                        System.out.println("[WAITING] Please wait for staff to inspect the car before paying.");
+                        System.out.println("---------------------------------");
+                    } 
+                    else {
+                        // 4th: if no the above situation then means inspection has done can pay amount
+                        hasBill = true;
+                        double latePenalty = 0.0;
+                        int lateDays = 0;
+                        int actualRentDays = tempPayment.getRentDuration(); 
+                        
+                        if (actualRentDays > tempPayment.getRentDuration()) {
+                            lateDays = actualRentDays - tempPayment.getRentDuration();
+                            latePenalty = lateDays * 50.0;
+                        }
+                        
+                        double balance = tempPayment.getAmount() + tempPayment.getDamageCharge() + latePenalty - tempPayment.getDeposit();
+                        
+                        System.out.println("Car ID: " + tempPayment.getCarID());
+                        System.out.println("Total Rent: RM " + tempPayment.getAmount() + " | Damage: RM " + tempPayment.getDamageCharge() + " | Deposit Paid: RM " + tempPayment.getDeposit());
+                        if (latePenalty > 0) {
+                            System.out.println("Late Penalty: RM " + latePenalty + " (" + lateDays + " day(s) late)");
+                        }
+                        System.out.println("Total Amount: RM " + balance);
+                        System.out.println("---------------------------------");
                     }
-                else{
-                // if not pending then can make payment
-                    hasBill = true;
-                    double balance = tempPayment.getAmount() + tempPayment.getDamageCharge() - tempPayment.getDeposit();
-                    System.out.println("Car ID: " + tempPayment.getCarID());
-                    System.out.println("Total Rent: RM " + tempPayment.getAmount() + " | Damage: RM " + tempPayment.getDamageCharge() + " | Deposit Paid: RM " + tempPayment.getDeposit());
-                    System.out.println("Balance Due: RM " + balance);
-                    System.out.println("---------------------------------");
                 }
             }
         }
@@ -720,14 +744,38 @@ public class TestCarRentalSystem{
         // find the bill array index by using car ID
         int targetIndex = -1;
         Payment pendingBill = null;
+        
         for (int i = 0; i < sys.getPayment().length; i++) {
             Payment tempPayment = sys.getPayment()[i];
             if (tempPayment != null && tempPayment.getCarID().equalsIgnoreCase(targetCarID) && tempPayment.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && tempPayment.getStatus() == false) {
+                
+                // if enter wrong car ID, handle exception
+                Car checkCar = sys.findCarById(tempPayment.getCarID());
+                if (checkCar != null) {
+                    if (tempPayment.getDeposit() == 0.0) {
+                        System.out.println("Payment Denied: You must Check Out this car first.");
+                        System.out.print("Press Enter to return...");
+                        input.nextLine();
+                        return;
+                    } else if (checkCar.getStatus().equalsIgnoreCase("unavailable")) {
+                        System.out.println("Payment Denied: You must Return this car first.");
+                        System.out.print("Press Enter to return...");
+                        input.nextLine();
+                        return;
+                    } else if (checkCar.getStatus().equalsIgnoreCase("pending")) {
+                        System.out.println("Payment Denied: This car is still awaiting staff inspection.");
+                        System.out.print("Press Enter to return...");
+                        input.nextLine();
+                        return;
+                    }
+                }
+
                 targetIndex = i;
                 pendingBill = tempPayment;
                 break;
             }
         }
+        
         // if no bill
         if (pendingBill == null) {
             System.out.println("Cannot find a pending bill for Car ID: " + targetCarID);
@@ -736,11 +784,17 @@ public class TestCarRentalSystem{
             return;
         }
 
-        double toBePaid = pendingBill.getAmount() + pendingBill.getDamageCharge() - pendingBill.getDeposit();
+        double finalLatePenalty = 0.0;
+        int finalActualDays = pendingBill.getRentDuration();
+        if (finalActualDays > pendingBill.getRentDuration()) {
+            finalLatePenalty = (finalActualDays - pendingBill.getRentDuration()) * 50.0;
+        }
+
+        double toBePaid = pendingBill.getAmount() + pendingBill.getDamageCharge() + finalLatePenalty - pendingBill.getDeposit();
 
         // select payment method
-        System.out.println("\nBalance to pay: RM " + toBePaid);
-        System.out.println("Enter way to pay (1: Cash, 2: Card, 3: Online Transfer, 0: Exit): ");
+        System.out.println("\nTotal Amount to be paid: RM " + toBePaid);
+        System.out.println("Enter way to pay (1: Cash, 2: Card, 3: Online Transfer, 0: Exit)");
         int paymentMethod = Helper.getValidatedInt(input, "Please enter a number (0-3): ", 0, 3);
 
         if (paymentMethod == 0) {
@@ -749,12 +803,9 @@ public class TestCarRentalSystem{
         }
 
         Payment finalizedPayment = null;
-
         if (paymentMethod == 1) { 
             // --- CASH ---
-            System.out.print("Enter amount received (RM): ");
-            double amountReceived = Helper.getValidatedDouble(input, "Please enter a valid amount: RM ");
-            input.nextLine(); // clear buffer
+            double amountReceived = Helper.getValidatedDouble(input, "Enter amount received (RM): ");
             
             if (amountReceived < toBePaid) {
                 System.out.println("Insufficient amount. Payment failed.");
@@ -763,8 +814,8 @@ public class TestCarRentalSystem{
             
             System.out.println("Change returned: RM " + (amountReceived - toBePaid));
             // create Cash object
-            finalizedPayment = new Cash(pendingBill.getDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
-                                        "Processed", loggedInCustomer.getCustomerID(), targetCarID, 
+            finalizedPayment = new Cash(pendingBill.getReserveDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                        "NO_DAMAGE", loggedInCustomer.getCustomerID(), targetCarID, 
                                         pendingBill.getRentDuration(), true, amountReceived);
 
         } else if (paymentMethod == 2) { 
@@ -780,8 +831,8 @@ public class TestCarRentalSystem{
             System.out.print("Enter Expiry Year: ");
             String expiryYear = input.nextLine();
             
-            finalizedPayment = new Card(pendingBill.getDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
-                                        "Processed", loggedInCustomer.getCustomerID(), targetCarID, 
+            finalizedPayment = new Card(pendingBill.getReserveDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                        "NO_DAMAGE", loggedInCustomer.getCustomerID(), targetCarID, 
                                         pendingBill.getRentDuration(), true, 
                                         cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
 
@@ -798,17 +849,17 @@ public class TestCarRentalSystem{
             System.out.print("Enter Reference Note: ");
             String reference = input.nextLine();
             
-            finalizedPayment = new OnlineTransfer(pendingBill.getDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
-                                    "Processed", loggedInCustomer.getCustomerID(), targetCarID, 
+            finalizedPayment = new OnlineTransfer(pendingBill.getReserveDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                    "NO_DAMAGE", loggedInCustomer.getCustomerID(), targetCarID, 
                                     pendingBill.getRentDuration(), true, 
                                     accountNumber, accountName, bankName, swiftCode, reference);
         }
 
-        // 
         if (finalizedPayment != null) {
-            //  PaymentID & DamageCharge
             finalizedPayment.setPaymentID(pendingBill.getPaymentID());
             finalizedPayment.setDamageCharge(pendingBill.getDamageCharge());
+            finalizedPayment.setCheckOutDate(pendingBill.getCheckOutDate());
+            finalizedPayment.setReturnDate(pendingBill.getReturnDate());
             
             System.out.println("Processing Payment.....");
             Helper.delay(3);
@@ -821,7 +872,7 @@ public class TestCarRentalSystem{
         
         System.out.print("\nPress Enter to return to menu... ");
         input.nextLine();
-    }   
+    }
 
     public static void viewHistory(Customer loggedInCustomer) {
         Helper.clearScreen();
@@ -834,7 +885,7 @@ public class TestCarRentalSystem{
         for (int i = 0; i < Payment.getPaymentCounter(); i++) {
             Payment payment = sys.getPayment()[i];
             if (payment != null && payment.getCustomerID().equals(customerID)) {
-                System.out.println("Payment ID: " + payment.getPaymentID() + ", Date: " + payment.getDate() + ", Amount: " + payment.getAmount());
+                System.out.println("Payment ID: " + payment.getPaymentID() + ", Date: " + payment.getReserveDate() + ", Amount: " + payment.getAmount());
                 System.out.print("\nPress Enter to Exit...   ");
                 input.nextLine();  // Wait for user to press Enter
                 return;
