@@ -636,7 +636,7 @@ public static void checkout(Customer loggedInCustomer){
                 System.out.println("Deposit received successfully.");
                 
                 // Just set the deposit amount
-                selectedTransaction.setDeposit(deposit);
+                selectedTransaction.setDeposit(depositAmount);
                 utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
                 System.out.println("You have successfully checked out the " + selectedCar.getCarID() + " Vehicle.");
                 System.out.println("=================================");
