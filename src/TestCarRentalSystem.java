@@ -336,18 +336,18 @@ public class TestCarRentalSystem{
 }
 
 //View Information Page  
-    public static void viewCustomerInformation(Customer customer){
+    public static void viewCustomerInformation(Customer loggedInCustomer){
     Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("           YOUR INFORMATION            ");
     System.out.println("=====================================");
     
-    User[] tempArray = {customer}; // create a temparary array that store the specific object of this customer
+    User[] tempArray = {loggedInCustomer}; // create a temparary array that store the specific object of this customer
     
     Helper.displayUsers(tempArray, 1);// Use the instance of method to print
     
     System.out.print("License Status: ");//check if the license status is expired
-    if (customer.getLicense().isExpired()) {
+    if (loggedInCustomer.getLicense().isExpired()) {
         System.out.println("Expired");
     } else {
         System.out.println("Valid");
@@ -359,16 +359,16 @@ public class TestCarRentalSystem{
 }
 
 //Modify Customer License Expiry Date
-	public static void updateLicenseExpiryDate(Customer customer) { 
+	public static void updateLicenseExpiryDate(Customer loggedInCustomer) { 
 	Helper.clearScreen();
     System.out.println("\n=====================================");
     System.out.println("      Modify License Expired Date      ");
     System.out.println("=====================================");
     
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    System.out.println("Current License Expiry Date: " + sdf.format(customer.getLicense().getLicenseExpireDate()));//print out the license expired date
+    System.out.println("Current License Expiry Date: " + sdf.format(loggedInCustomer.getLicense().getLicenseExpireDate()));//print out the license expired date
     System.out.print("License Status: ");//check if the license status is expired
-    if (customer.getLicense().isExpired()) {
+    if (loggedInCustomer.getLicense().isExpired()) {
         System.out.println("Expired");
     } else {
         System.out.println("Valid");
@@ -391,7 +391,7 @@ public class TestCarRentalSystem{
             String newExpiredDateInput = input.nextLine();
             
             //call the methods to update the new license expired date and also for validation
-            customer.getLicense().updateLicenseExpiryDate(newExpiredDateInput, customer.getLicense().getLicenseExpireDate());
+            loggedInCustomer.getLicense().updateLicenseExpiryDate(newExpiredDateInput, loggedInCustomer.getLicense().getLicenseExpireDate());
 
             
             utils.FileUploader.saveUsersToFile("users.txt", users);  // Save changes to file
@@ -399,9 +399,9 @@ public class TestCarRentalSystem{
             System.out.println("\n==========================================");
     		System.out.println("  License Expired Date Update Successfully!");
     		System.out.println("=============================================");
-    		System.out.println("\nNew License Expiry Date: " + sdf.format(customer.getLicense().getLicenseExpireDate()));//print out the license expired date
+    		System.out.println("\nNew License Expiry Date: " + sdf.format(loggedInCustomer.getLicense().getLicenseExpireDate()));//print out the license expired date
     		System.out.print("License Status: ");//check if the license status is expired
-    		if (customer.getLicense().isExpired()) {
+    		if (loggedInCustomer.getLicense().isExpired()) {
         	System.out.println("Expired");
     		} else {
         	System.out.println("Valid");
@@ -419,8 +419,8 @@ public class TestCarRentalSystem{
 }      
 
 //Reservation (rentVehicle)
-    public static void rentVehicle(Customer customer){ 
-        if (customer.getLicense().isExpired()) {
+    public static void rentVehicle(Customer loggedInCustomer){ 
+        if (loggedInCustomer.getLicense().isExpired()) {
             System.out.println("\nYour license is expired. You cannot rent a vehicle until you update your license expiry date.");
             System.out.println("Press Enter to return to the menu...");
             input.nextLine();
@@ -464,7 +464,7 @@ public class TestCarRentalSystem{
                 Helper.delay(200);
 
                 utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars()); 
-                sys.reservationRecord(customer, targetCar, rentalFee, rentDays);
+                sys.reservationRecord(loggedInCustomer, targetCar, rentalFee, rentDays);
                 input.nextLine();//clear buffer
                 }
             else { // car unavailable -> cannot book reservation
@@ -479,6 +479,13 @@ public class TestCarRentalSystem{
     } // end rentVehicle
 
     public static void checkout(Customer loggedInCustomer){
+        if (loggedInCustomer.getLicense().isExpired()) {
+            System.out.println("\nYour license is expired. You cannot rent a vehicle until you update your license expiry date.");
+            System.out.println("Press Enter to return to the menu...");
+            input.nextLine();
+            return;
+        }
+
         Helper.clearScreen();
         System.out.print("\n=====================================");
         System.out.print("\n             Check  Out              ");
@@ -633,7 +640,7 @@ public class TestCarRentalSystem{
         input.nextLine();
     }
 
-    public static void processPayment(Customer loggedInCustomer){ //TODO: Incomplete method
+    public static void processPayment(Customer loggedInCustomer){ 
         Helper.clearScreen();
         System.out.println("\n=====================================");
         System.out.println("\n             Payment                ");
@@ -648,12 +655,22 @@ public class TestCarRentalSystem{
             Payment tempPayment= sys.getPayment()[i];
             // find the customer and related bill
             if (tempPayment != null && tempPayment.getCustomerID().equalsIgnoreCase(loggedInCustomer.getCustomerID()) && tempPayment.getStatus() == false) {
-                hasBill = true;
-                double balance = tempPayment.getAmount() + tempPayment.getDamageCharge() - tempPayment.getDeposit();
-                System.out.println("Car ID: " + tempPayment.getCarID());
-                System.out.println("Total Rent: RM " + tempPayment.getAmount() + " | Damage: RM " + tempPayment.getDamageCharge() + " | Deposit Paid: RM " + tempPayment.getDeposit());
-                System.out.println("Balance Due: RM " + balance);
-                System.out.println("---------------------------------");
+                
+                // if car is pending means staff has not inspect the car
+                Car targetCar = sys.findCarById(tempPayment.getCarID());
+                if(targetCar != null && targetCar.getStatus().equalsIgnoreCase("Pending")){
+                    System.out.println("Car ID: " + tempPayment.getCarID());
+                    System.out.println("[WAITING] Please wait for staff to inspect the car before paying.");
+                    }
+                else{
+                // if not pending then can make payment
+                    hasBill = true;
+                    double balance = tempPayment.getAmount() + tempPayment.getDamageCharge() - tempPayment.getDeposit();
+                    System.out.println("Car ID: " + tempPayment.getCarID());
+                    System.out.println("Total Rent: RM " + tempPayment.getAmount() + " | Damage: RM " + tempPayment.getDamageCharge() + " | Deposit Paid: RM " + tempPayment.getDeposit());
+                    System.out.println("Balance Due: RM " + balance);
+                    System.out.println("---------------------------------");
+                }
             }
         }
 
@@ -664,13 +681,13 @@ public class TestCarRentalSystem{
             return;
         }
 
-        // find the bill
         System.out.print("\nPress enter to proceed to payment (or '0' to exit): ");
         String choice = input.nextLine();
             if (choice.equals("0")) {
                 Helper.clearScreen();
                 return;
             }
+        // user input get car ID
         System.out.print("Enter the car ID (or '0' to exit): ");
         String targetCarID = input.nextLine().trim();
 
@@ -679,7 +696,7 @@ public class TestCarRentalSystem{
             return;
         }
 
-        // find the bill array index 
+        // find the bill array index by using car ID
         int targetIndex = -1;
         Payment pendingBill = null;
         for (int i = 0; i < sys.getPayment().length; i++) {
@@ -690,7 +707,7 @@ public class TestCarRentalSystem{
                 break;
             }
         }
-
+        // if no bill
         if (pendingBill == null) {
             System.out.println("Cannot find a pending bill for Car ID: " + targetCarID);
             System.out.print("Press Enter to return...");
@@ -711,7 +728,7 @@ public class TestCarRentalSystem{
         }
 
         Payment finalizedPayment = null;
-        input.nextLine(); // clear buffer
+
         if (paymentMethod == 1) { 
             // --- CASH ---
             System.out.print("Enter amount received (RM): ");
@@ -778,7 +795,7 @@ public class TestCarRentalSystem{
             sys.getPayment()[targetIndex] = finalizedPayment; 
             utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
             
-            System.out.println("✅ Payment successful! Thank you for using our service.");
+            System.out.println("Payment successful! Thank you for using our service.");
         }
         
         System.out.print("\nPress Enter to return to menu... ");

@@ -64,6 +64,6 @@ CA0031|PEN 1234|Civic|Honda|10.0|5|0|available|100.0|true|100.0
 LUXURY
 CA0032|PEN 0829|Skyline GTR34|Nissan|100.0|5|42341|available|100.0|true|true
 LUXURY
-CA0033|PME 2237|Madza MX5|Madza|100.0|5|15000|available|100.0|true|true
+CA0033|PME 2237|Madza MX5|Madza|100.0|5|15000|unavailable|100.0|true|true
 LUXURY
-CA0034|PWN 9331|Astina|Mazda|100.0|5|45215|pending|100.0|true|true
+CA0034|PWN 9331|Astina|Mazda|100.0|5|45215|available|100.0|true|true
