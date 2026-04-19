@@ -1033,7 +1033,7 @@ public static void checkout(Customer loggedInCustomer){
 if (paidCar != null) {
     paidCar.incrementReservationCount();
     // Use amount + damageCharge (no deposit deduction)
-    double revenueEarned = pendingBill.getAmount() + pendingBill.getDamageCharge();
+    double revenueEarned = pendingBill.getAmount();
     paidCar.addRevenue(revenueEarned);
     utils.FileUploader.saveCarsToFile("cars.txt", sys.getCars());
     }
