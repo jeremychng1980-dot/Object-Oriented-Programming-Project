@@ -19,7 +19,7 @@ public class Cash extends Payment{
         this.amountReceived = amountReceived;
     }
 
-    public Cash(String customerID, String carID, int amount) { //TODO
+    public Cash(String customerID, String carID, int amount) { 
         super(customerID, carID);
         this.amountReceived = amount; // can be set later when payment is processed
     }

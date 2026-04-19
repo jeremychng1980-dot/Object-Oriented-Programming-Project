@@ -26,7 +26,7 @@ public class Card extends Payment {
         this.expiryYear = expiryYear;
     }
 
-    public Card(String customerID, String carID, String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) { //TODO
+    public Card(String customerID, String carID, String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) { 
         super(customerID, carID);
         this.cardNo = ""; // can be set later when payment is processed
         this.CCV = ""; // can be set later when payment is processed

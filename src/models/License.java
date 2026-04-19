@@ -42,7 +42,7 @@ public class License {
 }
 
 //-----------------------------------Register customer driving license date expired method-------------------------
-    public static Date validateRegisterLicenseDate(String RegisterLicenseExpireDate) { //TODO: Can reference this for date validation
+    public static Date validateRegisterLicenseDate(String RegisterLicenseExpireDate) { 
 
         String trimmed = User.validateNonEmpty(RegisterLicenseExpireDate, "License Expire Date");
         
