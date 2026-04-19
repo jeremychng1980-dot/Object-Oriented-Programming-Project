@@ -70,7 +70,7 @@ public class FileLoader {
                     users[count] = customer;
                     count++;
                     
-                    System.out.println("✓ Loaded customer: " + name);
+                    System.out.println("Loaded customer: " + name);
                 }
                 else if (userType.equals("STAFF")) {
                     String dataLine = reader.readLine();
@@ -96,7 +96,7 @@ public class FileLoader {
                     users[count] = staff;
                     count++;
                     
-                    System.out.println("✓ Loaded staff: " + name);
+                    System.out.println("Loaded staff: " + name);
                 }
                 else if (userType.equals("ADMIN")) {
                     String dataLine = reader.readLine();
@@ -119,7 +119,7 @@ public class FileLoader {
                     users[count] = admin;
                     count++;
                     
-                    System.out.println("✓ Loaded admin: " + name);
+                    System.out.println("Loaded admin: " + name);
                 }
             }
             

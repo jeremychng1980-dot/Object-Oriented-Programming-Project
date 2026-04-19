@@ -1,5 +1,7 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Payment {
@@ -212,6 +214,62 @@ public class Payment {
         } catch (NumberFormatException e) {
             // ignore invalid format
         }
+    }
+
+    // ================= Date Validation Methods =================
+      public static Date validateCheckoutDate(Date reserveDate, String checkoutDateStr) {
+        if (checkoutDateStr == null || checkoutDateStr.trim().isEmpty()) {
+            throw new IllegalArgumentException("Checkout date cannot be empty!");
+        }
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        
+        Date checkoutDate;
+        try {
+            checkoutDate = sdf.parse(checkoutDateStr.trim());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date format! Please use yyyy-MM-dd");
+        }
+        
+        if (!checkoutDate.after(reserveDate)) {
+            throw new IllegalArgumentException("Checkout date must be after the reservation date!");
+        }
+        
+        return checkoutDate;
+    }
+    
+    public static Date validateReturnDate(String returnDateStr) {
+        if (returnDateStr == null || returnDateStr.trim().isEmpty()) {
+            throw new IllegalArgumentException("Return date cannot be empty!");
+        }
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        
+        try {
+            return sdf.parse(returnDateStr.trim());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date format! Please use yyyy-MM-dd");
+        }
+    }
+    
+    public static double calculateLatePenalty(int rentDuration, Date checkoutDate, Date actualReturnDate) {
+        // Calculate expected return date (checkout + rent duration)
+        long oneDayInMillis = 24 * 60 * 60 * 1000;
+        long expectedReturnMillis = checkoutDate.getTime() + (rentDuration * oneDayInMillis);
+        Date expectedReturnDate = new Date(expectedReturnMillis);
+        
+        // If returned on or before expected date, no penalty
+        if (!actualReturnDate.after(expectedReturnDate)) {
+            return 0.0;
+        }
+        
+        // Calculate days late
+        long diffInMillis = actualReturnDate.getTime() - expectedReturnDate.getTime();
+        int daysLate = (int) (diffInMillis / oneDayInMillis);
+        
+        return daysLate * 50.0;
     }
 
     // ================= Other Methods =================

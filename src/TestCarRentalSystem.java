@@ -555,10 +555,11 @@ public static void checkout(Customer loggedInCustomer){
             Payment transaction = sys.getPayment()[index];
             Car bookedCar = sys.findCarById(transaction.getCarID());
             if (bookedCar != null) {
-                System.out.println("[" + (j + 1) + "] Car ID: " + transaction.getCarID() + 
-                                   " | " + bookedCar.getBrand() + " " + bookedCar.getModel() +
-                                   " | Duration: " + transaction.getRentDuration() + " days | " +
-                                   "Est. Fee: RM " + transaction.getAmount());
+               System.out.println("[" + (j + 1) + "] Car ID: " + transaction.getCarID() + 
+                   " | " + bookedCar.getBrand() + " " + bookedCar.getModel() +
+                   " | Duration: " + transaction.getRentDuration() + " days | " +
+                   "Est. Fee: RM " + transaction.getAmount() +
+                   " | Reserve Date: " + new SimpleDateFormat("yyyy-MM-dd").format(transaction.getReserveDate()));
             }
         }
         
@@ -593,6 +594,26 @@ public static void checkout(Customer loggedInCustomer){
                 validSelection = true;
                 
                 System.out.println("\n--- Checking out: " + selectedCar.getCarID() + " ---");
+
+                // Get Checkout Date
+                Date checkoutDate = null;
+                boolean validCheckoutDate = false;
+                
+                while (!validCheckoutDate) {
+                    try {
+                        System.out.print("Enter Checkout Date (yyyy-mm-dd): ");
+                        String checkoutDateStr = input.nextLine().trim();
+                        
+                        checkoutDate = Payment.validateCheckoutDate(new Date(), checkoutDateStr);
+                        validCheckoutDate = true;
+                        
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                
+                // Store checkout date
+                selectedTransaction.setCheckOutDate(checkoutDate);
                 // Calculate deposit amount 
                 double depositAmount = selectedTransaction.getAmount() / 5.0;
                 System.out.println("Deposit required: RM " + String.format("%.2f", depositAmount));
@@ -720,8 +741,15 @@ public static void checkout(Customer loggedInCustomer){
                     if (bookedCar != null && bookedCar.getStatus().equalsIgnoreCase("unavailable")) {
                         hasPendingReturn = true;
                         // display payment ID
-                        System.out.println("\n[Order ID: " + tempPayment.getPaymentID() + "] Car ID: " + tempPayment.getCarID() + " | Model: " + bookedCar.getBrand() + " " + bookedCar.getModel());
-                        System.out.println("   Rent Duration: " + tempPayment.getRentDuration() + " days | Est. Fee: RM " + tempPayment.getAmount());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String checkoutDateStr = (tempPayment.getCheckOutDate() != null) ? 
+                                         sdf.format(tempPayment.getCheckOutDate()) : "Not checked out yet";
+                
+                // display payme1nt ID with checkout date
+                System.out.println("\n[Payment ID: " + tempPayment.getPaymentID() + "] Car ID: " + tempPayment.getCarID() + 
+                                   " | Model: " + bookedCar.getBrand() + " " + bookedCar.getModel());
+                System.out.println("   Rent Duration: " + tempPayment.getRentDuration() + " days | Est. Fee: RM " + tempPayment.getAmount());
+                System.out.println("   Checkout Date: " + checkoutDateStr);
                     }
                 }
             }
@@ -769,6 +797,46 @@ public static void checkout(Customer loggedInCustomer){
                 validPayment = true;
             }
         }
+
+         Date actualReturnDate = null;
+        boolean validActualReturn = false;
+        
+        while (!validActualReturn) {
+            try {
+                System.out.print("Enter actual return date (yyyy-mm-dd): ");
+                String returnDateStr = input.nextLine().trim();
+                
+                actualReturnDate = Payment.validateReturnDate(returnDateStr);
+                
+                // Check if return date is after checkout date
+                if (targetPayment.getCheckOutDate() != null && !actualReturnDate.after(targetPayment.getCheckOutDate())) {
+                    System.out.println("Return date must be after checkout date!");
+                    continue;
+                }
+                
+                validActualReturn = true;
+                
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        
+        // Calculate late penalty
+        double latePenalty = Payment.calculateLatePenalty(
+            targetPayment.getRentDuration(),
+            targetPayment.getCheckOutDate(),
+            actualReturnDate
+        );
+        
+        if (latePenalty > 0) {
+            System.out.println("Late return detected! Penalty: RM " + String.format("%.2f", latePenalty));
+        }
+        
+        // Store return date and add penalty
+        targetPayment.setReturnDate(actualReturnDate);
+        targetPayment.setDamageCharge(targetPayment.getDamageCharge() + latePenalty);
+        utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
+        
 
         // Process the return
         returnedCar.setStatus("pending");
