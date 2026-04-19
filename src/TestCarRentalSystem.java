@@ -437,6 +437,40 @@ public static void rentVehicle(Customer loggedInCustomer) {
     while (continueRenting) {
         sys.displayAllCars();
 
+    //ask user want to filter by car type or not
+    System.out.println("\n--- Filter by Category ---");
+    System.out.println("1. Economy \n2. SUV \n3. Luxury \n0. Skip filter");
+    int filterChoice = Helper.getValidatedInt(input, "Enter choice (0-3): ", 0, 3);
+
+    // if selected 1, 2 , 3 , then filter by car type and display again
+    if (filterChoice != 0) {
+        System.out.println("\n=== Filtered Results ===");
+        boolean found = false;
+
+        for (int i = 0; i < sys.getCars().length; i++) {
+            Car car = sys.getCars()[i];
+            if (car != null) {
+
+                // instanceof to find the car type
+                if (filterChoice == 1 && car instanceof Economy) {
+                    System.out.println(car.toString());
+                    found = true;
+                } else if (filterChoice == 2 && car instanceof SUV) {
+                    System.out.println(car.toString());
+                    found = true;
+                } else if (filterChoice == 3 && car instanceof Luxury) {
+                    System.out.println(car.toString());
+                    found = true;
+                }
+            }
+        }//end loop
+
+        if (!found) {
+            System.out.println("Sorry, no available cars in this category.");
+        }
+        System.out.println("=========================\n");
+    }
+
         System.out.print("\nPress Enter to continue to rent a vehicle or '0' to exit... ");
         String choice = input.nextLine();
         System.out.println("\n");
@@ -618,7 +652,7 @@ public static void checkout(Customer loggedInCustomer){
                 double depositAmount = selectedTransaction.getAmount() / 5.0;
                 System.out.println("Deposit required: RM " + String.format("%.2f", depositAmount));
                 
-                // Deposit COllection
+                // Deposit Collection
                 double deposit = 0;
                 boolean validDeposit = false;
                 
@@ -1011,8 +1045,12 @@ public static void checkout(Customer loggedInCustomer){
             return;
         }
 
-        double toBePaid = pendingBill.getAmount() + pendingBill.getDamageCharge() - pendingBill.getDeposit();
 
+        double toBePaid = pendingBill.getAmount() 
+                        + pendingBill.getDamageCharge() 
+                        - pendingBill.getDeposit();
+
+                        
         // select payment method
         System.out.println("\nTotal Amount to be paid: RM " + toBePaid);
         System.out.println("Enter way to pay (1: Cash, 2: Card, 3: Online Transfer, 0: Exit)");
@@ -1038,346 +1076,88 @@ public static void checkout(Customer loggedInCustomer){
             finalizedPayment = new Cash(pendingBill.getReserveDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
                                         "NO_DAMAGE", loggedInCustomer.getCustomerID(), targetCarID, 
                                         pendingBill.getRentDuration(), true, amountReceived);
+            System.out.println(finalizedPayment.getPaymentDetails());
 
         } else if (paymentMethod == 2) { 
-           package models;
+            // --- CARD ---
+            String cardNo, CCV, nameOnCard;
+            int expiryMonth, expiryYear;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+            while (true) {
+                System.out.print("Enter Card Number: ");
+                cardNo = input.nextLine();
+                if (!Payment.isValidCardNumber(cardNo)) {
+                    System.out.println("Invalid card number (must be 16 digits).");
+                    continue;
+                }
 
-public class Payment {
+                System.out.print("Enter CCV: ");
+                CCV = input.nextLine();
+                if (!Payment.isValidCCV(CCV)) {
+                    System.out.println("Invalid CCV (3 or 4 digits).");
+                    continue;
+                }
 
-    // ================= Data Properties =================
-    private Date reserveDate;
-    private double amount;//amount received from customer
-    private static int paymentCounter = 0;
-    private Date returnDate;   
-    private Date checkOutDate; 
-    // Payment
-    private String paymentID;
-    private int rentDuration; // can be used to calculate amount based on car's daily rate
-    private double damageCharge;
-    private double deposit; 
+                System.out.print("Enter Name on Card: ");
+                nameOnCard = input.nextLine();
+                if (!Payment.isValidName(nameOnCard)) {
+                    System.out.println("Invalid name.");
+                    continue;
+                }
 
-    //Referenced characteristics
-    private String customerID; //Who paid
-    private String carID;      //Which car the payment is for
-    private boolean status;  // true represent has completed the payment, false --> not yet
+                System.out.print("Enter Expiry Month: ");
+                expiryMonth = input.nextInt();
+                if (!Payment.isValidMonth(expiryMonth)) {
+                    System.out.println("Invalid month (1–12).");
+                    continue;
+                }
 
-    // ================= Constructors =================
-    public Payment() {
-        this(new Date(), 0.0, 0.0, "NO_DAMAGE", null, null, 0, false);
-    }
+                System.out.print("Enter Expiry Year: ");
+                expiryYear = input.nextInt();
+                if (!Payment.isValidYear(expiryYear)) {
+                    System.out.println("Invalid year.");
+                    continue;
+                }
 
-    public Payment(Date date, double amount, double deposit, String damageCondition, 
-        String customerID, String carID, int rentDuration, boolean status) {
-        this.paymentID = generatePaymentID();
-        this.reserveDate = new Date();
-        this.checkOutDate = null; // default null
-        this.returnDate = null;   // default null
-        this.amount = 0.0; 
-        this.deposit = 0.0; 
-        this.damageCharge = calculateDamageCharge(damageCondition);
-        this.customerID = customerID;
-        this.carID = carID;
-        this.rentDuration = rentDuration;
-        this.status = status;
-    }
+                if (!Payment.isCardNotExpired(expiryMonth, expiryYear)) {
+                    System.out.println("Card is expired.");
+                    continue;
+                }
+                break;
+            }//end of card validation
 
-    public Payment(String customerID, String carID, String damageCondition) {
-        this.paymentID = generatePaymentID();
-        this.reserveDate = new Date();
-        this.checkOutDate = null;
-        this.returnDate = null;
-        this.amount = 0.0; 
-        this.deposit = 0.0; 
-        this.damageCharge = calculateDamageCharge(damageCondition);
-        this.customerID = customerID;
-        this.carID = carID;
-        this.rentDuration = 0; 
-        this.status = false;
-    }
+            finalizedPayment = new Card(
+                pendingBill.getReserveDate(),
+                pendingBill.getAmount(),
+                pendingBill.getDeposit(),
+                "NO_DAMAGE",
+                loggedInCustomer.getCustomerID(),
+                targetCarID,
+                pendingBill.getRentDuration(),
+                true,
+                cardNo, CCV, nameOnCard, expiryMonth, expiryYear
+            );
+            System.out.println(finalizedPayment.getPaymentDetails());
 
-    public Payment(Date date, double amount) {
-        this.paymentID = generatePaymentID();
-        this.reserveDate = date;
-        this.checkOutDate = null;
-        this.returnDate = null;
-        this.amount = amount;
-    }
-
-    public Payment(String customerID, String carID, int rentDuration) {
-        this.reserveDate = new Date();
-        this.checkOutDate = null;
-        this.returnDate = null;
-        this.amount = 0.0; 
-        this.deposit = 0.0; 
-        this.damageCharge = calculateDamageCharge("NO_DAMAGE");
-        this.customerID = customerID;
-        this.carID = carID;
-        this.rentDuration = rentDuration; 
-        this.status = false;
-    }
-
-    public Payment(String customerID, String carID, double amount, int rentDuration) {
-        this.reserveDate = new Date();
-        this.checkOutDate = null;
-        this.returnDate = null;
-        this.paymentID = generatePaymentID();
-        this.amount = amount;
-        this.deposit = 0.0; 
-        this.damageCharge = calculateDamageCharge("NO_DAMAGE");
-        this.customerID = customerID;
-        this.carID = carID;
-        this.rentDuration = rentDuration;
-        this.status = false;
-    }
-
-    public Payment(String customerID, String carID) {
-        this.reserveDate = new Date();
-        this.checkOutDate = null;
-        this.returnDate = null;
-        this.amount = 0.0; 
-        this.deposit = 0.0; 
-        this.damageCharge = calculateDamageCharge("NO_DAMAGE");
-        this.customerID = customerID;
-        this.carID = carID;
-        this.rentDuration = 0; 
-    }
-
-    // ================= ID Generation =================
-    private static String generatePaymentID() {
-        paymentCounter++;
-        return String.format("P%04d", paymentCounter);
-    }
-
-    // ================= Getters =================
-    public String getPaymentID() {
-        return paymentID;
-    }
-
-    public Date getReserveDate() {
-        return reserveDate;
-    }
-
-    public Date getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public Date getReturnDate() {
-        return returnDate;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public double getDeposit(){
-        return deposit;
-    }
-
-    public double getDamageCharge() {
-        return damageCharge;
-    }
-
-    public static int getPaymentCounter() {
-        return paymentCounter;
-    }
-
-    public String getCustomerID() {
-        return customerID;
-    }
-
-    public String getCarID() {
-        return carID;
-    }
-
-    public int getRentDuration() {
-        return rentDuration;
-    }
-
-    public boolean getStatus(){
-        return status;
-    }
-
-    // ================= Setters =================
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
-    }
-
-    public void setCarID(String carID) {
-        this.carID = carID;
-    }
-
-    public void setStatus(boolean status){
-        this.status = status;
-    }
-
-    public void setDate(Date date) {
-        this.reserveDate = date;
-    }
-
-    public void setCheckOutDate(Date checkOutDate) {
-        this.checkOutDate = checkOutDate;
-    }
-
-    public void setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public void setDeposit(double deposit){
-        this.deposit = deposit;
-    }
-
-    public void setDamageCharge(double damageCharge) {
-        this.damageCharge = damageCharge;
-    }
-
-    public static void setPaymentCounter(int paymentCounter) {
-        Payment.paymentCounter = paymentCounter;
-    }
-
-    public void setRentDuration(int rentDuration) {
-        this.rentDuration = rentDuration;
-    }
-    
-    public void setPaymentID(String paymentID) {
-        this.paymentID = paymentID;
-        try {
-            int value = Integer.parseInt(paymentID.substring(1));
-            if (value > paymentCounter) {
-                paymentCounter = value;
+        } else if (paymentMethod == 3) { 
+                // --- ONLINE TRANSFER ---
+                System.out.print("Enter Account Number: ");
+                String accountNumber = input.nextLine();
+                System.out.print("Enter Account Name: ");
+                String accountName = input.nextLine();
+                System.out.print("Enter Bank Name: ");
+                String bankName = input.nextLine();
+                System.out.print("Enter SWIFT Code: ");
+                String swiftCode = input.nextLine();
+                System.out.print("Enter Reference Note: ");
+                String reference = input.nextLine();
+                
+                finalizedPayment = new OnlineTransfer(pendingBill.getReserveDate(), pendingBill.getAmount(), pendingBill.getDeposit(), 
+                                        "NO_DAMAGE", loggedInCustomer.getCustomerID(), targetCarID, 
+                                        pendingBill.getRentDuration(), true, 
+                                        accountNumber, accountName, bankName, swiftCode, reference);
+                System.out.println(finalizedPayment.getPaymentDetails());
             }
-        } catch (NumberFormatException e) {
-            // ignore invalid format
-        }
-    }
-
-    // ================= Date Validation Methods =================
-      public static Date validateCheckoutDate(Date reserveDate, String checkoutDateStr) {
-        if (checkoutDateStr == null || checkoutDateStr.trim().isEmpty()) {
-            throw new IllegalArgumentException("Checkout date cannot be empty!");
-        }
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        
-        Date checkoutDate;
-        try {
-            checkoutDate = sdf.parse(checkoutDateStr.trim());
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid date format! Please use yyyy-MM-dd");
-        }
-        
-        if (!checkoutDate.after(reserveDate)) {
-            throw new IllegalArgumentException("Checkout date must be after the reservation date!");
-        }
-        
-        return checkoutDate;
-    }
-    
-    public static Date validateReturnDate(String returnDateStr) {
-        if (returnDateStr == null || returnDateStr.trim().isEmpty()) {
-            throw new IllegalArgumentException("Return date cannot be empty!");
-        }
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        
-        try {
-            return sdf.parse(returnDateStr.trim());
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid date format! Please use yyyy-MM-dd");
-        }
-    }
-    
-    public static double calculateLatePenalty(int rentDuration, Date checkoutDate, Date actualReturnDate) {
-        // Calculate expected return date (checkout + rent duration)
-        long oneDayInMillis = 24 * 60 * 60 * 1000;
-        long expectedReturnMillis = checkoutDate.getTime() + (rentDuration * oneDayInMillis);
-        Date expectedReturnDate = new Date(expectedReturnMillis);
-        
-        // If returned on or before expected date, no penalty
-        if (!actualReturnDate.after(expectedReturnDate)) {
-            return 0.0;
-        }
-        
-        // Calculate days late
-        long diffInMillis = actualReturnDate.getTime() - expectedReturnDate.getTime();
-        int daysLate = (int) (diffInMillis / oneDayInMillis);
-        
-        return daysLate * 50.0;
-    }
-
-    // ================= Other Methods =================
-    public String paymentToString() {
-        return "Payment ID: " + paymentID +
-               "\nDate: " + reserveDate +
-               "\nAmount: " + amount;
-    }
-
-    public static boolean isValidCardNumber(String cardNo) {
-        return cardNo.matches("\\d{16}");
-    }
-
-    public static boolean isValidCCV(String ccv) {
-        return ccv.matches("\\d{3,4}");
-    }
-
-    public static boolean isValidName(String name) {
-        return name.matches("[a-zA-Z ]{2,50}");
-    }
-
-    public static boolean isValidMonth(String month) {
-        try {
-            int m = Integer.parseInt(month);
-            return m >= 1 && m <= 12;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public static boolean isValidYear(String year) {
-        try {
-            int y = Integer.parseInt(year);
-            return y >= 2024;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public double calculateDamageCharge(String damageCondition) {
-        switch (damageCondition.toUpperCase()) {
-            case "NO_DAMAGE":
-                return 0.0;
-            case "MINOR":
-                return 100.0; 
-            case "MODERATE":
-                return 500.0; 
-            case "MAJOR":
-                return 1000.0; 
-            default:
-                throw new IllegalArgumentException("Invalid damage condition: " + damageCondition);
-        }
-    }
-
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        Payment other = (Payment) obj;
-        return this.paymentID.equals(other.paymentID);
-    }
-}
-        }
 
         if (finalizedPayment != null) {
             finalizedPayment.setPaymentID(pendingBill.getPaymentID());
@@ -1393,6 +1173,7 @@ public class Payment {
             
             System.out.println("Payment successful! Thank you for using our service.");
         }
+
         // Add car status here
     Car paidCar = sys.findCarById(targetCarID);
 if (paidCar != null) {

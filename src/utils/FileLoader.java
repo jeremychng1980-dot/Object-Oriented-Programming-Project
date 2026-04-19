@@ -298,15 +298,23 @@ public class FileLoader {
                 
                 if (paymentType.equals("CASH")) {
                     double amountReceived = Double.parseDouble(parts[12]);
-                    p = new Cash(reserveDate, amount, deposit, "Processed", customerID, carID, rentDuration, status, amountReceived);
-                    
+                    p.setReserveDate(reserveDate);
+                    p.setAmount(amount);
+                    p.setDeposit(deposit);
+                    p.setDamageCharge(damageCharge);
+                    p.setCustomerID(customerID);
+                    p.setCarID(carID);
+                    p.setRentDuration(rentDuration);
+                    p.setStatus(status);
+                    p.setAmount(amountReceived);
+
                 } else if (paymentType.equals("CARD")) {
                     String cardNo = parts[12];
                     String CCV = parts[13];
                     String nameOnCard = parts[14];
-                    String expiryMonth = parts[15];
-                    String expiryYear = parts[16];
-                    p = new Card(reserveDate, amount, deposit, "Processed", customerID, carID, rentDuration, status, cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
+                    int expiryMonth = Integer.parseInt(parts[15]);
+                    int expiryYear = Integer.parseInt(parts[16]);
+                    p = new Card(reserveDate, amount, deposit, "NO_DAMAGE", customerID, carID, rentDuration, status, cardNo, CCV, nameOnCard, expiryMonth, expiryYear);
                     
                 } else if (paymentType.equals("ONLINETRANSFER")) {
                     String accountNumber = parts[12];
@@ -314,11 +322,11 @@ public class FileLoader {
                     String bankName = parts[14];
                     String swiftCode = parts[15];
                     String reference = parts[16];
-                    p = new OnlineTransfer(reserveDate, amount, deposit, "Processed", customerID, carID, rentDuration, status, accountNumber, accountName, bankName, swiftCode, reference);
+                    p = new OnlineTransfer(reserveDate, amount, deposit, "NO_DAMAGE", customerID, carID, rentDuration, status, accountNumber, accountName, bankName, swiftCode, reference);
                     
                 } else {
                     p = new Payment(customerID, carID, rentDuration);
-                    p.setDate(reserveDate);
+                    p.setReserveDate(reserveDate);
                     p.setAmount(amount);
                     p.setDeposit(deposit);
                     p.setStatus(status);

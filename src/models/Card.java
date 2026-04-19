@@ -5,19 +5,19 @@ public class Card extends Payment {
     private String cardNo;
     private String CCV;
     private String nameOnCard;
-    private String expiryMonth;  
-    private String expiryYear;    
+    private int expiryMonth;  
+    private int expiryYear;    
 
 //methods
     // no-args constructor
     public Card() {
-        this(null, 0.0, 0.0, "", "", "", 0, false, "", "", "", "", "");
+        this(null, 0.0, 0.0, "", "", "", 0, false, "", "", "", 0, 0);
     }
     
     // constructor with args
     public Card(Date date, double amount, double deposit, String damageCondition, 
         String customerID, String carID, int rentDuration,boolean status, String cardNo, String CCV, 
-        String nameOnCard, String expiryMonth, String expiryYear) {
+        String nameOnCard, int expiryMonth, int expiryYear) {
         super(date, amount, deposit, damageCondition, customerID, carID, rentDuration, status);
         this.cardNo = cardNo;
         this.CCV = CCV;
@@ -26,13 +26,13 @@ public class Card extends Payment {
         this.expiryYear = expiryYear;
     }
 
-    public Card(String customerID, String carID, String cardNo, String CCV, String nameOnCard, String expiryMonth, String expiryYear) { 
+    public Card(String customerID, String carID, String cardNo, String CCV, String nameOnCard, int expiryMonth, int expiryYear) { 
         super(customerID, carID);
-        this.cardNo = ""; // can be set later when payment is processed
-        this.CCV = ""; // can be set later when payment is processed
-        this.nameOnCard = ""; // can be set later when payment is processed
-        this.expiryMonth = ""; // can be set later when payment is processed
-        this.expiryYear = ""; // can be set later when payment is processed
+        this.cardNo = cardNo;
+        this.CCV = CCV;
+        this.nameOnCard = nameOnCard;
+        this.expiryMonth = expiryMonth;
+        this.expiryYear = expiryYear;
     }
 
     // getters
@@ -48,11 +48,11 @@ public class Card extends Payment {
         return nameOnCard;
     }
 
-    public String getExpiryMonth() {
+    public int getExpiryMonth() {
         return expiryMonth;
     }
 
-    public String getExpiryYear() {
+    public int getExpiryYear() {
         return expiryYear;
     }
 
@@ -69,11 +69,11 @@ public class Card extends Payment {
         this.nameOnCard = nameOnCard;
     }
 
-    public void setExpiryMonth(String expiryMonth) {
+    public void setExpiryMonth(int expiryMonth) {
         this.expiryMonth = expiryMonth;
     }
 
-    public void setExpiryYear(String expiryYear) {
+    public void setExpiryYear(int expiryYear) {
         this.expiryYear = expiryYear;
     }
 

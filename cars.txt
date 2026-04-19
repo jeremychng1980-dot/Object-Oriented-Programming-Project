@@ -6,7 +6,7 @@ CA0002|VAB 2002|Axia|Perodua|80.0|5|25000|available|100.0|true|5.5|0|0.0
 ECONOMY
 CA0003|SAB 3003|Saga|Proton|90.0|5|45000|unavailable|85.0|false|6.7|0|0.0
 ECONOMY
-CA0004|W 4004 T|City|Honda|180.0|5|15000|available|100.0|false|5.4|0|0.0
+CA0004|W 4004 T|City|Honda|180.0|5|15000|unavailable|100.0|false|5.4|0|0.0
 ECONOMY
 CA0005|VAY 5005|Vios|Toyota|180.0|5|22000|available|100.0|false|5.8|0|0.0
 ECONOMY
@@ -24,7 +24,7 @@ CA0011|VBH 2011|X70|Proton|280.0|5|8000|available|100.0|true|190|0|0.0
 SUV
 CA0012|WRC 3012|X50|Proton|220.0|5|15000|unavailable|100.0|false|170|0|0.0
 SUV
-CA0013|VCS 4013|CR-V|Honda|350.0|5|25000|available|100.0|false|200|0|0.0
+CA0013|VCS 4013|CR-V|Honda|350.0|5|25000|maintenance|100.0|false|200|1|34650.0
 SUV
 CA0014|BDE 5014|HR-V|Honda|280.0|5|12000|available|90.0|false|185|0|0.0
 SUV
@@ -52,11 +52,11 @@ CA0025|VEM 6025|E250|Mercedes|800.0|5|20000|available|100.0|true|true|0|0.0
 LUXURY
 CA0026|WAM 7026|ES250|Lexus|650.0|5|10000|unavailable|100.0|true|true|0|0.0
 LUXURY
-CA0027|PHM 8027|Model 3|Tesla|700.0|5|5000|available|100.0|true|true|0|0.0
+CA0027|PHM 8027|Model 3|Tesla|700.0|5|5000|unavailable|100.0|true|true|0|0.0
 LUXURY
-CA0028|BGN 9028|S90|Volvo|680.0|5|18000|available|100.0|true|true|0|0.0
+CA0028|BGN 9028|S90|Volvo|680.0|5|18000|unavailable|100.0|true|true|0|0.0
 LUXURY
-CA0029|VFN 1029|911|Porsche|1500.0|2|3000|available|100.0|true|false|0|0.0
+CA0029|VFN 1029|911|Porsche|1500.0|2|3000|unavailable|100.0|true|false|0|0.0
 LUXURY
 CA0030|WHP 2030|Taycan|Porsche|1800.0|4|7444|maintenance|100.0|true|true|0|0.0
 ECONOMY
