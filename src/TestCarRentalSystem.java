@@ -915,7 +915,7 @@ public static void checkout(Customer loggedInCustomer){
         
         // Store return date and add penalty
         targetPayment.setReturnDate(actualReturnDate);
-        targetPayment.setDamageCharge(targetPayment.getDamageCharge() + latePenalty);
+        targetPayment.setAmount(targetPayment.getAmount() + latePenalty);
         utils.FileUploader.savePaymentsToFile("payment.txt", sys.getPayment());
         
 
